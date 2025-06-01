@@ -38,15 +38,15 @@ const Header = () => {
                             <li className="dropdown-submenu">
                                 <Link to="/GlobalExport">Global Export</Link>
                                 <ul className="dropdown-submenu">
-                                    <li><Link to="/services/logistics-management">Logistics Management</Link></li>
-                                    <li><Link to="/services/market-compliance">Market Compliance</Link></li>
+                                    <li><Link to="/LogisticManagement">Logistics Management</Link></li>
+                                    <li><Link to="/MarketCompliance">Market Compliance</Link></li>
                                 </ul>
                             </li>
 
                             <li className="dropdown-submenu">
-                                <Link to="/services/exhibition-programs">Exhibition Programs</Link>
+                                <Link to="/ExhibitionProgram">Exhibition Programs</Link>
                                 <ul className="dropdown-submenu">
-                                    <li><Link to="/services/distributor-collaborations">Distributor Collaborations</Link></li>
+                                    <li><Link to="/DistributerCollaboration">Distributor Collaborations</Link></li>
                                 </ul>
                             </li>
                         </ul>

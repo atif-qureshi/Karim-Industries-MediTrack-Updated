@@ -8,6 +8,10 @@ import CustomManuf from './Pages/CustomManuf/CustomManuf.jsx';
 import ProductCustomization from './Pages/ProductCustomization/ProductCustomization.jsx';
 import StandardCompliance from './Pages/StandardCompliance/StandardCompliance.jsx';
 import GlobalExport from './Pages/GlobalExport/GlobalExport.jsx';
+import LogisticManagement from './Pages/LogisticManagement/LogisticManagement.jsx';
+import MarketCompliance from './Pages/MarketCompliance/MarketCompliance.jsx';
+import ExhibitionProgram from './Pages/ExhibitionsProgram/ExhibitionProgram.jsx';
+import DistributerCollabration from './Pages/DistributerCollabration/DistributerCollabration.jsx';
 
 function App() {
   return (
@@ -18,8 +22,12 @@ function App() {
         <Route path="/AboutUs" element={<AboutUs />} />
         <Route path='/CustomManuf' element={<CustomManuf />} />
         <Route path='/ProductCustomization' element={<ProductCustomization />} />
-        <Route path='/StandardCompliance' element = {<StandardCompliance/>}/>
+        <Route path='/StandardCompliance' element={<StandardCompliance />} />
         <Route path='/GlobalExport' element={<GlobalExport />} />
+        <Route path='/LogisticManagement' element={<LogisticManagement />} />
+        <Route path='/MarketCompliance' element={<MarketCompliance />} />
+        <Route path='/ExhibitionProgram' element={<ExhibitionProgram />} />
+        <Route path='/DistributerCollaboration' element={<DistributerCollabration />} />
       </Routes>
       <Footer />
     </Router>
@@ -27,3 +35,4 @@ function App() {
 }
 
 export default App;
+
