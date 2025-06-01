@@ -6,9 +6,9 @@ const Footer = () => {
         <div>
             <footer>
                 {/* <!-- Quick Links Column --> */}
-                <div class="footer-column">
-                    <h3 class="footer-heading">Quick Links</h3>
-                    <ul class="quick-links">
+                <div className="footer-column">
+                    <h3 className="footer-heading">Quick Links</h3>
+                    <ul className="quick-links">
                         <li><a href="Home.html">Home</a></li>
                         <li><a href="About_Us.html">About Us</a></li>
                         <li><a href="1">Products</a></li>
@@ -17,11 +17,11 @@ const Footer = () => {
                 </div>
 
                 {/* <!-- Address Column 1 --> */}
-                <div class="footer-column">
-                    <h3 class="footer-heading">Head Office</h3>
-                    <div class="address-section">
-                        <div class="address-item">
-                            <span class="address-icon">
+                <div className="footer-column">
+                    <h3 className="footer-heading">Head Office</h3>
+                    <div className="address-section">
+                        <div className="address-item">
+                            <span className="address-icon">
                                 <svg
                                     width="16"
                                     height="16"
@@ -33,12 +33,12 @@ const Footer = () => {
                                     />
                                 </svg>
                             </span>
-                            <p class="address-text">
+                            <p className="address-text">
                                 123 Tech Park, Silicon Valley, CA 94025, United States
                             </p>
                         </div>
-                        <div class="address-item">
-                            <span class="address-icon">
+                        <div className="address-item">
+                            <span className="address-icon">
                                 <svg
                                     width="16"
                                     height="16"
@@ -50,10 +50,10 @@ const Footer = () => {
                                     />
                                 </svg>
                             </span>
-                            <p class="address-text">+1 (555) 123-4567</p>
+                            <p className="address-text">+1 (555) 123-4567</p>
                         </div>
-                        <div class="address-item">
-                            <span class="address-icon">
+                        <div className="address-item">
+                            <span className="address-icon">
                                 <svg
                                     width="16"
                                     height="16"
@@ -65,17 +65,17 @@ const Footer = () => {
                                     />
                                 </svg>
                             </span>
-                            <p class="address-text">info@company.com</p>
+                            <p className="address-text">info@company.com</p>
                         </div>
                     </div>
                 </div>
 
                 {/* <!-- Address Column 2 --> */}
-                <div class="footer-column">
-                    <h3 class="footer-heading">Regional Office</h3>
-                    <div class="address-section">
-                        <div class="address-item">
-                            <span class="address-icon">
+                <div className="footer-column">
+                    <h3 className="footer-heading">Regional Office</h3>
+                    <div className="address-section">
+                        <div className="address-item">
+                            <span className="address-icon">
                                 <svg
                                     width="16"
                                     height="16"
@@ -87,12 +87,12 @@ const Footer = () => {
                                     />
                                 </svg>
                             </span>
-                            <p class="address-text">
+                            <p className="address-text">
                                 456 Business District, London EC1A 1AA, United Kingdom
                             </p>
                         </div>
-                        <div class="address-item">
-                            <span class="address-icon">
+                        <div className="address-item">
+                            <span className="address-icon">
                                 <svg
                                     width="16"
                                     height="16"
@@ -104,10 +104,10 @@ const Footer = () => {
                                     />
                                 </svg>
                             </span>
-                            <p class="address-text">+44 20 7946 0958</p>
+                            <p className="address-text">+44 20 7946 0958</p>
                         </div>
-                        <div class="address-item">
-                            <span class="address-icon">
+                        <div className="address-item">
+                            <span className="address-icon">
                                 <svg
                                     width="16"
                                     height="16"
@@ -119,30 +119,30 @@ const Footer = () => {
                                     />
                                 </svg>
                             </span>
-                            <p class="address-text">europe@company.com</p>
+                            <p className="address-text">europe@company.com</p>
                         </div>
                     </div>
                 </div>
                 {/* <!-- Newsletter Column --> */}
-                <div class="footer-column">
-                    <h3 class="footer-heading">Newsletter</h3>
-                    <div class="newsletter">
+                <div className="footer-column">
+                    <h3 className="footer-heading">Newsletter</h3>
+                    <div className="newsletter">
                         <p>
                             Subscribe to our newsletter to receive updates on new products,
                             special offers, and industry news.
                         </p>
-                        <form class="subscribe-form">
+                        <form className="subscribe-form">
                             <input
                                 type="email"
-                                class="email-input"
+                                className="email-input"
                                 placeholder="Your email address"
                                 required
                             />
-                            <button type="submit" class="subscribe-btn">Subscribe</button>
+                            <button type="submit" className="subscribe-btn">Subscribe</button>
                         </form>
-                        <div class="social-media">
+                        <div className="social-media">
                             {/* <!-- Facebook --> */}
-                            <a href="1" class="social-icon" aria-label="Facebook">
+                            <a href="1" className="social-icon" aria-label="Facebook">
                                 <svg
                                     width="20"
                                     height="20"
@@ -156,7 +156,7 @@ const Footer = () => {
                             </a>
 
                             {/* <!-- Twitter --> */}
-                            <a href="1" class="social-icon" aria-label="Twitter">
+                            <a href="1" className="social-icon" aria-label="Twitter">
                                 <svg
                                     width="20"
                                     height="20"
@@ -170,7 +170,7 @@ const Footer = () => {
                             </a>
 
                             {/* <!-- Instagram --> */}
-                            <a href="1" class="social-icon" aria-label="Instagram">
+                            <a href="1" className="social-icon" aria-label="Instagram">
                                 <svg
                                     width="20"
                                     height="20"
@@ -184,7 +184,7 @@ const Footer = () => {
                             </a>
 
                             {/* <!-- LinkedIn --> */}
-                            <a href="1" class="social-icon" aria-label="LinkedIn">
+                            <a href="1" className="social-icon" aria-label="LinkedIn">
                                 <svg
                                     width="20"
                                     height="20"
@@ -198,7 +198,7 @@ const Footer = () => {
                             </a>
 
                             {/* <!-- YouTube --> */}
-                            <a href="1" class="social-icon" aria-label="YouTube">
+                            <a href="1" className="social-icon" aria-label="YouTube">
                                 <svg
                                     width="20"
                                     height="20"
@@ -215,7 +215,7 @@ const Footer = () => {
                 </div>
 
                 {/* <!-- Footer Bottom --> */}
-                <div class="footer-bottom">
+                <div className="footer-bottom">
                     <p>
                         &copy; 2025 Karim Industries. All Rights Reserved. |
                         <a href="1">Privacy Policy</a> | <a href="1">Terms of Service</a>
