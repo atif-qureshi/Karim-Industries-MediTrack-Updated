@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
-
+import logo from './Images/logo.jpeg';
 const Header = () => {
     return (
         <div>
             <nav className="navbar">
                 <div className="logo">
                     <img
-                        src="/assets/images/images.jpeg" // Ensure this path is correct in public folder
+                        src={logo}
                         alt="Description"
                     />
                     <span>Karim <br />Industries</span>

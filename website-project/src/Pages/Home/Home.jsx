@@ -1,6 +1,9 @@
 import React from 'react'
 import './Home.css';
-
+import slide1 from './Images/Mask-group-5.png';
+import slide2 from './Images/Mask-group-51.png';
+import slide3 from './Images/Mask-group-54.png';
+import pressure from './Images/pressure-1-1.png';
 const Home = () => {
   return (
     <div>
@@ -8,7 +11,7 @@ const Home = () => {
         <div className="slider">
           <div className="slide">
             <img
-              src="../Images/Mask-group-54.png"
+              src={slide1}
               alt="Slide 1"
             />
             <div className="slide-content">
@@ -18,7 +21,7 @@ const Home = () => {
           </div>
           <div className="slide">
             <img
-              src="../Images/Mask-group-5.png"
+              src={slide2}
               alt="Slide 2"
             />
             <div className="slide-content">
@@ -28,17 +31,7 @@ const Home = () => {
           </div>
           <div className="slide">
             <img
-              src="../Images/Mask-group-51.png"
-              alt="Slide 3"
-            />
-            <div className="slide-content">
-              <h2>Modern Technology</h2>
-              <p>The latest innovations shaping our future</p>
-            </div>
-          </div>
-          <div className="slide">
-            <img
-              src="../Images/Mask-group-51.png"
+              src={slide3}
               alt="Slide 3"
             />
             <div className="slide-content">
@@ -84,7 +77,7 @@ const Home = () => {
       <div className="image-text-section">
         <div className="image-box">
           <img
-            src="../Images/Mask-group-51.png "
+            src={slide3}
             alt="High-quality wound dressing products"
           />
         </div>
@@ -129,7 +122,7 @@ const Home = () => {
       <div className="image-text-section-2">
         <div className="image-box-2">
           <img
-            src="../Images/Mask-group-5.png "
+            src={slide1}
             alt="High-quality wound dressing products"
           />
         </div>
@@ -151,7 +144,7 @@ const Home = () => {
       <div className="image-text-section-3">
         <div className="image-box-3">
           <img
-            src="../Images/Mask-group-54.png "
+            src={slide3}
             alt="High-quality wound dressing products"
           />
         </div>
@@ -173,7 +166,7 @@ const Home = () => {
       <div className="image-text-section-4">
         <div className="image-box-4">
           <img
-            src="../Images/pressure-1-1.png "
+            src={pressure}
             alt="High-quality wound dressing products"
           />
         </div>

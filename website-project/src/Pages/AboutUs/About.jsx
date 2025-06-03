@@ -1,5 +1,6 @@
 import React from 'react'
 import './About.css';
+import story from './Images/Mask-group-5.png';
 const AboutUs = () => {
     return (
         <div>
@@ -39,7 +40,7 @@ const AboutUs = () => {
                         </div>
                         <div className="mission-image">
                             <img
-                                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                                src={story}
                                 alt="Our team working together"
                             />
                         </div>
