@@ -1,6 +1,9 @@
-import { Link } from 'react-router-dom';
-import './Products.css';
-const Products = () => {
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import './ProductDetail.css';
+const ProductDetail = () => {
+    const { id } = useParams();
+
     const products = [
         {
             id: 1,
@@ -328,31 +331,51 @@ const Products = () => {
         }
     ];
 
+    const product = products.find(p => p.id === parseInt(id));
+
+    if (!product) {
+        return <div>Product not found</div>;
+    }
+
     return (
-        <div className="products-container">
-            {/* Heading Section */}
+        <div className="product-detail-page">
             <div className="products-heading">
-                <h1>Our Medical Products</h1>
+                <h1>Products Detail</h1>
                 <p>High-quality medical supplies and dressings meeting international standards for healthcare professionals</p>
             </div>
+            <div className="product-detail-container">
+                <div className="product-image">
+                    <img src={`/images/${product.image}`} alt={product.name} />
+                </div>
 
-            {/* Existing Product Grid */}
-            <div className="product-grid">
-                {products.map(product => (
-                    <div key={product.id} className="product-card">
-                        <img src={`/images/${product.image}`} alt={product.name} />
-                        <h3>{product.name}</h3>
-                        <Link
-                            to={`/products/${product.id}`}
-                            className="inquiry-btn"
-                        >
-                            View Details
-                        </Link>
+                <div className="product-info">
+                    <h1>{product.name}</h1>
+                    <h2>{product.title}</h2>
+
+                    <div className="product-description">
+                        <h3>Description:</h3>
+                        <p>{product.description}</p>
                     </div>
-                ))}
+
+                    <div className="product-features">
+                        <h3>Features:</h3>
+                        <ul>
+                            {product.features.map((feature, index) => (
+                                <li key={index}>{feature}</li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div className="product-sizes">
+                        <h3>Available Sizes:</h3>
+                        <p>{product.sizes}</p>
+                    </div>
+
+                    <button className="inquiry-btn">Product Inquiry</button>
+                </div>
             </div>
         </div>
     );
 };
 
-export default Products;
+export default ProductDetail;

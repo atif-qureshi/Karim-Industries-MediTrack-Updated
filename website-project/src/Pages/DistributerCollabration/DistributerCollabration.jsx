@@ -1,5 +1,6 @@
 import React from 'react'
 import './DistributerCollabration.css';
+
 const DistributerCollabration = () => {
     return (
         <div>

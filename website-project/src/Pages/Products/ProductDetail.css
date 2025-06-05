@@ -1,0 +1,208 @@
+/* Product Detail Page Styles */
+
+/* Heading Section */
+.products-heading {
+  background-color: transparent;
+  margin-top: 4rem;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 20px 0;
+}
+
+.products-heading h1 {
+  color: white;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.products-heading p {
+  font-size: 1.1rem;
+  color: white;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+.product-detail-page {
+  min-height: 80vh;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  background-color: black;
+}
+
+.product-detail-container {
+  margin-top: 0rem;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.product-image {
+  width: 100%;
+  height: 22rem;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.product-info {
+  padding: 1.5rem;
+}
+
+.product-info h1 {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.product-info h2 {
+  font-size: 1.4rem;
+  color: #101111;
+  margin-bottom: 1.25rem;
+  font-weight: 500;
+}
+
+.product-info h3 {
+  font-size: 1.2rem;
+  color: #1b1c1d;
+  margin: 1rem 0 0.5rem;
+}
+
+.product-description p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.product-features ul {
+  padding-left: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.product-features li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+  color: #333;
+}
+
+.product-sizes p {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.inquiry-btn {
+  display: inline-block;
+  background-color: #10293f;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+  margin-top: 1rem;
+}
+
+.inquiry-btn:hover {
+  background-color: #2980b9;
+  color: black;
+}
+
+/* Tablet and Small Desktop */
+@media (min-width: 768px) {
+  .product-detail-page {
+    padding: 2rem;
+  }
+
+  .product-detail-container {
+    flex-direction: row;
+    max-width: 90%;
+    margin: 3rem auto;
+  }
+
+  .product-image {
+    width: 45%;
+    height: auto;
+    min-height: 35rem;
+  }
+
+  .product-info {
+    width: 55%;
+    padding: 2rem;
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1024px) {
+  .product-detail-container {
+    max-width: 85%;
+    margin: 4rem auto;
+  }
+
+  .product-info {
+    padding: 3rem;
+  }
+
+  .product-info h1 {
+    font-size: 2rem;
+  }
+
+  .product-info h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Mobile Landscape and Small Tablets */
+@media (max-width: 767px) and (min-width: 481px) {
+  .product-image {
+    height: 25rem;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  .product-detail-page {
+    padding: 1rem;
+  }
+
+  .product-detail-container {
+    /* margin: 1rem auto; */
+    margin-top: 4rem;
+  }
+
+  .product-image {
+    height: 18rem;
+  }
+
+  .product-info h1 {
+    font-size: 1.6rem;
+  }
+
+  .product-info h2 {
+    font-size: 1.2rem;
+  }
+}
+
+/* Very Small Mobile Devices */
+@media (max-width: 360px) {
+  .product-image {
+    height: 15rem;
+  }
+
+  .product-info {
+    padding: 1rem;
+  }
+}

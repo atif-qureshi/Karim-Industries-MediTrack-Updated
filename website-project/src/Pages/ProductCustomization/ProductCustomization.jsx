@@ -1,6 +1,6 @@
 import React from 'react'
 import './ProductCustomization.css';
-
+import './ProductCustomization.js';
 const ProductCustomization = () => {
     return (
         <div>
