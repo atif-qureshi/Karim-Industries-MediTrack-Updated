@@ -4,6 +4,7 @@ import slide1 from './Images/Mask-group-5.png';
 import slide2 from './Images/Mask-group-51.png';
 import slide3 from './Images/Mask-group-54.png';
 import pressure from './Images/pressure-1-1.png';
+import './Home.js';
 const Home = () => {
   return (
     <div>
