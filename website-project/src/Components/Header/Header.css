@@ -156,7 +156,7 @@ body {
 .search-bar input {
   padding: 0.7rem;
   font-size: clamp(0.9rem, 1.5vw, 1rem);
-  border: none;
+  border: black;
   border-radius: 0.5rem 0 0 0.5rem;
   width: 100%;
   outline: none;
@@ -165,7 +165,7 @@ body {
 .search-bar button {
   padding: 0.7rem 1.2rem;
   font-size: clamp(0.9rem, 1.5vw, 1rem);
-  background-color: #836f6f;
+  background-color: #251072;
   color: white;
   border: none;
   border-radius: 0 0.5rem 0.5rem 0;
@@ -174,8 +174,8 @@ body {
 }
 
 .search-bar button:hover {
-  background-color: #444;
-  transform: scale(1.05);
+  background-color: #59338b;
+  transform: scale(1.01);
 }
 
 .hamburger {
@@ -310,7 +310,7 @@ body {
     height: 2.2rem;
   }
 
-  .navbar{
+  .navbar {
     background-color: rgb(24, 24, 104);
   }
   .nav-links {

@@ -79,7 +79,7 @@ const AboutUs = () => {
                 <h2>Our Manufacturing Excellence</h2>
                 <div class="gallery-container">
                     <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1581093450021-4a7360e9a6a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Production Line">
+                        <img src="https://images.unsplash.com/photo-1581094271901-8022df4466f9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Production Line">
                         </img>
                         <div class="gallery-overlay">
                             <p>Advanced Production Line</p>

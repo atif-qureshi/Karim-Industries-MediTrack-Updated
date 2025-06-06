@@ -1,13 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ContactUs.css';
-import { FaMapMarkerAlt, FaBuilding, FaLink, FaEnvelope, FaGlobe, FaPhone, FaUserTie } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaBuilding, FaLink, FaEnvelope, FaGlobe, FaPhone, FaUserTie, FaPaperPlane } from 'react-icons/fa';
+import { FiCheckCircle } from 'react-icons/fi';
 
 const ContactPage = () => {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+    });
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Here you would typically send the form data to your backend
+        console.log('Form submitted:', formData);
+        setIsSubmitted(true);
+        // Reset form after 3 seconds
+        setTimeout(() => {
+            setFormData({
+                name: '',
+                email: '',
+                phone: '',
+                subject: '',
+                message: ''
+            });
+            setIsSubmitted(false);
+        }, 3000);
+    };
+
     return (
         <div className="contact-container">
             <div className="contact-header">
                 <h1>Contact Karim Industries</h1>
-                <p>Manufacturer of Surgical Dressing Products</p>
+                <p>Get in touch with Pakistan's leading surgical dressing manufacturer</p>
             </div>
 
             <div className="contact-content">
@@ -38,35 +74,78 @@ const ContactPage = () => {
                             outside Lohari Gate Lahore-Pakistan</p>
                         <p><FaPhone className="icon" /> +92-42-37249148</p>
                     </div>
-
                 </div>
 
                 <div className="contact-form">
                     <h2>Send Us a Message</h2>
-                    <form>
-                        <div className="form-group">
-                            <label htmlFor="name">Your Name</label>
-                            <input type="text" id="name" name="name" required />
+                    {isSubmitted ? (
+                        <div className="success-message">
+                            <FiCheckCircle className="success-icon" />
+                            <h3>Thank You!</h3>
+                            <p>Your message has been sent successfully. We'll contact you soon.</p>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="email">Email Address</label>
-                            <input type="email" id="email" name="email" required />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="subject">Subject</label>
-                            <input type="text" id="subject" name="subject" required />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="message">Your Message</label>
-                            <textarea id="message" name="message" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" className="submit-btn">Send Message</button>
-                    </form>
-                </div>  
+                    ) : (
+                        <form onSubmit={handleSubmit}>
+                            <div className="form-group">
+                                <label htmlFor="name">Your Name*</label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="email">Email Address*</label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="phone">Phone Number</label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="subject">Subject*</label>
+                                <input
+                                    type="text"
+                                    id="subject"
+                                    name="subject"
+                                    value={formData.subject}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="message">Your Message*</label>
+                                <textarea
+                                    id="message"
+                                    name="message"
+                                    rows="5"
+                                    value={formData.message}
+                                    onChange={handleChange}
+                                    required
+                                ></textarea>
+                            </div>
+                            <button type="submit" className="submit-btn">
+                                <FaPaperPlane className="submit-icon" /> Send Message
+                            </button>
+                        </form>
+                    )}
+                </div>
             </div>
 
             <div className="map-container">
@@ -76,6 +155,15 @@ const ContactPage = () => {
                     allowFullScreen=""
                     loading="lazy"
                 ></iframe>
+            </div>
+
+            <div className="business-hours">
+                <h3>Business Hours</h3>
+                <ul>
+                    <li><strong>Monday - Friday:</strong> 9:00 AM - 6:00 PM</li>
+                    <li><strong>Saturday:</strong> 9:00 AM - 2:00 PM</li>
+                    <li><strong>Sunday:</strong> Closed</li>
+                </ul>
             </div>
         </div>
     );

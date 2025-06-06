@@ -1,39 +1,61 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import './Home.css';
 import slide1 from './Images/Mask-group-5.png';
 import slide2 from './Images/Mask-group-51.png';
 import slide3 from './Images/Mask-group-54.png';
 import pressure from './Images/pressure-1-1.png';
+import AuthPopup from '../AuthPopup/AuthPop'; 
+
 const Home = () => {
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+
+  useEffect(() => {
+    // Show popup when home page loads
+    const timer = setTimeout(() => {
+      // Check if user is not already logged in
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+      if (!isLoggedIn) {
+        setShowAuthPopup(true);
+      }
+    }, 1000); // Show after 1 second delay
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleLoginSuccess = () => {
+    localStorage.setItem('isLoggedIn', 'true');
+    setShowAuthPopup(false);
+  };
+
   return (
     <div>
+      {/* Auth Popup - will appear automatically */}
+      {showAuthPopup && (
+        <AuthPopup
+          onClose={() => setShowAuthPopup(false)}
+          onLoginSuccess={handleLoginSuccess}
+        />
+      )}
+
+      {/* Rest of your existing home page content */}
       <div className="slider-container">
         <div className="slider">
           <div className="slide">
-            <img
-              src={slide1}
-              alt="Slide 1"
-            />
+            <img src={slide1} alt="Slide 1" />
             <div className="slide-content">
               <h2>Beautiful Nature</h2>
               <p>Explore the wonders of the natural world</p>
             </div>
           </div>
           <div className="slide">
-            <img
-              src={slide2}
-              alt="Slide 2"
-            />
+            <img src={slide2} alt="Slide 2" />
             <div className="slide-content">
               <h2>Urban Landscapes</h2>
               <p>Discover amazing cityscapes around the globe</p>
             </div>
           </div>
           <div className="slide">
-            <img
-              src={slide3}
-              alt="Slide 3"
-            />
+            <img src={slide3} alt="Slide 3" />
             <div className="slide-content">
               <h2>Modern Technology</h2>
               <p>The latest innovations shaping our future</p>
@@ -42,7 +64,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* <!-- Video Section --> */}
+      {/* Video Section */}
       <div className="video-section">
         <div className="video-container">
           <iframe
@@ -50,10 +72,10 @@ const Home = () => {
             height="315"
             src="https://www.youtube.com/embed/a7UKUoVxAxo?si=HSV8nPYC1KdCve51"
             title="YouTube video player"
-            frameborder="0"
+            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen>
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen>
           </iframe>
           <div className="video-caption">Our Services</div>
         </div>
@@ -64,16 +86,16 @@ const Home = () => {
             height="315"
             src="https://www.youtube.com/embed/V9lUW-S2kDA?si=Zq9czTgQnrOsIWMW"
             title="YouTube video player"
-            frameborder="0"
+            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen>
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen>
           </iframe>
           <div className="video-caption">Company Overview</div>
         </div>
       </div>
 
-      {/* <!-- Image + Text Box Section --> */}
+      {/* Image + Text Box Section */}
       <div className="image-text-section">
         <div className="image-box">
           <img
@@ -185,9 +207,8 @@ const Home = () => {
         </div>
       </div>
 
-      {/* <!--Cards--> */}
+      {/* Cards */}
       <div className="card-container">
-        {/* <!-- Card 1 --> */}
         <div className="card">
           <div className="card-content">
             <h3>Quality Assurance</h3>
@@ -195,7 +216,6 @@ const Home = () => {
           </div>
         </div>
 
-        {/* <!-- Card 2 --> */}
         <div className="card">
           <div className="card-content">
             <h3>Innovative Solutions</h3>
@@ -203,7 +223,6 @@ const Home = () => {
           </div>
         </div>
 
-        {/* <!-- Card 3 --> */}
         <div className="card">
           <div className="card-content">
             <h3>Patient-Centric Approaches</h3>
@@ -221,4 +240,5 @@ const Home = () => {
     </div>
   )
 }
+
 export default Home;

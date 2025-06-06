@@ -23,6 +23,7 @@
 .hero h1 {
   font-size: clamp(1.8rem, 4vw, 3rem);
   margin-bottom: 1rem;
+  color: white;
 }
 
 .hero p {
