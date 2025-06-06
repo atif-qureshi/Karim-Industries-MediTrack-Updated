@@ -1,6 +1,5 @@
 import React from 'react';
 import './About.css';
-import './About.js';
 const AboutUs = () => {
     return (
         <main class="about-container">
