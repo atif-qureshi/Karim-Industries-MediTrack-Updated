@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './ContactUs.css';
 import { FaMapMarkerAlt, FaBuilding, FaLink, FaEnvelope, FaGlobe, FaPhone, FaUserTie, FaPaperPlane } from 'react-icons/fa';
 import { FiCheckCircle } from 'react-icons/fi';
+import emailjs from 'emailjs-com';
 
 const ContactPage = () => {
     const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const ContactPage = () => {
         message: ''
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -23,22 +25,37 @@ const ContactPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Here you would typically send the form data to your backend
-        console.log('Form submitted:', formData);
-        setIsSubmitted(true);
-        // Reset form after 3 seconds
-        setTimeout(() => {
-            setFormData({
-                name: '',
-                email: '',
-                phone: '',
-                subject: '',
-                message: ''
-            });
-            setIsSubmitted(false);
-        }, 3000);
-    };
+        setIsLoading(true);
 
+        // Replace with your EmailJS service ID, template ID, and user ID
+        const serviceID = 'service_kmd11fr';
+        const templateID = 'template_sjj57gd';
+        const userID = 'dlZ_I3GUqmFo9n2o4';
+
+        emailjs.send(serviceID, templateID, formData, userID)
+            .then((response) => {
+                console.log('Email sent successfully!', response.status, response.text);
+                setIsSubmitted(true);
+                setIsLoading(false);
+
+                // Reset form after 3 seconds
+                setTimeout(() => {
+                    setFormData({
+                        name: '',
+                        email: '',
+                        phone: '',
+                        subject: '',
+                        message: ''
+                    });
+                    setIsSubmitted(false);
+                }, 3000);
+            })
+            .catch((error) => {
+                console.error('Failed to send email:', error);
+                alert('Failed to send message. Please try again later.');
+                setIsLoading(false);
+            });
+    };
     return (
         <div className="contact-container">
             <div className="contact-header">
@@ -140,7 +157,7 @@ const ContactPage = () => {
                                     required
                                 ></textarea>
                             </div>
-                            <button type="submit" className="submit-btn">
+                            <button type="submit" className="submit-btn" disabled={isLoading}>
                                 <FaPaperPlane className="submit-icon" /> Send Message
                             </button>
                         </form>

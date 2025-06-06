@@ -97,7 +97,6 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   border: 1px solid black;
   height: 100%;
-  
 }
 
 .contact-form h2 {
@@ -125,7 +124,7 @@
   padding: 1.2rem;
   border: 1px solid #e0e0e0;
   border-radius: 0.5rem;
-  border: .5px solid black;
+  border: 0.5px solid black;
   font-size: 1rem;
   transition: all 0.3s ease;
   background-color: white;
@@ -254,6 +253,16 @@
   .map-container {
     height: 35rem;
   }
+}
+
+.submit-btn[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.submit-btn[disabled]:hover {
+  background-color: #ccc;
+  transform: none;
 }
 
 @media (max-width: 480px) {
