@@ -1,6 +1,6 @@
 import React from 'react'
 import './Footer.css';
-
+import { Link } from 'react-router-dom';
 const Footer = () => {
     return (
         <div>
@@ -9,10 +9,10 @@ const Footer = () => {
                 <div className="footer-column">
                     <h3 className="footer-heading">Quick Links</h3>
                     <ul className="quick-links">
-                        <li><a href="Home.html">Home</a></li>
-                        <li><a href="About_Us.html">About Us</a></li>
-                        <li><a href="1">Products</a></li>
-                        <li><a href="2">Contact Us</a></li>
+                        <li><Link to="/" onClick={() => window.scrollTo(0, 0)}>Home</Link></li>
+                        <li><Link to="/AboutUs" onClick={() => window.scrollTo(0, 0)}>About Us</Link></li>
+                        <li><Link to="/Products" onClick={() => window.scrollTo(0, 0)}>Products</Link></li>
+                        <li><Link to="/ContactUs" onClick={() => window.scrollTo(0, 0)}>Contact Us</Link></li>
                     </ul>
                 </div>
 

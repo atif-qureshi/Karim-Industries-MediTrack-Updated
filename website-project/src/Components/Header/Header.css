@@ -71,19 +71,51 @@ body {
   transform: translateY(-2px);
 }
 
+/* Dropdown Styles */
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: 100%;
   left: 0;
-  background-color: #444;
-  list-style: none;
-  padding: 0.5rem 0;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-  border-radius: 0.5rem;
-  min-width: 200px;
+  top: 100%;
+  min-width: 12rem;
+  background: black;
+  box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* Services dropdown specific styling */
+.services-dropdown .dropdown-menu {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Subcategory Styles - appears on right side */
+.dropdown-submenu > .dropdown-submenu {
+  display: none;
+  position: absolute;
+  left: 100%;
+  top: 0;
+  min-width: 12rem;
+  background: black;
+  box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+}
+
+.dropdown-submenu:hover > .dropdown-submenu {
+  display: block;
+}
+
+/* Arrow indicator for submenus */
+.dropdown-submenu > a:after {
+  content: "▸";
+  float: right;
+  margin-left: 0.5rem;
 }
 
 .dropdown-menu li {
@@ -100,50 +132,7 @@ body {
   text-decoration: none;
   display: block;
   padding: 0.5rem 1rem;
-}
-
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-/* Dropdown Styles */
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: 100%;
-  min-width: 12rem;
-  background: black;
-  box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  border: 1px solid #ddd;
-}
-
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-/* Subcategory Styles - appears on right side */
-.dropdown-submenu > .dropdown-submenu {
-  display: none;
-  position: absolute;
-  left: 100%;
-  top: 0;
-  min-width: 12rem;
-  background: black;
-  box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
-  border: 1px solid #ddd;
-}
-
-.dropdown-submenu:hover > .dropdown-submenu {
-  display: block;
-}
-
-/* Arrow indicator for submenus */
-.dropdown-submenu > a:after {
-  content: "▸";
-  float: right;
-  margin-left: 0.5rem;
+  white-space: nowrap;
 }
 
 .search-bar {
@@ -156,7 +145,7 @@ body {
 .search-bar input {
   padding: 0.7rem;
   font-size: clamp(0.9rem, 1.5vw, 1rem);
-  border: black;
+  border: 1px solid #ddd;
   border-radius: 0.5rem 0 0 0.5rem;
   width: 100%;
   outline: none;
@@ -178,17 +167,19 @@ body {
   transform: scale(1.01);
 }
 
+/* Hamburger Menu Styles */
 .hamburger {
   display: none;
   flex-direction: column;
   justify-content: space-between;
-  height: 1.2rem;
+  height: 1.5rem;
   width: 2rem;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
   z-index: 1001;
+  position: relative;
 }
 
 .hamburger span {
@@ -198,11 +189,12 @@ body {
   background-color: black;
   border-radius: 0.2rem;
   transition: all 0.3s ease;
+  transform-origin: center;
 }
 
 /* Mobile menu active state */
 .hamburger.active span:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
+  transform: translateY(0.6rem) rotate(45deg);
 }
 
 .hamburger.active span:nth-child(2) {
@@ -210,7 +202,22 @@ body {
 }
 
 .hamburger.active span:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
+  transform: translateY(-0.6rem) rotate(-45deg);
+}
+
+/* Mobile Dropdown Toggle */
+.dropdown-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* 💻 Large screens (desktops and laptops) */
@@ -239,6 +246,11 @@ body {
 @media (max-width: 768px) {
   .navbar {
     padding: 0.8rem 1rem;
+    background-color: #342669;
+  }
+
+  .logo span {
+    color: white;
   }
 
   .hamburger {
@@ -253,20 +265,42 @@ body {
     width: 100%;
     height: 100vh;
     background-color: #342669;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     transform: translateY(-100%);
     opacity: 0;
     pointer-events: none;
-    padding: 2rem;
-    gap: 2rem;
-    z-index: 1000;
+    padding: 5rem 1rem 2rem;
+    gap: 1rem;
+    z-index: 999;
+    transition: all 0.3s ease;
   }
 
   .nav-links.active {
     transform: translateY(0);
     opacity: 1;
     pointer-events: all;
+  }
+
+  .nav-links li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-links a {
+    color: white;
+    display: block;
+    padding: 1rem;
+    font-size: 1.2rem;
+  }
+
+  /* Mobile dropdown styles */
+  .dropdown {
+    position: relative;
+  }
+
+  .dropdown-toggle {
+    display: block;
   }
 
   .dropdown-menu {
@@ -277,15 +311,44 @@ body {
     width: 100%;
     text-align: center;
     animation: none;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0;
   }
 
-  .dropdown:hover .dropdown-menu {
-    display: none;
+  .dropdown-menu li {
+    padding: 0.5rem;
+  }
+
+  .dropdown-menu a {
+    font-size: 1rem;
   }
 
   .dropdown.active .dropdown-menu {
     display: block;
-    margin-top: 0.5rem;
+  }
+
+  /* Services dropdown specific mobile styling */
+  .services-dropdown .dropdown-menu {
+    left: 0;
+    transform: none;
+  }
+
+  /* Submenu adjustments for mobile */
+  .dropdown-submenu > .dropdown-submenu {
+    position: static;
+    display: none;
+    background-color: #5a4a9a;
+    margin-left: 1rem;
+    width: calc(100% - 2rem);
+  }
+
+  .dropdown-submenu.active > .dropdown-submenu {
+    display: block;
+  }
+
+  .dropdown-submenu > a:after {
+    content: "▾";
   }
 
   .search-bar {
@@ -310,16 +373,25 @@ body {
     height: 2.2rem;
   }
 
-  .navbar {
-    background-color: rgb(24, 24, 104);
-  }
   .nav-links {
-    padding: 1rem;
+    padding: 4rem 1rem 2rem;
   }
 
   .nav-links a {
     padding: 0.8rem;
     width: 100%;
     text-align: center;
+  }
+}
+
+/* Animation for dropdowns */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

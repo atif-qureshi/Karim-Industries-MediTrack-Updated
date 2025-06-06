@@ -823,4 +823,16 @@
     padding: 1.5rem;
     gap: 1.5rem;
   }
+  .text-content h2{
+    text-align: center;
+  }
+  .text-content-2 h2{
+    text-align: center;
+  }
+  .text-content-3 h2{
+    text-align: center;
+  }
+  .text-content-4 h2{
+    text-align: center;
+  }
 }

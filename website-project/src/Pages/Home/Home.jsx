@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import './Home.css';
+import { Link } from 'react-router-dom';
 import slide1 from './Images/Mask-group-5.png';
 import slide2 from './Images/Mask-group-51.png';
 import slide3 from './Images/Mask-group-54.png';
 import pressure from './Images/pressure-1-1.png';
-import AuthPopup from '../AuthPopup/AuthPop'; 
+import AuthPopup from '../AuthPopup/AuthPop';
+import './Home.css';
 
 const Home = () => {
   const [showAuthPopup, setShowAuthPopup] = useState(false);
@@ -119,7 +120,9 @@ const Home = () => {
             wound healing while preventing infections. We use only the highest
             quality materials that meet international healthcare standards.
           </p>
-          <a href="." className="cta-button">Explore Our Products</a>
+          <Link to="/Products" className="cta-button-2">
+            Explore Our Products
+          </Link>
         </div>
       </div>
 
@@ -159,7 +162,9 @@ const Home = () => {
             absorbent gauze dressings/ sponges, absorbent lint, tulle dressings
             and bandages.
           </p>
-          <a href="." className="cta-button-2">Explore Our Products</a>
+          <Link to="/Products" className="cta-button-2">
+            Explore Our Products
+          </Link>
         </div>
       </div>
 
@@ -181,7 +186,9 @@ const Home = () => {
             absorbent gauze dressings/ sponges, absorbent lint, tulle dressings
             and bandages.
           </p>
-          <a href="." className="cta-button-3">Explore Our Products</a>
+          <Link to="/Products" className="cta-button-2">
+            Explore Our Products
+          </Link>
         </div>
       </div>
 
@@ -203,7 +210,9 @@ const Home = () => {
             absorbent gauze dressings/ sponges, absorbent lint, tulle dressings
             and bandages.
           </p>
-          <a href="." className="cta-button-4">Explore Our Products</a>
+          <Link to="/Products" className="cta-button-2">
+            Explore Our Products
+          </Link>
         </div>
       </div>
 

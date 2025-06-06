@@ -345,9 +345,11 @@ const Products = () => {
                         <Link
                             to={`/products/${product.id}`}
                             className="inquiry-btn"
+                            onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
                         >
                             View Details
                         </Link>
+
                     </div>
                 ))}
             </div>
