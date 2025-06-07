@@ -7,7 +7,6 @@ const Header = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
     const [searchError, setSearchError] = useState('');
     const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
@@ -405,7 +404,6 @@ const Header = () => {
     };
 
     const handleSuggestionClick = (product) => {
-        setSelectedProduct(product);
         setSearchTerm(product.name);
         setShowSuggestions(false);
         setSearchError('');
