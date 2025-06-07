@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 import logo from './Images/logo.jpeg';
@@ -7,9 +7,13 @@ const Header = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [searchError, setSearchError] = useState('');
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
     const navigate = useNavigate();
 
-    const products = [
+    const products = useMemo(() => [
         {
             id: 1,
             name: "Medi Cot",
@@ -358,7 +362,7 @@ const Header = () => {
             sizes: "Available in all sizes as per customer demand",
             image: "surgical-gown.jpg"
         }
-    ];
+    ], []);
 
     useEffect(() => {
         if (searchTerm.trim() === '') {
@@ -366,35 +370,45 @@ const Header = () => {
             return;
         }
 
+        // Show suggestions for partial matches (but navigation requires exact match)
         const filtered = products.filter(product =>
-            product.name.toLowerCase().includes(searchTerm.toLowerCase())
+            product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            product.id.toString().includes(searchTerm)
         );
         setSuggestions(filtered);
-    }, [searchTerm]);
+    }, [searchTerm, products]);
 
     const handleSearch = (e) => {
         e.preventDefault();
-        if (searchTerm.trim() === '') return;
+        setSearchError('');
+        setShowPopup(false); // Reset popup
 
-        const foundProduct = products.find(product =>
-            product.name.toLowerCase() === searchTerm.toLowerCase()
+        // Case 1: Empty search term
+        if (searchTerm.trim() === '') {
+            setPopupMessage('Please enter a product name');
+            setShowPopup(true);
+            return;
+        }
+
+        // Case 2: Exact name match (case-insensitive)
+        const foundProduct = products.find(
+            product => product.name.toLowerCase() === searchTerm.toLowerCase()
         );
 
         if (foundProduct) {
-            navigate(foundProduct.path);
+            navigate(foundProduct.path); // Navigate if match found
         } else {
-            // Redirect to search results page or show message
-            navigate(`/products?search=${encodeURIComponent(searchTerm)}`);
+            // Case 3: No match → Show popup
+            setPopupMessage(`"${searchTerm}" not found. Try a valid product name.`);
+            setShowPopup(true);
         }
-
-        setSearchTerm('');
-        setShowSuggestions(false);
     };
 
     const handleSuggestionClick = (product) => {
-        navigate(product.path);
-        setSearchTerm('');
+        setSelectedProduct(product);
+        setSearchTerm(product.name);
         setShowSuggestions(false);
+        setSearchError('');
     };
 
     return (
@@ -451,22 +465,31 @@ const Header = () => {
                     <form onSubmit={handleSearch}>
                         <input
                             type="text"
-                            placeholder="Search..."
+                            placeholder="Search by name"
                             value={searchTerm}
                             onChange={(e) => {
                                 setSearchTerm(e.target.value);
                                 setShowSuggestions(true);
+                                setSearchError(''); // Clear error on typing
                             }}
-                            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                         />
                         <button type="submit">Search</button>
                     </form>
+
+                    {/* Error message */}
+                    {searchError && (
+                        <div className="search-error">
+                            {searchError}
+                        </div>
+                    )}
+
+                    {/* Suggestions dropdown (optional) */}
                     {showSuggestions && suggestions.length > 0 && (
                         <ul className="search-suggestions">
                             {suggestions.map(product => (
                                 <li
-                                    key={product.id}
-                                    onMouseDown={() => handleSuggestionClick(product)}
+                                    key={product.name}
+                                    onClick={() => handleSuggestionClick(product)}
                                 >
                                     {product.name}
                                 </li>
@@ -474,6 +497,14 @@ const Header = () => {
                         </ul>
                     )}
                 </div>
+                {showPopup && (
+                    <div className="popup-overlay">
+                        <div className="popup-box">
+                            <p>{popupMessage}</p>
+                            <button onClick={() => setShowPopup(false)}>OK</button>
+                        </div>
+                    </div>
+                )}
             </nav>
         </div>
     )
