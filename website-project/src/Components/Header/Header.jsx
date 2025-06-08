@@ -369,10 +369,9 @@ const Header = () => {
             return;
         }
 
-        // Show suggestions for partial matches (but navigation requires exact match)
+        // Only search by name now (removed the ID check)
         const filtered = products.filter(product =>
-            product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            product.id.toString().includes(searchTerm)
+            product.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setSuggestions(filtered);
     }, [searchTerm, products]);
@@ -380,33 +379,32 @@ const Header = () => {
     const handleSearch = (e) => {
         e.preventDefault();
         setSearchError('');
-        setShowPopup(false); // Reset popup
+        setShowPopup(false);
 
-        // Case 1: Empty search term
         if (searchTerm.trim() === '') {
             setPopupMessage('Please enter a product name');
             setShowPopup(true);
             return;
         }
 
-        // Case 2: Exact name match (case-insensitive)
         const foundProduct = products.find(
             product => product.name.toLowerCase() === searchTerm.toLowerCase()
         );
 
         if (foundProduct) {
-            navigate(foundProduct.path); // Navigate if match found
+            setSearchTerm(''); // Clear search only after successful navigation
+            navigate(foundProduct.path);
         } else {
-            // Case 3: No match → Show popup
             setPopupMessage(`"${searchTerm}" not found. Try a valid product name.`);
             setShowPopup(true);
         }
     };
 
     const handleSuggestionClick = (product) => {
-        setSearchTerm(product.name);
-        setShowSuggestions(false);
+        setSearchTerm(product.name); // Keep the product name in search field
+        setShowSuggestions(false); // Hide suggestions
         setSearchError('');
+        // Don't navigate yet - wait for search button click
     };
 
     return (

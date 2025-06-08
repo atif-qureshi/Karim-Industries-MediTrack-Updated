@@ -396,7 +396,7 @@ body {
 }
 
 .popup-box {
-  background: white;
+  background: #fff;
   padding: 1.25rem; /* 20px equivalent */
   border-radius: 0.5rem; /* 8px equivalent */
   text-align: center;
@@ -418,7 +418,7 @@ body {
 .popup-box button {
   margin-top: 0.9375rem; /* 15px equivalent */
   padding: 0.5rem 1rem; /* 8px 16px equivalent */
-  background: #6200ee;
+  background: #280953;
   color: white;
   border: none;
   border-radius: 0.25rem; /* 4px equivalent */
@@ -428,6 +428,10 @@ body {
   width: 20vw; /* 20% of viewport width */
   max-width: 8rem; /* 128px equivalent */
   min-width: 5rem; /* 80px equivalent */
+}
+.popup-box button:hover{
+  background-color: #0c0c0e;
+  transition: ease-in;
 }
 
 /* Responsive adjustments */
