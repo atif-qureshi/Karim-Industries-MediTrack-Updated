@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react';
 import './DistributerCollabration.css';
 
 const DistributerCollabration = () => {
+    const [activeTab, setActiveTab] = useState('cotton');
+
+    const handleTabClick = (tabId) => {
+        setActiveTab(tabId);
+    };
+
     return (
         <div>
             <main className="distributor-container">
@@ -63,17 +69,33 @@ const DistributerCollabration = () => {
                     <h2>Our Product Range for Distributors</h2>
                     <div className="product-tabs">
                         <div className="tab-header">
-                            <button className="tab-button active" data-tab="cotton">
+                            <button
+                                className={`tab-button ${activeTab === 'cotton' ? 'active' : ''}`}
+                                onClick={() => handleTabClick('cotton')}
+                            >
                                 Cotton Products
                             </button>
-                            <button className="tab-button" data-tab="bandages">Bandages</button>
-                            <button className="tab-button" data-tab="wound-care">Wound Care</button>
-                            <button className="tab-button" data-tab="surgical">
+                            <button
+                                className={`tab-button ${activeTab === 'bandages' ? 'active' : ''}`}
+                                onClick={() => handleTabClick('bandages')}
+                            >
+                                Bandages
+                            </button>
+                            <button
+                                className={`tab-button ${activeTab === 'wound-care' ? 'active' : ''}`}
+                                onClick={() => handleTabClick('wound-care')}
+                            >
+                                Wound Care
+                            </button>
+                            <button
+                                className={`tab-button ${activeTab === 'surgical' ? 'active' : ''}`}
+                                onClick={() => handleTabClick('surgical')}
+                            >
                                 Surgical Supplies
                             </button>
                         </div>
 
-                        <div id="cotton" className="tab-content active">
+                        <div id="cotton" className={`tab-content ${activeTab === 'cotton' ? 'active' : ''}`}>
                             <div className="product-card">
                                 <h3>Medi Cot</h3>
                                 <p>Absorbent Cotton Wool (BP/BPC Specification)</p>
@@ -91,7 +113,7 @@ const DistributerCollabration = () => {
                             </div>
                         </div>
 
-                        <div id="bandages" className="tab-content">
+                        <div id="bandages" className={`tab-content ${activeTab === 'bandages' ? 'active' : ''}`}>
                             <div className="product-card">
                                 <h3>Medi Crepe</h3>
                                 <p>Cotton Crepe Bandage (BP/BPC Specification)</p>
@@ -111,7 +133,7 @@ const DistributerCollabration = () => {
                             </div>
                         </div>
 
-                        <div id="wound-care" className="tab-content">
+                        <div id="wound-care" className={`tab-content ${activeTab === 'wound-care' ? 'active' : ''}`}>
                             <div className="product-card">
                                 <h3>Medi Paraffin</h3>
                                 <p>Paraffin Gauze (BP/BPC Specification)</p>
@@ -129,7 +151,7 @@ const DistributerCollabration = () => {
                             </div>
                         </div>
 
-                        <div id="surgical" className="tab-content">
+                        <div id="surgical" className={`tab-content ${activeTab === 'surgical' ? 'active' : ''}`}>
                             <div className="product-card">
                                 <h3>Medicare Drape Kit</h3>
                                 <p>Surgical Drape Kit Set</p>
