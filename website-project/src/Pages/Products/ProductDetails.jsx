@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './ProductDetail.css';
 const ProductDetail = () => {
     const { id } = useParams();
@@ -371,7 +372,13 @@ const ProductDetail = () => {
                         <p>{product.sizes}</p>
                     </div>
 
-                    <button className="inquiry-btn">Product Inquiry</button>
+                    <Link
+                        to="/ContactUs"
+                        className="inquiry-btn"
+                        onClick={() => window.scrollTo(0, 0)}
+                    >
+                        Product Inquiry
+                    </Link>
                 </div>
             </div>
         </div>

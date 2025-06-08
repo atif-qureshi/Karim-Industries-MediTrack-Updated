@@ -7,9 +7,10 @@ import emailjs from 'emailjs-com';
 const ContactPage = () => {
     const [formData, setFormData] = useState({
         name: '',
-        email: '',
+        country: '',
+        company: '',
         phone: '',
-        subject: '',
+        email: '',
         message: ''
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -42,9 +43,10 @@ const ContactPage = () => {
                 setTimeout(() => {
                     setFormData({
                         name: '',
-                        email: '',
+                        country: '',
+                        company: '',
                         phone: '',
-                        subject: '',
+                        email: '',
                         message: ''
                     });
                     setIsSubmitted(false);
@@ -56,6 +58,7 @@ const ContactPage = () => {
                 setIsLoading(false);
             });
     };
+
     return (
         <div className="contact-container">
             <div className="contact-header">
@@ -104,7 +107,7 @@ const ContactPage = () => {
                     ) : (
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <label htmlFor="name">Your Name*</label>
+                                <label htmlFor="name">Name*</label>
                                 <input
                                     type="text"
                                     id="name"
@@ -115,7 +118,47 @@ const ContactPage = () => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="email">Email Address*</label>
+                                <label htmlFor="country">Select Your Country*</label>
+                                <select
+                                    id="country"
+                                    name="country"
+                                    value={formData.country}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">Select Country</option>
+                                    <option value="Pakistan">Pakistan</option>
+                                    <option value="India">India</option>
+                                    <option value="USA">USA</option>
+                                    <option value="UK">UK</option>
+                                    <option value="UAE">UAE</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="company">Name of Company/Hospital/other*</label>
+                                <input
+                                    type="text"
+                                    id="company"
+                                    name="company"
+                                    value={formData.company}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="phone">Phone/Contact no*</label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="email">Email*</label>
                                 <input
                                     type="email"
                                     id="email"
@@ -126,39 +169,17 @@ const ContactPage = () => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="phone">Phone Number</label>
-                                <input
-                                    type="tel"
-                                    id="phone"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="subject">Subject*</label>
-                                <input
-                                    type="text"
-                                    id="subject"
-                                    name="subject"
-                                    value={formData.subject}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="message">Your Message*</label>
+                                <label htmlFor="message">Message</label>
                                 <textarea
                                     id="message"
                                     name="message"
                                     rows="5"
                                     value={formData.message}
                                     onChange={handleChange}
-                                    required
                                 ></textarea>
                             </div>
                             <button type="submit" className="submit-btn" disabled={isLoading}>
-                                <FaPaperPlane className="submit-icon" /> Send Message
+                                <FaPaperPlane className="submit-icon" /> Send
                             </button>
                         </form>
                     )}
