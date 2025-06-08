@@ -12,14 +12,12 @@
   text-align: center;
   padding: 10vh 2rem;
   margin-bottom: 3rem;
-  margin-top: 4rem;
   border-radius: 0.5rem;
 }
 
 .manufacturing-hero h1 {
   font-size: clamp(2rem, 5vw, 3.5rem);
   margin-bottom: 1rem;
-  color: white;
 }
 
 .manufacturing-hero p {

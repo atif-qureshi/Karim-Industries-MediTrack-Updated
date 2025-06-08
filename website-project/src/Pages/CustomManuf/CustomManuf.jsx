@@ -1,6 +1,5 @@
-import React from 'react';
+import React from 'react'
 import './CustomManuf.css';
-
 const CustomManuf = () => {
     return (
         <div>
@@ -80,7 +79,7 @@ const CustomManuf = () => {
                             {/* <!-- Cotton Products --> */}
                             <div className="category-card">
                                 <div
-                                    classNameName="category-img"
+                                    className="category-img"
                                     style={{
                                         backgroundImage: "url('https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"
                                     }}
@@ -100,10 +99,9 @@ const CustomManuf = () => {
                             {/* <!-- Bandages --> */}
                             <div className="category-card">
                                 <div
-                                    classNameName="category-img"
+                                    className="category-img"
                                     style={{
-                                        backgroundImage:
-                                            "url('https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')",
+                                        backgroundImage: "url('https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"
                                     }}
                                 ></div>
 
@@ -121,10 +119,9 @@ const CustomManuf = () => {
                             {/* <!-- Gauze Products --> */}
                             <div className="category-card">
                                 <div
-                                    classNameName="category-img"
+                                    className="category-img"
                                     style={{
-                                        backgroundImage:
-                                            "url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')",
+                                        backgroundImage: "url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"
                                     }}
                                 ></div>
 
@@ -142,7 +139,7 @@ const CustomManuf = () => {
                             {/* <!-- Specialized Dressings --> */}
                             <div className="category-card">
                                 <div
-                                    classNameName="category-img"
+                                    className="category-img"
                                     style={{
                                         backgroundImage: "url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"
                                     }}
@@ -162,7 +159,7 @@ const CustomManuf = () => {
                             {/* <!-- Surgical Products --> */}
                             <div className="category-card">
                                 <div
-                                    classNameName="category-img"
+                                    className="category-img"
                                     style={{
                                         backgroundImage: "url('https://images.unsplash.com/photo-1581595219315-a187dd40c322?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"
                                     }}
@@ -182,7 +179,7 @@ const CustomManuf = () => {
                             {/* <!-- Antiseptic Products --> */}
                             <div className="category-card">
                                 <div
-                                    classNameName="category-img"
+                                    className="category-img"
                                     style={{
                                         backgroundImage: "url('https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"
                                     }}
@@ -236,7 +233,7 @@ const CustomManuf = () => {
                         </div>
                     </section>
 
-                    {/* <!-- CTA Section --> */}
+                    {/* <!-- CTA Section -->s */}
                     <section className="cta-section">
                         <h2>Ready to Partner with Us?</h2>
                         <p>
@@ -254,4 +251,4 @@ const CustomManuf = () => {
     )
 }
 
-export default CustomManuf;
+export default CustomManuf
