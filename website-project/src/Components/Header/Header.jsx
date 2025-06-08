@@ -431,8 +431,8 @@ const Header = () => {
                             <li className="dropdown-submenu">
                                 <Link to="/CustomManuf">Custom Manufacturing</Link>
                                 <ul className="dropdown-submenu">
-                                    <li><Link to="/ProductCustomization">Product Customization</Link></li>
                                     <li><Link to="/StandardCompliance">Standards Compliance</Link></li>
+                                    <li><Link to="/MarketCompliance">Market Compliance</Link></li>
                                 </ul>
                             </li>
 
@@ -440,7 +440,6 @@ const Header = () => {
                                 <Link to="/GlobalExport">Global Export</Link>
                                 <ul className="dropdown-submenu">
                                     <li><Link to="/LogisticManagement">Logistics Management</Link></li>
-                                    <li><Link to="/MarketCompliance">Market Compliance</Link></li>
                                 </ul>
                             </li>
 

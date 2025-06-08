@@ -5,7 +5,6 @@ import Home from './Pages/Home/Home.jsx';
 import AboutUs from './Pages/AboutUs/About.jsx';
 import Footer from './Components/Footer/Footer.jsx';
 import CustomManuf from './Pages/CustomManuf/CustomManuf.jsx';
-import ProductCustomization from './Pages/ProductCustomization/ProductCustomization.jsx';
 import StandardCompliance from './Pages/StandardCompliance/StandardCompliance.jsx';
 import GlobalExport from './Pages/GlobalExport/GlobalExport.jsx';
 import LogisticManagement from './Pages/LogisticManagement/LogisticManagement.jsx';
@@ -24,7 +23,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/AboutUs" element={<AboutUs />} />
         <Route path='/CustomManuf' element={<CustomManuf />} />
-        <Route path='/ProductCustomization' element={<ProductCustomization />} />
         <Route path='/StandardCompliance' element={<StandardCompliance />} />
         <Route path='/GlobalExport' element={<GlobalExport />} />
         <Route path='/LogisticManagement' element={<LogisticManagement />} />

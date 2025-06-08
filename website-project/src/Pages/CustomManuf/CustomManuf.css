@@ -1,3 +1,4 @@
+
 /* Layout */
 .manufacturing-container {
   max-width: 120rem;
@@ -13,6 +14,7 @@
   padding: 10vh 2rem;
   margin-bottom: 3rem;
   border-radius: 0.5rem;
+  margin-top: 4rem;
 }
 
 .manufacturing-hero h1 {
