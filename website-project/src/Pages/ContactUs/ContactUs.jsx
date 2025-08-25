@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './ContactUs.css';
 import { FaMapMarkerAlt, FaBuilding, FaLink, FaEnvelope, FaGlobe, FaPhone, FaUserTie, FaPaperPlane } from 'react-icons/fa';
 import { FiCheckCircle } from 'react-icons/fi';
-import emailjs from 'emailjs-com';
 
 const ContactPage = () => {
     const [formData, setFormData] = useState({
@@ -24,22 +23,25 @@ const ContactPage = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
 
-        // Replace with your EmailJS service ID, template ID, and user ID
-        const serviceID = 'service_kmd11fr';
-        const templateID = 'template_sjj57gd';
-        const userID = 'dlZ_I3GUqmFo9n2o4';
+        try {
+            const response = await fetch('http://localhost:5000/api/contact/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
 
-        emailjs.send(serviceID, templateID, formData, userID)
-            .then((response) => {
-                console.log('Email sent successfully!', response.status, response.text);
+            const result = await response.json();
+
+            if (result.success) {
                 setIsSubmitted(true);
                 setIsLoading(false);
 
-                // Reset form after 3 seconds
                 setTimeout(() => {
                     setFormData({
                         name: '',
@@ -51,12 +53,14 @@ const ContactPage = () => {
                     });
                     setIsSubmitted(false);
                 }, 3000);
-            })
-            .catch((error) => {
-                console.error('Failed to send email:', error);
-                alert('Failed to send message. Please try again later.');
-                setIsLoading(false);
-            });
+            } else {
+                throw new Error(result.message || "Unknown error");
+            }
+        } catch (error) {
+            alert('Failed to send message. Please try again later.');
+            setIsLoading(false);
+            console.error('Error:', error);
+        }
     };
 
     return (
@@ -73,21 +77,18 @@ const ContactPage = () => {
                         <p>½ Km Raiwind Road, Raiwind<br />Lahore-Pakistan</p>
                         <p><FaPhone className="icon" /> +92-42-35392174</p>
                     </div>
-
                     <div className="info-section">
                         <h2><FaBuilding className="icon" /> Head Office</h2>
                         <p>135-C Nawab Town, Thokar Niaz Baig<br />Lahore-Pakistan</p>
                         <p><FaPhone className="icon" /> +92-42-35233001</p>
                         <p><FaPhone className="icon" /> +92-300-4090248</p>
                     </div>
-
                     <div className="info-section">
                         <h2><FaLink className="icon" /> Online Contacts</h2>
                         <p><FaEnvelope className="icon" /> info@karimindustries.com.pk</p>
                         <p><FaEnvelope className="icon" /> karimindustries786@gmail.com</p>
                         <p><FaGlobe className="icon" /> www.karimindustries.com.pk</p>
                     </div>
-
                     <div className="info-section">
                         <h2><FaUserTie className="icon" /> Liason Office</h2>
                         <p>Ch. Imam Din Medicine Market, 2nd Floor, Room No. 12<br />
@@ -179,7 +180,7 @@ const ContactPage = () => {
                                 ></textarea>
                             </div>
                             <button type="submit" className="submit-btn" disabled={isLoading}>
-                                <FaPaperPlane className="submit-icon" /> Send
+                                <FaPaperPlane className="submit-icon" /> {isLoading ? 'Sending...' : 'Send'}
                             </button>
                         </form>
                     )}

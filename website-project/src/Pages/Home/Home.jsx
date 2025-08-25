@@ -1,43 +1,13 @@
-import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import slide1 from './Images/Mask-group-5.png';
 import slide2 from './Images/Mask-group-51.png';
 import slide3 from './Images/Mask-group-54.png';
 import pressure from './Images/pressure-1-1.png';
-import AuthPopup from '../AuthPopup/AuthPop';
 import './Home.css';
 
 const Home = () => {
-  const [showAuthPopup, setShowAuthPopup] = useState(false);
-
-  useEffect(() => {
-    // Show popup when home page loads
-    const timer = setTimeout(() => {
-      // Check if user is not already logged in
-      const isLoggedIn = localStorage.getItem('isLoggedIn');
-      if (!isLoggedIn) {
-        setShowAuthPopup(true);
-      }
-    }, 1000); // Show after 1 second delay
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleLoginSuccess = () => {
-    localStorage.setItem('isLoggedIn', 'true');
-    setShowAuthPopup(false);
-  };
-
   return (
     <div>
-      {/* Auth Popup - will appear automatically */}
-      {showAuthPopup && (
-        <AuthPopup
-          onClose={() => setShowAuthPopup(false)}
-          onLoginSuccess={handleLoginSuccess}
-        />
-      )}
-
       {/* Rest of your existing home page content */}
       <div className="slider-container">
         <div className="slider">

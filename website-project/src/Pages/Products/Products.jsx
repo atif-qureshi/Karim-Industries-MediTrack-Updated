@@ -1,5 +1,30 @@
 import { Link } from 'react-router-dom';
 import './Products.css';
+import MediCott from './images/Medi_cott.png';
+import MediBalls from './images/Medi_Balls.png';
+import MediZigZag from './images/Medi-Zig-Zag.png';
+import OrthoCott from './images/Ortho-Cott.png';
+import MediCrape from './images/Medi-Crepe.png';
+import MediPlast from './images/Medi-Plast.png';
+import MediBand from './images/Medi-Band.png';
+import MediTraingular from './images/Medi-Triangular.png';
+import SoftGuaze from './images/Soft-Guaz.png';
+import MeSoftGuaze from './images/Me-Soft-Guaze.png';
+import SoftGuazeRoll from './images/Soft-Guaze-Roll.png';
+import MediLintGuaze from './images/Medi-Lint-Guaze.png';
+import MediLapSponges from './images/Medi_Lap-Sponges.png';
+import MediSufraTulle from './images/Medi-Sofra-Tulle.png';
+import SeptiGrassTulle from './images/Septi-Gras_Tulle.png';
+import MediParaffin from './images/Medi-Paraffin-Guaze.png';
+import FustinTulle from './images/Fusitin-Tulle.png';
+import MediEyePad from './images/Medi-Eye-Pad.png';
+import PoveeTulle from './images/Povee-Tulle.png';
+import SilvaTulle from './images/Silvs-Tulle-Guaze.png';
+import SurgiGrip from './images/Surgi-Grip.png';
+import AlcoSwab from './images/Alco-Swab.png';
+import MedicareDrapeKit from './images/Medicare-Drape-Kit.png';
+import MedicareGown from './images/Medicare-Gown.png';
+
 const Products = () => {
     const products = [
         {
@@ -13,7 +38,7 @@ const Products = () => {
                 "Standard weights: 100g, 200g, 400g, 500g, 1000g"
             ],
             sizes: "Available in all weights as per customer demand",
-            image: "medi-cot.jpg"
+            image: MediCott
         },
         {
             id: 2,
@@ -27,7 +52,7 @@ const Products = () => {
                 "Standard Weight: 1g to 5g"
             ],
             sizes: "Available in all weights as per customer demand",
-            image: "medi-balls.jpg"
+            image: MediBalls
         },
         {
             id: 3,
@@ -41,7 +66,7 @@ const Products = () => {
                 "Standard weights: 100g, 200g"
             ],
             sizes: "Available in all weights as per customer demand",
-            image: "zig-zag.jpg"
+            image: MediZigZag
         },
         {
             id: 4,
@@ -54,7 +79,7 @@ const Products = () => {
                 "Standard Sizes: 3 inches, 4 inches, 6 inches"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "ortho-cot.jpg"
+            image: OrthoCott
         },
         {
             id: 5,
@@ -68,7 +93,7 @@ const Products = () => {
                 "Standard Size: Width 7.5cm, 10cm, 15cm x Length 3m & 4.5m"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "crepe-bandage.jpg"
+            image: MediCrape
         },
         {
             id: 6,
@@ -82,7 +107,7 @@ const Products = () => {
                 "Standard Size: Width 7.5cm, 10cm, 15cm x Length 2.7m"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "pop-bandage.jpg"
+            image: MediPlast
         },
         {
             id: 7,
@@ -96,7 +121,7 @@ const Products = () => {
                 "Standard Size: Width: 5cm, 6.5cm, 7.5cm, 10cm, 15cm x Length: 3m, 4m, 5m, & 6m"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "open-wove.jpg"
+            image: MediBand
         },
         {
             id: 8,
@@ -110,7 +135,7 @@ const Products = () => {
                 "To control bleeding (tourniquet)"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "triangular-bandage.jpg"
+            image: MediTraingular
         },
         {
             id: 9,
@@ -124,7 +149,7 @@ const Products = () => {
                 "Standard Size: 7.5cm x 7.5cm, 10cm x 10cm, 15cm x 15cm"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "gauze-swab.jpg"
+            image: SoftGuaze
         },
         {
             id: 10,
@@ -138,7 +163,7 @@ const Products = () => {
                 "Standard Size: 10cm x 10cm, 15cm x 15cm"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "usb-gauze.jpg"
+            image: MeSoftGuaze
         },
         {
             id: 11,
@@ -151,7 +176,7 @@ const Products = () => {
                 "Standard Size: Width: 1m x Length: 2.5m, 5m, 10m, 20m, 30m, 40m, 50m"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "gauze-roll.jpg"
+            image: SoftGuazeRoll
         },
         {
             id: 12,
@@ -164,7 +189,7 @@ const Products = () => {
                 "Standard Size: 50g, 500g"
             ],
             sizes: "Available in all weights as per customer demand",
-            image: "lint-gauze.jpg"
+            image: MediLintGuaze
         },
         {
             id: 13,
@@ -177,7 +202,7 @@ const Products = () => {
                 "Standard Size: 30cm × 30cm, 45cm × 45cm (4ply, 6ply, 8ply)"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "lap-sponges.jpg"
+            image: MediLapSponges
         },
         {
             id: 14,
@@ -191,7 +216,7 @@ const Products = () => {
                 "Standard Size: 10cm x 10cm"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "sofra-tulle.jpg"
+            image: MediSufraTulle
         },
         {
             id: 15,
@@ -205,7 +230,7 @@ const Products = () => {
                 "Standard Size: 10cm x 10cm"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "chlorhexidine-tulle.jpg"
+            image: SeptiGrassTulle
         },
         {
             id: 16,
@@ -219,7 +244,7 @@ const Products = () => {
                 "Standard Size: 10cm x 10cm"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "paraffin-gauze.jpg"
+            image: MediParaffin
         },
         {
             id: 17,
@@ -232,7 +257,7 @@ const Products = () => {
                 "Standard Size: 10cm x 10cm, 15cm x 20cm, 15cm x 150cm"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "fustin-tulle.jpg"
+            image: FustinTulle
         },
         {
             id: 18,
@@ -245,7 +270,7 @@ const Products = () => {
                 "Standard Size: Eye-specific dimensions"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "eye-pad.jpg"
+            image: MediEyePad
         },
         {
             id: 19,
@@ -258,7 +283,7 @@ const Products = () => {
                 "Standard Size: 10cm x 10cm, 15cm x 20cm, 15cm x 150cm"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "povidone-tulle.jpg"
+            image: PoveeTulle
         },
         {
             id: 20,
@@ -271,7 +296,7 @@ const Products = () => {
                 "Standard Size: 10cm x 10cm, 15cm x 20cm, 15cm x 150cm"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "silver-tulle.jpg"
+            image: SilvaTulle
         },
         {
             id: 21,
@@ -284,7 +309,7 @@ const Products = () => {
                 "Standard Size: Width: 0.5-5 inch, Length: 3-9 Yard"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "surgical-tape.jpg"
+            image: SurgiGrip
         },
         {
             id: 22,
@@ -297,7 +322,7 @@ const Products = () => {
                 "Standard Size: 3cmx3cm, 6cmx6cm, 10cm x 10cm"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "alcohol-swab.jpg"
+            image: AlcoSwab
         },
         {
             id: 23,
@@ -310,7 +335,7 @@ const Products = () => {
                 "Types: C-Section, Ortho, Universal, Laparoscopic, PCNL, Knee Replacement"
             ],
             sizes: "Available in all configurations as per customer demand",
-            image: "drape-kit.jpg"
+            image: MedicareDrapeKit
         },
         {
             id: 24,
@@ -324,7 +349,7 @@ const Products = () => {
                 "Options: Surgical Gown, Reinforced Gown, Isolation Gown"
             ],
             sizes: "Available in all sizes as per customer demand",
-            image: "surgical-gown.jpg"
+            image: MedicareGown
         }
     ];
 
@@ -340,7 +365,8 @@ const Products = () => {
             <div className="product-grid">
                 {products.map(product => (
                     <div key={product.id} className="product-card">
-                        <img src={`/images/${product.image}`} alt={product.name} />
+                        {/* <img src={`/images/${product.image}`} alt={product.name} /> */}
+                        <img src={product.image} alt={product.name} />
                         <h3>{product.name}</h3>
                         <Link
                             to={`/products/${product.id}`}

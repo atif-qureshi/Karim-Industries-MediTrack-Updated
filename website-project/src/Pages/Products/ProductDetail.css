@@ -1,14 +1,33 @@
 /* Product Detail Page Styles */
-
+body {
+  background: #fff5f5;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 245, 245, 1) 0%,
+    rgba(228, 140, 255, 1) 100%,
+    rgba(16, 51, 66, 1) 100%,
+    rgba(0, 205, 250, 1) 94%,
+    rgba(0, 212, 255, 1) 100%
+  );
+}
 .product-detail-container {
   margin-top: 0rem;
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  background: aqua;
+  /* background: aqua; */
   border-radius: 0.5rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  background: #fff5f5;
+  /* background: linear-gradient(
+    90deg,
+    rgba(255, 245, 245, 1) 0%,
+    rgba(228, 140, 255, 1) 100%,
+    rgba(16, 51, 66, 1) 100%,
+    rgba(0, 205, 250, 1) 94%,
+    rgba(0, 212, 255, 1) 100%
+  ); */
 }
 
 .product-image {
@@ -175,76 +194,4 @@
   .product-info {
     padding: 1rem;
   }
-}
-
-/* Add these styles to your existing ProductDetail.css */
-.inquiry-form-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.inquiry-form-container {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 500px;
-  position: relative;
-}
-
-.inquiry-form-container h3 {
-  margin-top: 0;
-  color: #2c3e50;
-}
-
-.close-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.submit-btn {
-  background: #0066cc;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  width: 100%;
-}
-
-.submit-btn:hover {
-  background: #0052a3;
 }

@@ -1,16 +1,14 @@
-:root {
-  --primary-color: #241a57;
-  --secondary-color: #1f11e0;
-  --text-color: #f5f6fa;
-  --light-gray: #dfe6e9;
-  --dark-gray: #636e72;
-  --footer-bg: #2d3436;
-}
-
 /* Footer Styles */
 footer {
-  background-color: var(--footer-bg);
-  color: var(--text-color);
+  /* background-color: #2d3436; */
+  background: #020024;
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 100%,
+    rgba(9, 9, 121, 1) 35%,
+    rgba(0, 212, 255, 1) 100%
+  );
+  color: #f5f6fa;
   padding: clamp(3rem, 5vh, 5rem) clamp(1.5rem, 5vw, 4rem);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -26,11 +24,7 @@ footer::before {
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(
-    90deg,
-    var(--primary-color),
-    var(--secondary-color)
-  );
+  background: linear-gradient(90deg, #241a57, #1f11e0);
 }
 
 .footer-column {
@@ -53,7 +47,7 @@ footer::before {
   left: 0;
   width: 50px;
   height: 3px;
-  background: var(--secondary-color);
+  background: #1f11e0;
   border-radius: 3px;
 }
 
@@ -66,7 +60,7 @@ footer::before {
 }
 
 .quick-links li a {
-  color: var(--light-gray);
+  color: #dfe6e9;
   text-decoration: none;
   font-size: clamp(1rem, 1.5vw, 1rem);
   transition: all 0.3s ease;
@@ -82,7 +76,7 @@ footer::before {
   left: 0;
   width: 0;
   height: 2px;
-  background: var(--secondary-color);
+  background: #1f11e0;
   transition: width 0.3s ease;
 }
 
@@ -109,13 +103,15 @@ footer::before {
 }
 
 .address-icon {
-  color: var(--secondary-color);
-  font-size: 1.2rem;
+  color: #1f11e0;
+  font-size: 1em; /* matches the text size */
   margin-top: 0.2rem;
+  line-height: 1;
 }
 
+/* Address Text */
 .address-text {
-  color: var(--light-gray);
+  color: #dfe6e9;
   font-size: clamp(1rem, 1.5vw, 1rem);
   line-height: 1.6rem;
 }
@@ -128,7 +124,7 @@ footer::before {
 }
 
 .newsletter p {
-  color: var(--light-gray);
+  color: #dfe6e9;
   font-size: clamp(1rem, 1.5vw, 1rem);
   line-height: 1.6;
 }
@@ -150,17 +146,13 @@ footer::before {
 }
 
 .email-input:focus {
-  outline: 2px solid var(--secondary-color);
+  outline: 2px solid #1f11e0;
   background: rgba(110, 90, 90, 0.2);
 }
 
 .subscribe-btn {
   padding: clamp(0.7rem, 1.5vh, 0.9rem);
-  background: linear-gradient(
-    135deg,
-    var(--primary-color),
-    var(--secondary-color)
-  );
+  background: linear-gradient(135deg, #241a57, #1f11e0);
   color: white;
   border: none;
   border-radius: 0.3rem;
@@ -188,21 +180,17 @@ footer::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: clamp(2.5rem, 3vw, 3rem);
-  height: clamp(2.5rem, 3vw, 3rem);
+  width: calc(1.8em + 1vw); /* size relative to text */
+  height: calc(1.8em + 1vw);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.1em; /* proportional to the container */
   transition: all 0.3s ease;
 }
 
 .social-icon:hover {
-  background: linear-gradient(
-    135deg,
-    var(--primary-color),
-    var(--secondary-color)
-  );
+  background: linear-gradient(135deg, #241a57, #1f11e0);
   transform: translateY(-5px) scale(1.1);
 }
 
@@ -213,7 +201,7 @@ footer::before {
   padding-top: 1.3rem;
   margin-top: 1rem;
   border-top: 1px solid rgba(202, 180, 180, 0.1);
-  color: var(--light-gray);
+  color: #dfe6e9;
   font-size: clamp(1.1rem, 1.5vw, 0.9rem);
 }
 
@@ -232,6 +220,7 @@ footer::before {
   .social-media {
     justify-content: space-around;
   }
+
   .address-item {
     gap: 0.7rem;
   }
@@ -246,6 +235,7 @@ footer::before {
   .quick-links {
     gap: 1.25rem;
   }
+
   .quick-links li {
     min-width: 8%;
   }

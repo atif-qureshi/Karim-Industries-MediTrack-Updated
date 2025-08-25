@@ -1,16 +1,20 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
 import logo from './Images/logo.jpeg';
+import Hamburger from './Hamburger.js';
 
 const Header = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
-    const [searchError, setSearchError] = useState('');
     const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
+    const [mobileMenu, setMobileMenu] = useState(false);
+    const [searchError, setSearchError] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
+    const searchInputRef = useRef(null);
 
     const products = useMemo(() => [
         {
@@ -363,49 +367,74 @@ const Header = () => {
         }
     ], []);
 
+    // Clear search input and close menu when route changes
+    useEffect(() => {
+        setSearchTerm('');
+        setShowSuggestions(false);
+        setMobileMenu(false);
+    }, [location.pathname]);
+
+    // Filter suggestions as user types (frontend only)
     useEffect(() => {
         if (searchTerm.trim() === '') {
             setSuggestions([]);
+            setShowSuggestions(false);
             return;
         }
 
-        // Only search by name now (removed the ID check)
-        const filtered = products.filter(product =>
-            product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        const filtered = products.filter(p =>
+            p.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setSuggestions(filtered);
+        setShowSuggestions(filtered.length > 0);
     }, [searchTerm, products]);
 
+    // Hide suggestions when clicking outside
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (searchInputRef.current && !searchInputRef.current.contains(event.target)) {
+                setShowSuggestions(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    // Handle search submit
     const handleSearch = (e) => {
         e.preventDefault();
         setSearchError('');
-        setShowPopup(false);
-
-        if (searchTerm.trim() === '') {
+        const trimmed = searchTerm.trim();
+        if (trimmed === '') {
             setPopupMessage('Please enter a product name');
             setShowPopup(true);
             return;
         }
 
-        const foundProduct = products.find(
-            product => product.name.toLowerCase() === searchTerm.toLowerCase()
+        const exactMatch = products.find(
+            p => p.name.trim().toLowerCase() === trimmed.toLowerCase()
         );
 
-        if (foundProduct) {
-            setSearchTerm(''); // Clear search only after successful navigation
-            navigate(foundProduct.path);
+        if (exactMatch) {
+            setSearchTerm('');
+            setShowSuggestions(false);
+            setMobileMenu(false);
+            navigate(`/products/${exactMatch.id}`); // 👈 use `id` from array
         } else {
             setPopupMessage(`"${searchTerm}" not found. Try a valid product name.`);
             setShowPopup(true);
         }
     };
 
+    // On suggestion click
     const handleSuggestionClick = (product) => {
-        setSearchTerm(product.name); // Keep the product name in search field
-        setShowSuggestions(false); // Hide suggestions
+        setSearchTerm(product.name);
+        setShowSuggestions(false);
         setSearchError('');
-        // Don't navigate yet - wait for search button click
     };
+
+    const handleHamburger = () => setMobileMenu(prev => !prev);
+    const closeMenu = () => setMobileMenu(false);
 
     return (
         <div>
@@ -415,49 +444,45 @@ const Header = () => {
                     <span>Karim <br />Industries</span>
                 </div>
 
-                <button className="hamburger" aria-label="Toggle navigation">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+                <Hamburger isActive={mobileMenu} onClick={handleHamburger} />
 
-                <ul className="nav-links">
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/AboutUs">About Us</Link></li>
-
+                <ul className={`nav-links${mobileMenu ? ' active' : ''}`}>
+                    <li><Link to="/" onClick={closeMenu}>Home</Link></li>
+                    <li><Link to="/AboutUs" onClick={closeMenu}>About Us</Link></li>
                     <li className="dropdown">
-                        <Link to="/Services">Services ▼</Link>
+                        <Link to="/Services" onClick={closeMenu}>Services ▼</Link>
                         <ul className="dropdown-menu">
                             <li className="dropdown-submenu">
-                                <Link to="/CustomManuf">Custom Manufacturing</Link>
+                                <Link to="/CustomManuf" onClick={closeMenu}>Custom Manufacturing</Link>
                                 <ul className="dropdown-submenu">
-                                    <li><Link to="/StandardCompliance">Standards Compliance</Link></li>
-                                    <li><Link to="/MarketCompliance">Market Compliance</Link></li>
+                                    <li><Link to="/StandardCompliance" onClick={closeMenu}>Standards Compliance</Link></li>
+                                    <li><Link to="/MarketCompliance" onClick={closeMenu}>Market Compliance</Link></li>
                                 </ul>
                             </li>
-
                             <li className="dropdown-submenu">
-                                <Link to="/GlobalExport">Global Export</Link>
+                                <Link to="/GlobalExport" onClick={closeMenu}>Global Export</Link>
                                 <ul className="dropdown-submenu">
-                                    <li><Link to="/LogisticManagement">Logistics Management</Link></li>
+                                    <li><Link to="/LogisticManagement" onClick={closeMenu}>Logistics Management</Link></li>
                                 </ul>
                             </li>
-
                             <li className="dropdown-submenu">
-                                <Link to="/ExhibitionProgram">Exhibition Programs</Link>
+                                <Link to="/ExhibitionProgram" onClick={closeMenu}>Exhibition Programs</Link>
                                 <ul className="dropdown-submenu">
-                                    <li><Link to="/DistributerCollaboration">Distributor Collaborations</Link></li>
+                                    <li><Link to="/DistributerCollaboration" onClick={closeMenu}>Distributor Collaborations</Link></li>
                                 </ul>
                             </li>
                         </ul>
                     </li>
-
-                    <li><Link to="/Products">Products</Link></li>
-                    <li><Link to="/ContactUs">Contact Us</Link></li>
+                    <li><Link to="/Products" onClick={closeMenu}>Products</Link></li>
+                    <li><Link to="/ContactUs" onClick={closeMenu}>Contact Us</Link></li>
+                    <li style={{ display: "none" }}>
+                        <Link to="/owner-login" onClick={closeMenu}>Owner Login</Link>
+                    </li>
                 </ul>
 
-                <div className="search-bar">
-                    <form onSubmit={handleSearch}>
+                {/* Search Bar */}
+                <div className="search-bar" ref={searchInputRef}>
+                    <form onSubmit={handleSearch} autoComplete="off">
                         <input
                             type="text"
                             placeholder="Search by name"
@@ -465,25 +490,24 @@ const Header = () => {
                             onChange={(e) => {
                                 setSearchTerm(e.target.value);
                                 setShowSuggestions(true);
-                                setSearchError(''); // Clear error on typing
+                                setSearchError('');
+                            }}
+                            onFocus={() => {
+                                if (suggestions.length > 0) setShowSuggestions(true);
                             }}
                         />
                         <button type="submit">Search</button>
                     </form>
 
-                    {/* Error message */}
                     {searchError && (
-                        <div className="search-error">
-                            {searchError}
-                        </div>
+                        <div className="search-error">{searchError}</div>
                     )}
 
-                    {/* Suggestions dropdown (optional) */}
                     {showSuggestions && suggestions.length > 0 && (
                         <ul className="search-suggestions">
                             {suggestions.map(product => (
                                 <li
-                                    key={product.name}
+                                    key={product.id}
                                     onClick={() => handleSuggestionClick(product)}
                                 >
                                     {product.name}
@@ -492,6 +516,7 @@ const Header = () => {
                         </ul>
                     )}
                 </div>
+
                 {showPopup && (
                     <div className="popup-overlay">
                         <div className="popup-box">
@@ -502,7 +527,7 @@ const Header = () => {
                 )}
             </nav>
         </div>
-    )
-}
+    );
+};
 
 export default Header;
