@@ -3,29 +3,32 @@
   margin: 0 auto;
   padding: 32px;
 }
-
-/* Hero Section */
-.compliance-hero {
-  text-align: center;
-  padding: 50px 32px;
-  margin-bottom: 48px;
-  background: linear-gradient(135deg, #0056b3 0%, #003366 100%);
-  color: white;
+/* Heading Section */
+.products-heading {
+  background-color: transparent;
   margin-top: 4rem;
-  border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 1.25rem; /* 20px */
+  padding: 1.25rem 0; /* 20px */
 }
 
-.compliance-hero h1 {
-  font-size: clamp(32px, 5vw, 56px);
-  margin-bottom: 16px;
-  color: white;
+.products-heading h1 {
+  font-size: 2.8rem;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  display: inline-block;
+  border-bottom: 0.1875rem solid #050505; /* 3px */
+  font-weight: 600;
+  margin-top: 2rem;
 }
 
-.compliance-hero p {
-  font-size: clamp(16px, 2vw, 24px);
-  max-width: 800px;
+.products-heading p {
+  font-size: 1.1rem;
+  color: black;
+  max-width: 43.75rem; /* 700px */
   margin: 0 auto;
+  line-height: 1.6;
 }
 
 /* Standards Section */
@@ -46,7 +49,7 @@
 
 .standards-intro p {
   font-size: 19px;
-  color: #7f8c8d;
+  color: black;
   max-width: 800px;
   margin: 0 auto;
 }
@@ -59,7 +62,8 @@
 }
 
 .standard-card {
-  background: aqua;
+  background: white;
+  color: black;
   padding: 32px;
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -74,7 +78,7 @@
 .standard-icon {
   width: 80px;
   height: 80px;
-  background: #3498db;
+  background: purple;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -92,7 +96,7 @@
 
 .standard-card p {
   margin-bottom: 24px;
-  color: #7f8c8d;
+  color: black;
 }
 
 .compliance-list {
@@ -109,8 +113,8 @@
 }
 
 .compliance-list li:before {
-  content: "✓";
-  color: #3498db;
+  content: "*";
+  color: purple;
   margin-right: 8px;
   font-weight: bold;
 }
@@ -134,7 +138,7 @@
 }
 
 .feature-box {
-  background: aqua;
+  background: white;
   padding: 32px;
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -148,18 +152,18 @@
 
 .feature-box i {
   font-size: 48px;
-  color: #3498db;
+  color: purple;
   margin-bottom: 24px;
 }
 
 .feature-box h3 {
   font-size: 21px;
   margin-bottom: 16px;
-  color: #2c3e50;
+  color: black;
 }
 
 .feature-box p {
-  color: #7f8c8d;
+  color: black;
 }
 
 /* Certifications Section */
@@ -190,7 +194,7 @@
 }
 
 .certification-item {
-  background: aqua;
+  background: white;
   padding: 48px 32px;
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -204,7 +208,7 @@
 .certification-badge {
   width: 112px;
   height: 112px;
-  background: aqua;
+  background: purple;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -216,22 +220,18 @@
 
 .certification-item h3 {
   font-size: 24px;
-  color: #2c3e50;
+  color: black;
   margin-bottom: 8px;
 }
 
 .certification-item p {
-  color: #7f8c8d;
+  color: black;
   font-size: 18px;
 }
 
 /* Commitment Section */
 .commitment-section {
-  background: linear-gradient(
-    135deg,
-    rgba(52, 152, 219, 0.1) 0%,
-    rgba(231, 76, 60, 0.1) 100%
-  );
+  background-color: white;
   padding: 64px 32px;
   border-radius: 8px;
   margin-bottom: 48px;
@@ -272,14 +272,14 @@
   display: block;
   font-size: 48px;
   font-weight: bold;
-  color: #3498db;
+  color: purple;
   line-height: 1;
   margin-bottom: 8px;
 }
 
 .stat-label {
   font-size: 18px;
-  color: #7f8c8d;
+  color: black;
 }
 
 /* Responsive Adjustments */

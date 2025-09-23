@@ -21,13 +21,9 @@
     <link rel="canonical" href="https://karimindustries.com/" />
 
     <!-- Favicon & App Icons -->
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="%PUBLIC_URL%/apple-touch-icon.png"
-    />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
 
     <!-- Open Graph Tags for Facebook & LinkedIn -->
     <meta
@@ -40,7 +36,7 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://karimindustries.com/" />
-    <meta property="og:image" content="%PUBLIC_URL%/og-image.jpg" />
+    <meta property="og:image" content="/og-image.jpg" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -52,12 +48,36 @@
       name="twitter:description"
       content="Premium quality surgical, dental, and hospital instruments for export worldwide. Trusted by global healthcare providers."
     />
-    <meta name="twitter:image" content="%PUBLIC_URL%/og-image.jpg" />
+    <meta name="twitter:image" content="/og-image.jpg" />
     <meta name="twitter:site" content="@karim_industries" />
     <meta name="twitter:creator" content="@karim_industries" />
 
     <!-- Theme Color (for PWA/browser bar) -->
     <meta name="theme-color" content="#0a2342" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Karim Industries",
+        "url": "https://karimindustries.com/",
+        "logo": "https://karimindustries.com/logo.png",
+        "description": "Karim Industries offers premium quality medical, surgical, and dental instruments manufactured in Pakistan and supplied globally.",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+92-331-4597652",
+          "contactType": "Customer Service",
+          "areaServed": "Worldwide",
+          "availableLanguage": ["English", "Urdu"]
+        },
+        "sameAs": [
+          "https://www.facebook.com/karimindustries",
+          "https://www.linkedin.com/company/karimindustries",
+          "https://twitter.com/karim_industries"
+        ]
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

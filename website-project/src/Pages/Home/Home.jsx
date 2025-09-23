@@ -1,100 +1,121 @@
 import { Link } from 'react-router-dom';
-import slide1 from './Images/Mask-group-5.png';
-import slide2 from './Images/Mask-group-51.png';
-import slide3 from './Images/Mask-group-54.png';
-import pressure from './Images/pressure-1-1.png';
 import './Home.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import CottonBandage from './Images/CottonBandages.jpg';
+import Wool from './Images/CottonWool.jpg';
+import Crepe from './Images/CrepeBandage.jpeg';
+import Eye from './Images/EyePad.jpeg';
+import FusidateTulle from './Images/FusidateGuaze.jpg';
+import Swab from './Images/GuazeSwab.png';
+import Lap from './Images/LapSpongaes.jpg';
+import Lint from './Images/LintGuaze.jpg';
+import Ortho from './Images/OrthoCotton.jpeg';
+import POp from './Images/POP.webp';
 
+import Surgical from './Section/Surgicalteam.jpg';
+import Advance from './Section/AdvanceWound.jpeg';  
 const Home = () => {
   return (
     <div>
-      {/* Rest of your existing home page content */}
       <div className="slider-container">
         <div className="slider">
           <div className="slide">
-            <img src={slide1} alt="Slide 1" />
+            <img src={CottonBandage} alt="Slide 1" loading='lazy'/>
             <div className="slide-content">
-              <h2>Beautiful Nature</h2>
-              <p>Explore the wonders of the natural world</p>
+              <h2>Cotton Bandage</h2>
             </div>
           </div>
+
           <div className="slide">
-            <img src={slide2} alt="Slide 2" />
+            <img src={Wool} alt="Slide 2" loading='lazy'/>
             <div className="slide-content">
-              <h2>Urban Landscapes</h2>
-              <p>Discover amazing cityscapes around the globe</p>
+              <h2>Cotton Wool</h2>
             </div>
           </div>
+
           <div className="slide">
-            <img src={slide3} alt="Slide 3" />
+            <img src={Crepe} alt="Slide 3" loading='lazy'/>
             <div className="slide-content">
-              <h2>Modern Technology</h2>
-              <p>The latest innovations shaping our future</p>
+              <h2>Crepe Bandage</h2>
+            </div>
+          </div>
+
+          <div className="slide">
+            <img src={Eye} alt="Slide 4" loading='lazy'/>
+            <div className="slide-content">
+              <h2>Eye Pad</h2>
+            </div>
+          </div>
+
+          <div className="slide">
+            <img src={FusidateTulle} alt="Slide 6" loading='lazy'/>
+            <div className="slide-content">
+              <h2>Fusidic Tulle</h2>
+            </div>
+          </div>
+
+          <div className="slide">
+            <img src={Swab} alt="Slide 7" loading='lazy'/>
+            <div className="slide-content">
+              <h2>Gauze Swab</h2>
+            </div>
+          </div>
+
+          <div className="slide">
+            <img src={Lap} alt="Slide 8" loading='lazy'/>
+            <div className="slide-content">
+              <h2>Lap Sponges</h2>
+            </div>
+          </div>
+
+          <div className="slide">
+            <img src={Lint} alt="Slide 9" loading='lazy'/>
+            <div className="slide-content">
+              <h2>Lint Gauze</h2>
+            </div>
+          </div>
+
+          <div className="slide">
+            <img src={Ortho} alt="Slide 10" loading='lazy'/>
+            <div className="slide-content">
+              <h2>Ortho Cotton</h2>
+            </div>
+          </div>
+
+          <div className="slide">
+            <img src={POp} alt="Slide 11" loading='lazy'/>
+            <div className="slide-content">
+              <h2>POP</h2>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Video Section */}
-      <div className="video-section">
-        <div className="video-container">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/a7UKUoVxAxo?si=HSV8nPYC1KdCve51"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen>
-          </iframe>
-          <div className="video-caption">Our Services</div>
-        </div>
-
-        <div className="video-container">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/V9lUW-S2kDA?si=Zq9czTgQnrOsIWMW"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen>
-          </iframe>
-          <div className="video-caption">Company Overview</div>
-        </div>
-      </div>
 
       {/* Image + Text Box Section */}
-      <div className="image-text-section">
+      <div div className="image-text-section" >
         <div className="image-box">
           <img
-            src={slide3}
+            src={Surgical}
             alt="High-quality wound dressing products"
+            loading='lazy'
           />
         </div>
         <div className="text-content">
           <h2>
-            Experience Effective Wound Dressing Solutions with Best Traditional
-            Wound Dressing Manufacturer
+            Experience Effective Surgical Dressing Solutions with Karim Industries
           </h2>
           <p>
-            As a leading wound dressing manufacturer, we provide clinically proven
-            solutions for effective wound care management. Our traditional wound
-            dressings combine time-tested methods with modern manufacturing
-            standards to deliver superior healing results.
+            As a leading manufacturer of surgical dressing products established in 1985, we provide top-quality solutions for hospitals and international markets. With a rich history and a commitment to quality, we serve hospitals & international markets.
           </p>
           <p>
-            Our products are designed by medical professionals to promote optimal
-            wound healing while preventing infections. We use only the highest
-            quality materials that meet international healthcare standards.
+            Our products are designed to meet the highest standards of quality, safety, and innovation, contributing to the healthcare industry and patient care.
           </p>
           <Link to="/Products" className="cta-button-2">
             Explore Our Products
           </Link>
         </div>
-      </div>
+      </div >
 
       <div className="text-content-2">
         <h2>
@@ -102,35 +123,22 @@ const Home = () => {
           of Wound Care Supplies Wholesale
         </h2>
         <p>
-          As the top surgical dressing supplier worldwide, we offer a lot of
-          top-quality wound care solutions for our patients and caregivers. Our
-          applications are part of the products that are used for medical
-          treatment worldwide. Our global wound care solutions help professionals
-          to improve the life quality of their patients. We work with hundreds of
-          nursing facilities and medical suppliers to fulfill our aim of serving
-          humanity in the best way. It helps us to honor our pledge of providing
-          affordable and inexpensive wound care supplies to everyone, including
-          deserving patients. Our extensive range of wound care supplies include;
+          As a renowned medical device manufacturing company specializing in surgical dressing / disposables, we offer a diverse array of surgical dressing products essential for medical practices. Our global solutions help professionals improve patient quality of life. We collaborate with numerous nursing facilities and medical suppliers to provide affordable wound care supplies to deserving patients. Our extensive range of products includes absorbent cotton wool products, gauze dressings/sponges, lint, tulle dressings, bandages, and more.
         </p>
       </div>
 
       <div className="image-text-section-2">
         <div className="image-box-2">
           <img
-            src={slide1}
+            src={CottonBandage}
             alt="High-quality wound dressing products"
+            loading='lazy'
           />
         </div>
         <div className="text-content-3">
           <h2>Traditional Wound Dressing</h2>
           <p>
-            At Karim Industries, we use patient-centric approaches and innovative
-            solutions to develop traditional wound dressings for our patients.
-            These dressings protect wounds from contamination. These dressings are
-            used for uninfected wounds with mild exudate. Our unique traditional
-            wound dressing solutions include absorbent cotton wool products,
-            absorbent gauze dressings/ sponges, absorbent lint, tulle dressings
-            and bandages.
+            At Karim Industries, we prioritize quality and efficiency in our products. These traditional dressings protect wounds from contamination and are suitable for uninfected wounds with mild exudate. Our offerings include Absorbent Cotton Wool (Medi Cot), Cotton Balls (Medi Balls), Zig Zag Cotton (Medi Zig Zag), Non Absorbent Cotton (Ortho Cot), Cotton Crepe Bandage (Medi Crepe), Plaster of Paris Bandage (Medi Plast), Open Wove Bandage (Medi Band), Triangular Bandage (Medi Triangular), Gauze Swab (Soft Gauze), Surgical Gauze Roll (Soft Gauze), and Lint Gauze (Medi Lint Gauze).
           </p>
           <Link to="/Products" className="cta-button-2">
             Explore Our Products
@@ -141,20 +149,15 @@ const Home = () => {
       <div className="image-text-section-3">
         <div className="image-box-3">
           <img
-            src={slide3}
+            src={Eye}
             alt="High-quality wound dressing products"
+            loading='lazy'
           />
         </div>
         <div className="text-content-4">
           <h2>Condition Specific Dressing</h2>
           <p>
-            At Karim Industries, we use patient-centric approaches and innovative
-            solutions to develop traditional wound dressings for our patients.
-            These dressings protect wounds from contamination. These dressings are
-            used for uninfected wounds with mild exudate. Our unique traditional
-            wound dressing solutions include absorbent cotton wool products,
-            absorbent gauze dressings/ sponges, absorbent lint, tulle dressings
-            and bandages.
+            Our condition-specific dressings are designed for targeted wound care. These include Lap Sponges (Medi Lap Sponges) for absorption during surgery, Gauze Eye Pad (Medi Eye Pad) for eye protection and relief, Alcohol Swab (Alco Swab) for cleaning and disinfection, and various medicated tulle dressings like Framycetin Sulphate (Medi Sofra Tulle), Chlorhexidine Tulle (Septi Grass Tulle), Paraffin Gauze (Medi Paraffin), Fusidic Acid (Fusitin Tulle), Povidone-Iodine (Povee-Tulle), and Silver Sulfadiazine (Silva Tulle) for infected and chronic wounds.
           </p>
           <Link to="/Products" className="cta-button-2">
             Explore Our Products
@@ -165,20 +168,15 @@ const Home = () => {
       <div className="image-text-section-4">
         <div className="image-box-4">
           <img
-            src={pressure}
+            src={Advance}
             alt="High-quality wound dressing products"
+            loading='lazy'
           />
         </div>
         <div className="text-content-4">
           <h2>Advanced Wound Dressing</h2>
           <p>
-            At Karim Industries, we use patient-centric approaches and innovative
-            solutions to develop traditional wound dressings for our patients.
-            These dressings protect wounds from contamination. These dressings are
-            used for uninfected wounds with mild exudate. Our unique traditional
-            wound dressing solutions include absorbent cotton wool products,
-            absorbent gauze dressings/ sponges, absorbent lint, tulle dressings
-            and bandages.
+            Karim Industries offers advanced solutions for complex wound management. These include Surgical Adhesive Paper Tape (Surgi Grip) for securing dressings, Surgical Drape Kit Set (Medicare) for sterile surgical environments, and Surgical Gowns (Medicare) for maximum barrier protection during procedures.
           </p>
           <Link to="/Products" className="cta-button-2">
             Explore Our Products
@@ -191,32 +189,32 @@ const Home = () => {
         <div className="card">
           <div className="card-content">
             <h3>Quality Assurance</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo, soluta. Voluptas dolorum itaque in officia accusamus id repellat quidem libero sapiente perferendis, tempore aliquid eos maiores! Eum maxime, molestias amet praesentium fugit labore quaerat consectetur ad rerum nemo corrupti, id est ut et eligendi sit cum! Labore ullam praesentium totam!</p>
+            <p>We prioritize quality, employing rigorous testing and advanced manufacturing techniques to guarantee the reliability and efficacy of our products. Our certifications include ISO 13485:2016, ISO 9001:2015, ISO 45001:2018, and BCI, ensuring compliance with international standards.</p>
           </div>
         </div>
 
         <div className="card">
           <div className="card-content">
             <h3>Innovative Solutions</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Id, veritatis ratione corporis quis at cupiditate numquam eos qui aut illo deleniti totam non quia unde libero nihil laudantium accusantium. Natus, inventore quibusdam. Eius eveniet quis, nulla ducimus iste soluta omnis deserunt tenetur, odio ipsum suscipit aspernatur saepe autem, voluptatem incidunt?</p>
+            <p>We invest in research and development to remain at the forefront of medical innovation, aligning our products with the latest advancements and best practices in the healthcare industry.</p>
           </div>
         </div>
 
         <div className="card">
           <div className="card-content">
             <h3>Patient-Centric Approaches</h3>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id, eligendi est voluptatibus unde qui cupiditate, sed atque nulla quaerat quibusdam, commodi tempora. Qui dolorem iste eius quam ratione consectetur. Quae optio minus officiis, officia excepturi aut voluptas magnam fuga quos nemo ullam doloribus vero laborum voluptate dolore suscipit aliquid numquam?</p>
+            <p>Our mission is to provide top-quality surgical dressing products that meet the highest standards of quality, safety, and innovation, contributing to patient care worldwide.</p>
           </div>
         </div>
 
         <div className="card">
           <div className="card-content">
             <h3>Traditional Supply</h3>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsum incidunt atque corporis, nesciunt corrupti suscipit cupiditate, repellendus rerum dolor libero tempore optio sit nemo non doloribus amet id itaque sint assumenda! Cum fuga nulla nostrum, ad porro maiores optio magnam sapiente saepe. Reiciendis dolore unde incidunt quasi, repellat rerum optio!</p>
+            <p>Karim Industries serves hospitals, healthcare institutions, retail consumers, and international markets globally with our products.</p>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

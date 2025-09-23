@@ -18,7 +18,7 @@ const Footer = () => {
 
       {/* Address Column 1 */}
       <div className="footer-column">
-        <h3 className="footer-heading">Head Office</h3>
+        <h3 className="footer-heading">Factory</h3>
         <div className="address-section">
           <div className="address-item">
             <span className="address-icon">
@@ -29,8 +29,8 @@ const Footer = () => {
               </svg>
             </span>
             <p className="address-text">
-              123 Tech Park, Silicon Valley, CA 94025, United States
-            </p>
+              ½ Km Raiwind Road, Raiwind
+              Lahore-Pakistan            </p>
           </div>
           <div className="address-item">
             <span className="address-icon">
@@ -40,7 +40,9 @@ const Footer = () => {
                 />
               </svg>
             </span>
-            <p className="address-text">+1 (555) 123-4567</p>
+            <p className="address-text">+92-42-35392174
+
+            </p>
           </div>
           <div className="address-item">
             <span className="address-icon">
@@ -50,14 +52,16 @@ const Footer = () => {
                 />
               </svg>
             </span>
-            <p className="address-text">info@company.com</p>
+            <p className="address-text">info@karimindustries.com.pk
+
+            </p>
           </div>
         </div>
       </div>
 
       {/* Address Column 2 */}
       <div className="footer-column">
-        <h3 className="footer-heading">Regional Office</h3>
+        <h3 className="footer-heading">Main Office</h3>
         <div className="address-section">
           <div className="address-item">
             <span className="address-icon">
@@ -68,8 +72,8 @@ const Footer = () => {
               </svg>
             </span>
             <p className="address-text">
-              456 Business District, London EC1A 1AA, United Kingdom
-            </p>
+              135-C Nawab Town, Thokar Niaz Baig
+              Lahore-Pakistan           </p>
           </div>
           <div className="address-item">
             <span className="address-icon">
@@ -79,7 +83,7 @@ const Footer = () => {
                 />
               </svg>
             </span>
-            <p className="address-text">+44 20 7946 0958</p>
+            <p className="address-text">+92-42-35233001</p>
           </div>
           <div className="address-item">
             <span className="address-icon">
@@ -89,7 +93,9 @@ const Footer = () => {
                 />
               </svg>
             </span>
-            <p className="address-text">europe@company.com</p>
+            <p className="address-text">karimindustries786@gmail.com
+
+            </p>
           </div>
         </div>
       </div>
@@ -144,9 +150,7 @@ const Footer = () => {
       {/* Footer Bottom */}
       <div className="footer-bottom">
         <p>
-          &copy; 2025 Karim Industries. All rights reserved. |
-          <a href="/privacy-policy">Privacy Policy</a> |
-          <a href="/terms-of-service">Terms of Service</a> |
+          &copy; 2025 Karim Industries. All rights reserved |
           Designed and Developed by <strong>Muhammad Atif Qureshi</strong>
         </p>
       </div>

@@ -4,13 +4,13 @@ const MarketCompliance = () => {
     return (
         <div>
             <main className="compliance-container">
-                <section className="compliance-hero">
+                <div className="products-heading">
                     <h1>Market Compliance & Quality Standards</h1>
                     <p>
                         Karim Industries is committed to meeting the highest industry
                         standards for all our surgical dressing products
                     </p>
-                </section>
+                </div>
 
                 <section className="standards-section">
                     <div className="standards-intro">

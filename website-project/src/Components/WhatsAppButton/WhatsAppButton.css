@@ -1,0 +1,28 @@
+.whatsapp-float {
+  position: fixed;
+  bottom: 2vh; /* viewport height */
+  right: 2vw;  /* viewport width */
+  width: 60px;
+  height: 60px;
+  background-color: #25D366; /* WhatsApp green */
+  border-radius: 50%; /* fully round */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  font-size: 2rem; /* icon size */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: all 0.3s ease-in-out;
+}
+
+.whatsapp-float:hover {
+  background-color: #22994b; /* darker green on hover */
+  transform: scale(1.1);
+}
+
+.whatsapp-icon {
+  font-size: 2rem; /* make icon bigger */
+  color: white;
+}

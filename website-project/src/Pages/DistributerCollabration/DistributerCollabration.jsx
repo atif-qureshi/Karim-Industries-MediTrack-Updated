@@ -11,14 +11,14 @@ const DistributerCollabration = () => {
     return (
         <div>
             <main className="distributor-container">
-                {/* <!-- Hero Section --> */}
-                <section className="distributor-hero">
+                <div className="products-heading">
                     <h1>Distributor Collaborations</h1>
                     <p>
                         Partnering with distributors worldwide to deliver quality surgical
                         dressing products
                     </p>
-                </section>
+                </div>
+
 
                 {/* <!-- Introduction Section --> */}
                 <section className="collaboration-intro">

@@ -1,17 +1,22 @@
 import React from 'react'
 import './StandardCompliance.css';
+import Cert1 from './Certificates/Certificate-1.jpg';
+import Cert2 from './Certificates/Certificate-2.jpg';
+import Cert3 from './Certificates/Certificate-3.jpg';
+import Cert4 from './Certificates/Certificate-4.jpg';
+import Cert5 from './Certificates/Certificate-5.jpg';
 const StandardCompliance = () => {
     return (
         <div>
             <main className="container">
-                <section className="hero">
+                {/* Heading Section */}
+                <div className="products-heading">
                     <h1>Standard Compliance</h1>
-                    <p>
-                        Karim Industries is committed to manufacturing high-quality surgical
+                    <p>Karim Industries is committed to manufacturing high-quality surgical
                         dressing products that meet international standards and
-                        specifications.
-                    </p>
-                </section>
+                        specifications.</p>
+                </div>
+
 
                 <section className="compliance-section">
                     <h2>Our Compliance Standards</h2>
@@ -122,42 +127,37 @@ const StandardCompliance = () => {
                         Karim Industries maintains compliance with various international
                         standards and regulatory requirements:
                     </p>
-
+                    <br /><br />
                     <div className="certifications">
                         <div className="certification-badge">
                             <img
-                                src="https://via.placeholder.com/150x100?text=ISO+Certified"
+                                src={Cert1}
                                 alt="ISO Certification"
                             />
-                            <p>ISO Certified Manufacturing</p>
                         </div>
                         <div className="certification-badge">
                             <img
-                                src="https://via.placeholder.com/150x100?text=BP+Compliant"
+                                src={Cert2}
                                 alt="BP Compliance"
                             />
-                            <p>BP Compliance</p>
                         </div>
                         <div className="certification-badge">
                             <img
-                                src="https://via.placeholder.com/150x100?text=USP+Approved"
+                                src={Cert3}
                                 alt="USP Approval"
                             />
-                            <p>USP Approved Products</p>
                         </div>
                         <div className="certification-badge">
                             <img
-                                src="https://via.placeholder.com/150x100?text=GMP"
+                                src={Cert4}
                                 alt="Good Manufacturing Practices"
                             />
-                            <p>Good Manufacturing Practices</p>
                         </div>
                         <div className="certification-badge">
                             <img
-                                src="https://via.placeholder.com/150x100?text=CE+Marked"
+                                src={Cert5}
                                 alt="CE Certification"
                             />
-                            <p>CE Marked Medical Devices</p>
                         </div>
                     </div>
                 </section>

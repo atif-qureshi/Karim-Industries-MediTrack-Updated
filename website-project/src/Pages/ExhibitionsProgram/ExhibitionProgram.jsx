@@ -4,14 +4,14 @@ const ExhibitionProgram = () => {
     return (
         <div>
             <main className="trade-show-container">
-                {/* <!-- Hero Section --> */}
-                <section className="trade-show-hero">
+                {/* Heading Section */}
+                <div className="products-heading">
                     <h1>Exhibition Program</h1>
                     <p>
                         Connecting with healthcare professionals and showcasing our surgical
                         dressing innovations
                     </p>
-                </section>
+                </div>
 
                 {/* <!-- Introduction Section --> */}
                 <section className="participation-intro">
@@ -29,8 +29,11 @@ const ExhibitionProgram = () => {
                 <section className="past-events">
                     <h2>Recent Trade Show Participation</h2>
                     <div className="event-cards">
+
+                        {/* Event Card 1 */}
                         <article className="event-card">
                             <div
+                                className="event-image"
                                 style={{
                                     backgroundImage: `linear-gradient(rgba(0, 86, 179, 0.7), rgba(0, 86, 179, 0.7)), url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')`,
                                 }}
@@ -40,8 +43,7 @@ const ExhibitionProgram = () => {
                             </div>
                             <div className="event-details">
                                 <p>
-                                    Showcased our Medi Cot absorbent cotton wool and Medi Crepe
-                                    bandages to international buyers and distributors.
+                                    Showcased our Medi Cot absorbent cotton wool and Medi Crepe bandages to international buyers and distributors.
                                 </p>
                                 <ul className="event-highlights">
                                     <li>Featured our BP/BPC compliant product line</li>
@@ -51,24 +53,20 @@ const ExhibitionProgram = () => {
                             </div>
                         </article>
 
+                        {/* Event Card 2 */}
                         <article className="event-card">
                             <div
                                 className="event-image"
                                 style={{
-                                    backgroundImage: `linear-gradient(
-      rgba(0, 86, 179, 0.7),
-      rgba(0, 86, 179, 0.7)
-    ), url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')`
+                                    backgroundImage: `linear-gradient(rgba(0, 86, 179, 0.7), rgba(0, 86, 179, 0.7)), url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')`,
                                 }}
                             >
                                 <h3>PAK MEDICA EXPO</h3>
                                 <p className="event-year">2021-2022</p>
                             </div>
-
                             <div className="event-details">
                                 <p>
-                                    Introduced our advanced wound care products including Silva
-                                    Tulle and Fustin Tulle dressings to the Pakistani market.
+                                    Introduced our advanced wound care products including Silva Tulle and Fustin Tulle dressings to the Pakistani market.
                                 </p>
                                 <ul className="event-highlights">
                                     <li>Launched our USP-compliant product range</li>
@@ -77,8 +75,10 @@ const ExhibitionProgram = () => {
                                 </ul>
                             </div>
                         </article>
+
                     </div>
                 </section>
+
 
                 {/* <!-- Featured Products Section --> */}
                 <section className="featured-products">
@@ -186,7 +186,7 @@ const ExhibitionProgram = () => {
                         Interested in meeting with our team at an upcoming event or learning
                         more about our trade show participation?
                     </p>
-                    <a href="." className="contact-button">Contact Our Sales Team</a>
+                    <a href="/ContactUs" className="contact-button">Contact Our Team</a>
                 </section>
             </main>
         </div>

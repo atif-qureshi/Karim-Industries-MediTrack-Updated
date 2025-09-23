@@ -1,18 +1,22 @@
 import React from 'react'
 import './GlobalExport.css';
+import Cotton from './images/Cotton Balls white.jpg';
+import Soft from './images/Soft Guaze.JPG';
+import Silva from './images/Silva Tulle.jpg';
+import Bandage from './images/Cotton Crepe Bandage.jpg';
 
 const GlobalExport = () => {
     return (
         <div>
             <main className="main">
                 <main className="export-container">
-                    <section className="export-hero">
+                    <div className="products-heading">
                         <h1>Global Export Solutions</h1>
                         <p>
                             Trusted surgical dressing products delivered worldwide with
                             uncompromising quality standards
                         </p>
-                    </section>
+                    </div>
 
                     <section className="export-capabilities">
                         <h2>Our Export Capabilities</h2>
@@ -57,8 +61,8 @@ const GlobalExport = () => {
                         <div className="product-categories">
                             <div className="category-card">
                                 <img
-                                    src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                                    alt="Cotton Products"
+                                    src={Cotton}
+                                    alt="Cotton Products" loading='lazy'
                                 />
                                 <h3>Cotton Products</h3>
                                 <ul>
@@ -70,8 +74,8 @@ const GlobalExport = () => {
                             </div>
                             <div className="category-card">
                                 <img
-                                    src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                                    alt="Bandages"
+                                    src={Bandage}
+                                    alt="Bandages" loading='lazy'
                                 />
                                 <h3>Bandages</h3>
                                 <ul>
@@ -83,8 +87,8 @@ const GlobalExport = () => {
                             </div>
                             <div className="category-card">
                                 <img
-                                    src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                                    alt="Gauze Products"
+                                    src={Soft}
+                                    alt="Gauze Products" loading='lazy'
                                 />
                                 <h3>Gauze Products</h3>
                                 <ul>
@@ -96,8 +100,8 @@ const GlobalExport = () => {
                             </div>
                             <div className="category-card">
                                 <img
-                                    src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                                    alt="Specialty Products"
+                                    src={Silva}
+                                    alt="Specialty Products" loading='lazy'
                                 />
                                 <h3>Specialty Products</h3>
                                 <ul>

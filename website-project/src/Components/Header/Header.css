@@ -16,7 +16,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: purple;
+  background-color: #6a2c70;
   color: black;
   padding: 1rem 2rem;
   position: absolute;
@@ -38,8 +38,8 @@ body {
 }
 
 .logo span {
-  font-size: clamp(1rem, 1.3vw, 1.2rem);
-  font-weight: bold;
+  font-size: clamp(1.2rem, 1.3vw, 1.2rem);
+  font-weight: 700;
   white-space: nowrap;
   color: white;
   line-height: 1.3rem;
@@ -151,7 +151,7 @@ body {
   display: block;
   height: 3px;
   width: 100%;
-  background-color: black;
+  background-color: white;
   border-radius: 0.2rem;
   transition: all 0.3s ease;
 }
@@ -289,7 +289,7 @@ body {
 
 .search-bar button {
   padding: 0 1rem;
-  background-color: #3a0b66;
+  background-color: #6A2C70;
   color: white;
   border: none;
   border-radius: 0 0.5rem 0.5rem 0;
@@ -298,7 +298,7 @@ body {
 }
 
 .search-bar button:hover {
-  background-color: #310cb8;
+  background-color: #1a0b50;
 }
 
 /* Search Suggestions */
@@ -423,12 +423,12 @@ body {
 
 @media (max-width: 480px) {
   .logo span {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   .logo img {
-    width: 2.2rem;
-    height: 2.2rem;
+    width: 2.7rem;
+    height: 2.7rem;
   }
 
   .nav-links {
@@ -454,5 +454,18 @@ body {
   }
   .popup-box button {
     width: 30vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .dropdown-menu {
+    display: block !important; /* force show all */
+    padding-left: 1rem;
+    background-color: transparent;
+  }
+
+  .dropdown-submenu {
+    display: block;
+    margin-left: 1rem;
   }
 }

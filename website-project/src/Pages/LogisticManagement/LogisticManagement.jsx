@@ -4,13 +4,14 @@ const LogisticManagement = () => {
     return (
         <div>
             <main className="logistics-container">
-                <section className="logistics-hero">
+                <div className="products-heading">
                     <h1>Efficient Logistics Management</h1>
                     <p>
                         Reliable supply chain solutions for our surgical dressing products
                         worldwide
                     </p>
-                </section>
+                </div>
+
 
                 <section className="logistics-overview">
                     <h2>Our Logistics Capabilities</h2>

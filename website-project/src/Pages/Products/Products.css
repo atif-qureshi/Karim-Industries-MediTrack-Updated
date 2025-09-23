@@ -6,14 +6,7 @@
 /* Products Container */
 .products-container {
   padding: 1.875rem; /* 30px */
-  background: linear-gradient(
-    90deg,
-    rgba(255, 245, 245, 1) 0%,
-    rgba(228, 140, 255, 1) 100%,
-    rgba(16, 51, 66, 1) 100%,
-    rgba(0, 205, 250, 1) 94%,
-    rgba(0, 212, 255, 1) 100%
-  );
+  background-color: white;
   min-height: 100vh;
 }
 

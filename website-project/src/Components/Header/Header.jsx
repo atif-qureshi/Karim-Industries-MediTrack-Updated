@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
-import logo from './Images/logo.jpeg';
+import logo from './Images/logo.jpg';
 import Hamburger from './Hamburger.js';
 
 const Header = () => {
@@ -449,34 +449,60 @@ const Header = () => {
                 <ul className={`nav-links${mobileMenu ? ' active' : ''}`}>
                     <li><Link to="/" onClick={closeMenu}>Home</Link></li>
                     <li><Link to="/AboutUs" onClick={closeMenu}>About Us</Link></li>
+
+                    {/* ---- Services Dropdown (responsive) ---- */}
                     <li className="dropdown">
-                        <Link to="/Services" onClick={closeMenu}>Services ▼</Link>
+                        <Link
+                            to="/Services">
+                            Services
+                        </Link>
                         <ul className="dropdown-menu">
-                            <li className="dropdown-submenu">
-                                <Link to="/CustomManuf" onClick={closeMenu}>Custom Manufacturing</Link>
-                                <ul className="dropdown-submenu">
-                                    <li><Link to="/StandardCompliance" onClick={closeMenu}>Standards Compliance</Link></li>
-                                    <li><Link to="/MarketCompliance" onClick={closeMenu}>Market Compliance</Link></li>
-                                </ul>
-                            </li>
-                            <li className="dropdown-submenu">
-                                <Link to="/GlobalExport" onClick={closeMenu}>Global Export</Link>
-                                <ul className="dropdown-submenu">
-                                    <li><Link to="/LogisticManagement" onClick={closeMenu}>Logistics Management</Link></li>
-                                </ul>
-                            </li>
-                            <li className="dropdown-submenu">
-                                <Link to="/ExhibitionProgram" onClick={closeMenu}>Exhibition Programs</Link>
-                                <ul className="dropdown-submenu">
-                                    <li><Link to="/DistributerCollaboration" onClick={closeMenu}>Distributor Collaborations</Link></li>
-                                </ul>
-                            </li>
+                            {window.innerWidth <= 768 ? (
+                                <>
+                                    <li className="left-links">
+                                        <Link to="/DistributerCollaboration">Distributor Collaborations</Link>
+                                        <Link to="/LogisticManagement">Logistics Management</Link>
+                                        <Link to="/StandardCompliance">Standards Compliance</Link>
+                                        <Link to="/ExhibitionProgram">Exhibition Programs</Link>
+                                        <Link to="/MarketCompliance">Market Compliance</Link>
+                                        <Link to="/GlobalExport">Global Export</Link>
+                                    </li>
+                                </>
+                            ) : (
+                                <>
+                                    <li className="dropdown-submenu">
+                                        <Link to="/StandardCompliance" onClick={closeMenu}>Standards Compliance</Link>
+                                        <ul className="dropdown-submenu">
+                                            <li>
+                                                <Link to="/MarketCompliance" onClick={closeMenu}>Market Compliance</Link>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li className="dropdown-submenu">
+                                        <Link to="/GlobalExport" onClick={closeMenu}>Global Export</Link>
+                                        <ul className="dropdown-submenu">
+                                            <li>
+                                                <Link to="/LogisticManagement" onClick={closeMenu}>Logistics Management</Link>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li className="dropdown-submenu">
+                                        <Link to="/ExhibitionProgram" onClick={closeMenu}>Exhibition Programs</Link>
+                                        <ul className="dropdown-submenu">
+                                            <li>
+                                                <Link to="/DistributerCollaboration" onClick={closeMenu}>Distributor Collaborations</Link>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </>
+                            )}
                         </ul>
                     </li>
+                    {/* ---- End Services Dropdown ---- */}
+
                     <li><Link to="/Products" onClick={closeMenu}>Products</Link></li>
                     <li><Link to="/ContactUs" onClick={closeMenu}>Contact Us</Link></li>
                     <li style={{ display: "none" }}>
-                        <Link to="/owner-login" onClick={closeMenu}>Owner Login</Link>
                     </li>
                 </ul>
 

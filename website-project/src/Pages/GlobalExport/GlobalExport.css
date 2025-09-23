@@ -13,12 +13,12 @@ h3 {
 
 h1 {
   font-size: 2.5rem;
-  color: #0056b3;
+  color: #2c3e50;
 }
 
 h2 {
   font-size: 2rem;
-  color: #0056b3;
+  color: #2c3e50;
   text-align: center;
   margin-bottom: 2rem;
   position: relative;
@@ -37,35 +37,39 @@ h2::after {
 
 h3 {
   font-size: 1.5rem;
-  color: #333333;
+  color: #2c3e50;
 }
 
 p {
   margin: 0 0 1rem 0;
   font-size: 1.1rem;
 }
-
-/* Hero Section */
-.export-hero {
-  background: linear-gradient(135deg, #0056b3 0%, #003366 100%);
-  color: white;
-  text-align: center;
-  padding: 10vh 5vw;
+/* Heading Section */
+.products-heading {
+  background-color: transparent;
   margin-top: 4rem;
-  margin-bottom: 3rem;
-  border-radius: 0.5rem;
+  text-align: center;
+  margin-bottom: 1.25rem; /* 20px */
+  padding: 1.25rem 0; /* 20px */
 }
 
-.export-hero h1 {
-  color: white;
-  font-size: clamp(2rem, 5vw, 3.5rem);
+.products-heading h1 {
+  font-size: 2.8rem;
+  color: #2c3e50;
   margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  display: inline-block;
+  border-bottom: 0.1875rem solid #050505; /* 3px */
+  font-weight: 600;
+  margin-top: 2rem;
 }
 
-.export-hero p {
-  font-size: clamp(1rem, 2.5vw, 1.5rem);
-  max-width: 800px;
+.products-heading p {
+  font-size: 1.1rem;
+  color: black;
+  max-width: 43.75rem; /* 700px */
   margin: 0 auto;
+  line-height: 1.6;
 }
 
 /* Capabilities Section */
@@ -81,7 +85,7 @@ p {
 }
 
 .capability-card {
-  background-color: aqua;
+  background-color: white;
   border-radius: 0.5rem;
   padding: 2rem;
   text-align: center;
@@ -113,7 +117,7 @@ p {
 }
 
 .category-card {
-  background-color: aqua;
+  background-color: white;
   border-radius: 0.5rem;
   overflow: hidden;
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
@@ -127,7 +131,7 @@ p {
 
 .category-card h3 {
   padding: 1rem 1rem 0 1rem;
-  color: #0056b3;
+  color: #2c3e50;
 }
 
 .category-card ul {
@@ -158,10 +162,11 @@ p {
 }
 
 .process-step {
-  background-color: aqua;
+  background-color: white;
   border-radius: 0.5rem;
   padding: 1.5rem;
   text-align: center;
+  border: 1px solid purple;
   position: relative;
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
 }
@@ -173,7 +178,7 @@ p {
   transform: translateX(-50%);
   width: 3rem;
   height: 3rem;
-  background-color: #e63946;
+  background-color: purple;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -185,7 +190,7 @@ p {
 
 .process-step h3 {
   margin-top: 1.5rem;
-  color: #0056b3;
+  color: black;
 }
 
 /* Responsive Adjustments */

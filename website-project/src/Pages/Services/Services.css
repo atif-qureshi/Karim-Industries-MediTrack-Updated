@@ -5,14 +5,14 @@
   line-height: 1.6;
   max-width: 100vw;
   overflow-x: hidden;
+  background-color: white;
 }
 
 /* Hero Section */
 .hero-section {
-  background-color: #f0f8ff;
+  background-color: white;
   padding: 10vh 5vw;
   text-align: center;
-  margin-bottom: 1vh;
   margin-top: 4rem;
 }
 
@@ -28,7 +28,7 @@
 
 .hero-section p {
   font-size: clamp(1rem, 2.5vw, 1.5rem);
-  color: #7f8c8d;
+  color: black;
 }
 
 /* Services Overview */
@@ -40,7 +40,7 @@
 }
 
 .service-card {
-  background: aqua;
+  background-color: white;
   border-radius: 0.5rem;
   padding: 2rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
@@ -54,22 +54,25 @@
 .service-icon {
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .service-card h3 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
   color: #2c3e50;
+  text-align: center;
 }
 
 .service-card p {
   color: black;
   font-size: 1rem;
+  text-align: center;
 }
 
 /* Commitment Section */
 .commitment-section {
-  background-color: aqua;
+  background-color: white;
   padding: 8vh 5vw;
   text-align: center;
 }
@@ -90,11 +93,13 @@
 
 .commitment-item {
   padding: 1.5rem;
+  border-radius: 5px;
+  background-color: white;
 }
 
 .commitment-item h3 {
   font-size: 1.3rem;
-  color: #2c3e50;
+  color: black;
   margin-bottom: 1rem;
 }
 

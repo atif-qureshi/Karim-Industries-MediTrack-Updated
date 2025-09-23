@@ -4,28 +4,32 @@
   padding: 2rem;
 }
 
-/* Hero Section */
-.trade-show-hero {
-  text-align: center;
-  padding: 10vh 2rem;
-  margin-bottom: 3rem;
-  background: linear-gradient(135deg, #0056b3 0%, #003366 100%);
-  color: white;
+/* Heading Section */
+.products-heading {
+  background-color: transparent;
   margin-top: 4rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 1.25rem;
+  padding: 1.25rem 0;
 }
 
-.trade-show-hero h1 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  margin-bottom: 1rem;
-  color: white;
+.products-heading h1 {
+  font-size: 2.8rem;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  display: inline-block;
+  border-bottom: 0.1875rem solid #050505; /* 3px */
+  font-weight: 600;
+  margin-top: 2rem;
 }
 
-.trade-show-hero p {
-  font-size: clamp(1rem, 2vw, 1.5rem);
-  max-width: 80ch;
+.products-heading p {
+  font-size: 1.1rem;
+  color: black;
+  max-width: 43.75rem; /* 700px */
   margin: 0 auto;
+  line-height: 1.6;
 }
 
 /* Introduction Section */
@@ -37,13 +41,13 @@
 
 .participation-intro h2 {
   font-size: 2.2rem;
-  color: #0056b3;
   margin-bottom: 1rem;
+  color: #2c3e50;
 }
 
 .participation-intro p {
   font-size: 1.2rem;
-  color: #555555;
+  color: black;
 }
 
 /* Past Events Section */
@@ -54,7 +58,7 @@
 .past-events h2 {
   text-align: center;
   font-size: 2.2rem;
-  color: #0056b3;
+  color: #2c3e50;
   margin-bottom: 3rem;
 }
 
@@ -104,9 +108,9 @@
 }
 
 .event-details p {
-  font-size: 1.1rem;
-  color: #444444;
+  font-size: 1.2rem;
   margin-bottom: 1.5rem;
+  color: black;
 }
 
 .event-highlights {
@@ -138,7 +142,7 @@
 .featured-products h2 {
   text-align: center;
   font-size: 2.2rem;
-  color: #0056b3;
+  color: #2c3e50;
   margin-bottom: 3rem;
 }
 
@@ -164,7 +168,7 @@
 .product-icon {
   width: 5rem;
   height: 5rem;
-  background: #0056b3;
+  background: purple;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -176,18 +180,18 @@
 
 .product-card h3 {
   font-size: 1.5rem;
-  color: #0056b3;
+  color: #2c3e50;
   margin-bottom: 1rem;
 }
 
 .product-card p {
-  color: #666666;
+  color: black;
 }
 
 /* Upcoming Events Section */
 .upcoming-events {
   margin: 6rem 0;
-  background: #f0f7ff;
+  background: white;
   padding: 3rem;
   border-radius: 0.5rem;
 }
@@ -195,7 +199,7 @@
 .upcoming-events h2 {
   text-align: center;
   font-size: 2.2rem;
-  color: #0056b3;
+  color: #2c3e50;
   margin-bottom: 3rem;
 }
 
@@ -210,19 +214,19 @@
 
 .upcoming-event-card h3 {
   font-size: 1.8rem;
-  color: #0056b3;
+  color: #2c3e50;
   margin-bottom: 0.5rem;
 }
 
 .event-date {
   font-size: 1.1rem;
-  color: #666666;
+  color: #2c3e50;
   font-weight: bold;
   margin-bottom: 1.5rem;
 }
 
 .event-info {
-  background: #f8f9fa;
+  background: white;
   padding: 1.5rem;
   border-radius: 0.5rem;
   margin-top: 1.5rem;
@@ -247,7 +251,7 @@
 .benefits h2 {
   text-align: center;
   font-size: 2.2rem;
-  color: #0056b3;
+  color: #2c3e50;
   margin-bottom: 3rem;
 }
 
@@ -273,7 +277,7 @@
 .benefit-icon {
   width: 5rem;
   height: 5rem;
-  background: #0056b3;
+  background: purple;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -285,27 +289,27 @@
 
 .benefit-card h3 {
   font-size: 1.5rem;
-  color: #0056b3;
+  color: #2c3e50;
   margin-bottom: 1rem;
 }
 
 .benefit-card p {
-  color: #666666;
+  color: black;
 }
 
 /* Contact Section */
 .trade-show-contact {
   text-align: center;
   padding: 4rem 2rem;
-  background: linear-gradient(135deg, #0056b3 0%, #003366 100%);
-  color: white;
+  background-color: white;
+  color: black;
   border-radius: 0.5rem;
-  margin: 5rem 0;
 }
 
 .trade-show-contact h2 {
   font-size: 2rem;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
+  color: #2c3e50;
 }
 
 .trade-show-contact p {
@@ -316,8 +320,8 @@
 
 .contact-button {
   display: inline-block;
-  background: white;
-  color: #0056b3;
+  background: rgb(8, 68, 117);
+  color: white;
   padding: 1rem 2rem;
   border-radius: 0.5rem;
   text-decoration: none;
@@ -327,7 +331,8 @@
 }
 
 .contact-button:hover {
-  background: #f0f7ff;
+  background: purple;
+  color: black;
   transform: translateY(-0.2rem);
 }
 

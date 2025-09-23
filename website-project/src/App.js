@@ -4,7 +4,6 @@ import Header from './Components/Header/Header.jsx';
 import Home from './Pages/Home/Home.jsx';
 import AboutUs from './Pages/AboutUs/About.jsx';
 import Footer from './Components/Footer/Footer.jsx';
-import CustomManuf from './Pages/CustomManuf/CustomManuf.jsx';
 import StandardCompliance from './Pages/StandardCompliance/StandardCompliance.jsx';
 import GlobalExport from './Pages/GlobalExport/GlobalExport.jsx';
 import LogisticManagement from './Pages/LogisticManagement/LogisticManagement.jsx';
@@ -16,6 +15,8 @@ import ProductDetail from './Pages/Products/ProductDetails.jsx';
 import ContactUs from './Pages/ContactUs/ContactUs.jsx';
 import Services from './Pages/Services/Services.jsx';
 import PageTransition from './Components/ScreenLoader/PageTransition.jsx';
+import WhatsAppButton from './Components/WhatsAppButton/WhatsAppButton.jsx';
+import NotFound from './Components/NotFound/NotFound.jsx';
 
 function App() {
   return (
@@ -25,7 +26,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/AboutUs" element={<AboutUs />} />
-          <Route path='/CustomManuf' element={<CustomManuf />} />
           <Route path='/StandardCompliance' element={<StandardCompliance />} />
           <Route path='/GlobalExport' element={<GlobalExport />} />
           <Route path='/LogisticManagement' element={<LogisticManagement />} />
@@ -36,7 +36,10 @@ function App() {
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path='/ContactUs' element={<ContactUs />} />
           <Route path='/Services' element={<Services />} />
+
+          <Route path='*' element={<NotFound />} />
         </Routes>
+        <WhatsAppButton />
       </PageTransition>
       <Footer />
     </Router>
