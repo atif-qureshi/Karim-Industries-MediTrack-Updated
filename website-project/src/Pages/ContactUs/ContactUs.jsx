@@ -5,7 +5,6 @@ import {
     FaBuilding,
     FaLink,
     FaEnvelope,
-    FaGlobe,
     FaPhone,
     FaUserTie,
     FaPaperPlane,
