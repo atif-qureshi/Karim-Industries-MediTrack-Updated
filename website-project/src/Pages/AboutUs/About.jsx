@@ -1,28 +1,28 @@
 import React from 'react';
 import './About.css';
-import image from './Images/Factory Building.jpg';
-import MD from './Images/Mubashir Hussian.png';
-import CEO from './Images/Hamid sb picture.jpg';
+// import image from './Images/Factory Building.jpg';
+// import MD from './Images/Mubashir Hussian.png';
+// import CEO from './Images/Hamid sb picture.jpg';
 
 const AboutUs = () => {
     return (
         <main class="about-container">
             {/* <!-- Hero Section with Background Image --> */}
-            <section class="about-hero">
-                <img src={image} alt="Factory"/>
-                <div class="hero-overlay"></div>
-                <div class="hero-content">
-                    <a href="#our-story" class="scroll-down">
-                        <i class="fas fa-chevron-down"></i>
-                    </a>
-                </div>
-            </section>
+            {/* <section class="about-hero"> */}
+            {/* <img src={image} alt="Factory"/> */}
+            {/* <div class="hero-overlay"></div> */}
+            {/* <div class="hero-content"> */}
+            {/* <a href="#our-story" class="scroll-down"> */}
+            {/* <i class="fas fa-chevron-down"></i> */}
+            {/* </a> */}
+            {/* </div> */}
+            {/* </section> */}
 
 
             {/* <!-- Our Story Section --> */}
             <section id="our-story" class="about-section">
                 <div class="section-content">
-                    <h2>Our Story</h2>
+                    <h2 class="story-h2">Our Story</h2>
                     <div class="story-grid">
                         <div class="story-text">
                             <p>Founded with a vision to transform wound care, <strong>Karim Industries</strong> has grown from a modest workshop into a leading manufacturer and trusted name in the field of surgical dressing products. For more than two decades, we have been committed to delivering premium-quality medical supplies that meet and exceed international healthcare standards.</p>
@@ -33,10 +33,10 @@ const AboutUs = () => {
 
                             <p>Looking ahead, we remain committed to innovation, sustainability, and expanding our reach—because at Karim Industries, healing begins with care.</p>
                         </div>
-                        <div class="story-image">
+                        {/* <div class="story-image">
                             <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Karim Industries Factory" loading='lazy'>
                             </img>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>
@@ -46,9 +46,9 @@ const AboutUs = () => {
             <section class="director-section">
                 <div class="section-content">
                     <div class="director-grid">
-                        <div className="director-image">
+                        {/* <div className="director-image">
                             <img src={CEO} alt="Company CEO" loading='lazy'/>
-                        </div>
+                        </div> */}
 
                         <div class="director-message">
                             <h2>Message from Our CEO</h2>
@@ -73,9 +73,9 @@ const AboutUs = () => {
             <section class="director-section">
                 <div class="section-content">
                     <div class="director-grid">
-                        <div class="director-image">
+                        {/* <div class="director-image">
                             <img src={MD} alt="Company Director" loading='lazy'/>
-                        </div>
+                        </div> */}
                         <div class="director-message">
                             <h2>Message from Our Managing Director</h2>
                             <blockquote>

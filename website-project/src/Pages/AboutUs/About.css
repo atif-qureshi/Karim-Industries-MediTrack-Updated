@@ -17,10 +17,10 @@ body {
 }
 
 /* Hero Section - Fixed */
-.about-hero {
+/* .about-hero {
   position: relative;
   height: 115vh;
-  min-height: 500px; /* Minimum height for smaller devices */
+  min-height: 500px; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,18 +29,18 @@ body {
   margin-bottom: 3rem;
   margin-top: 4rem;
   overflow: hidden;
-}
+} */
 
-.about-hero img {
+/* .about-hero img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Changed from contain to cover */
-  object-position: center center; /* Ensure important parts of image are visible */
+  object-fit: cover; 
+  object-position: center center; 
   position: absolute;
   top: 0;
   left: 0;
   z-index: -1;
-}
+} */
 
 @keyframes bounce {
   0%,
@@ -88,20 +88,48 @@ body {
 }
 /* Story Section */
 .story-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* 2 columns for desktop */
-  gap: 3rem;
-  align-items: center;
+  /* display: grid; */
+  /* grid-template-columns: 1fr 1fr;  */
+  gap: 1rem;
   margin: 1rem 2rem;
+  text-align: center;
+  margin-left: 8rem;
+  margin-right: 8rem;
 }
+
+.story-h2 {
+  text-align: center;
+  margin-top: 8rem;          /* heading ke upar space */
+  margin-bottom: 2rem;       /* heading ke niche space */
+  font-size: clamp(2rem, 4vw, 2.5rem);  /* responsive size */
+  font-weight: 700;          /* bold text */
+  color: #2c3e50;            /* dark bluish color */
+  position: relative;
+  padding-bottom: 0.5rem;    /* underline ke liye space */
+}
+
+/* Optional underline design */
+.story-h2::after {
+  content: "";
+  position: absolute;
+  width: 80px;
+  height: 4px;
+  background-color: #3498db; /* blue underline */
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
 
 .story-text p {
   margin-bottom: 1.5rem;
   font-size: clamp(1rem, 1.5vw, 1.2rem);
-  line-height: 1.8;
+  /* line-height: 1.8; */
+  text-align: center;
 }
 
-.story-image {
+/* .story-image {
   border-radius: 0.5rem;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -116,7 +144,7 @@ body {
 
 .story-image:hover img {
   transform: scale(1.03);
-}
+} */
 
 /* ---------- RESPONSIVE BREAKPOINTS ---------- */
 
@@ -186,34 +214,17 @@ body {
   margin-top: 3rem;
   perspective: 1000px;
 }
-
 /* Director Section */
 .director-section {
-  padding: 5rem 2rem;
-  background-color: #f8f9fa;
+  padding: 2rem 1rem;
+  background-color: white;
 }
 
 .director-grid {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 3rem;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.director-image {
-  border-radius: 0.5rem;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  width: 90%;
-}
-
-.director-image img {
-  width: 80%;
-  height: 20rem;
   display: block;
-  margin-left: 2.3rem;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .director-message h2 {
@@ -227,7 +238,8 @@ body {
   content: "";
   position: absolute;
   bottom: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 60px;
   height: 3px;
   background-color: #e74c3c;
@@ -238,9 +250,10 @@ blockquote {
   font-size: 1.2rem;
   line-height: 1.8;
   color: #555;
-  border-left: 4px solid #3498db;
-  padding-left: 1.5rem;
+  border-left: none;
+  padding-left: 0;
   margin: 1.5rem 0;
+  text-align: center;
 }
 
 .director-info {

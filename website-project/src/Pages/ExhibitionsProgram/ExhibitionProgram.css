@@ -371,3 +371,9 @@
     font-size: 1.5rem;
   }
 }
+
+
+.spaced-label {
+  display: inline-block;
+  margin-right: 10px;
+}

@@ -1,5 +1,10 @@
-import React from 'react'
+import React from 'react';
 import './LogisticManagement.css';
+import Cotton from './Images/Cotton Wool.jpg';
+import Soft from './Images/Me Soft Guaze.jpg';
+import Povee from './Images/Povee Tulle.jpg';
+import Trangular from './Images/Triangular White.jpg';
+
 const LogisticManagement = () => {
     return (
         <div>
@@ -11,7 +16,6 @@ const LogisticManagement = () => {
                         worldwide
                     </p>
                 </div>
-
 
                 <section className="logistics-overview">
                     <h2>Our Logistics Capabilities</h2>
@@ -64,7 +68,7 @@ const LogisticManagement = () => {
                     <div className="product-grid">
                         <div className="product-card">
                             <img
-                                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                                src={Cotton}
                                 alt="Cotton Products"
                             />
                             <h3>Cotton Products Logistics</h3>
@@ -88,7 +92,7 @@ const LogisticManagement = () => {
                         </div>
                         <div className="product-card">
                             <img
-                                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                                src={Trangular}
                                 alt="Bandages"
                             />
                             <h3>Bandages Logistics</h3>
@@ -110,7 +114,7 @@ const LogisticManagement = () => {
                         </div>
                         <div className="product-card">
                             <img
-                                src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                                src={Soft}
                                 alt="Gauze Products"
                             />
                             <h3>Gauze Products Logistics</h3>
@@ -132,7 +136,7 @@ const LogisticManagement = () => {
                         </div>
                         <div className="product-card">
                             <img
-                                src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                                src={Povee}
                                 alt="Specialty Products"
                             />
                             <h3>Specialty Products Logistics</h3>
@@ -202,10 +206,7 @@ const LogisticManagement = () => {
                         </div>
                     </div>
                 </section>
-
-
             </main>
-
         </div>
     )
 }

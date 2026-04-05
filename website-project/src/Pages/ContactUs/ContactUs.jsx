@@ -6,7 +6,6 @@ import {
     FaLink,
     FaEnvelope,
     FaPhone,
-    FaUserTie,
     FaPaperPlane,
 } from 'react-icons/fa';
 import { FiCheckCircle } from 'react-icons/fi';
@@ -56,14 +55,14 @@ const ContactPage = () => {
                     <div className="info-section">
                         <h2><FaLink className="icon" /> Online Contacts</h2>
                         <p><FaEnvelope className="icon" /> info@karimindustries.com.pk</p>
-                        <p><FaEnvelope className="icon" /> karimindustries786@gmail.com</p>
+                        <p><FaEnvelope className="icon" /> karim.industries786@gmail.com</p>
                     </div>
-                    <div className="info-section">
+                    {/* <div className="info-section">
                         <h2><FaUserTie className="icon" /> Liason Office</h2>
                         <p>Ch. Imam Din Medicine Market, 2nd Floor, Room No. 12<br />
                             outside Lohari Gate Lahore-Pakistan</p>
                         <p><FaPhone className="icon" /> +92-42-37249148</p>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Contact Form */}
@@ -77,7 +76,7 @@ const ContactPage = () => {
                         </div>
                     ) : (
                         <form
-                            action="https://formsubmit.co/muhammadatifqureshi30@gmail.com"
+                            action="https://formsubmit.co/Karim.industries786@gmail.com"
                             method="POST"
                             onSubmit={handleFormSubmit}
                         >
@@ -90,13 +89,13 @@ const ContactPage = () => {
                             />
 
                             <div className="form-group">
-                                <label htmlFor="name">Name*</label>
-                                <input type="text" id="name" name="name" required />
+                                <label htmlFor="Name">Name*</label>
+                                <input type="text" id="Name" name="Name" required />
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="country">Select Your Country*</label>
-                                <select id="country" name="country" required>
+                                <label htmlFor="Country">Select Your Country*</label>
+                                <select id="Country" name="Country" required>
                                     <option value="">Select Country</option>
                                     <option value="Pakistan">Pakistan</option>
                                     <option value="India">India</option>
@@ -108,27 +107,27 @@ const ContactPage = () => {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="company">Name of Company/Hospital/other*</label>
-                                <input type="text" id="company" name="company" required />
+                                <label htmlFor="Company">Name of Company/Hospital/other*</label>
+                                <input type="text" id="Company" name="Company" required />
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="phone">Phone/Contact no*</label>
-                                <input type="tel" id="phone" name="phone" required />
+                                <label htmlFor="Phone">Phone/Contact no*</label>
+                                <input type="tel" id="Phone" name="Phone" required />
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="email">Email*</label>
-                                <input type="email" id="email" name="email" required />
+                                <label htmlFor="Email">Email*</label>
+                                <input type="Email" id="Email" name="Email" required />
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="message">Message</label>
-                                <textarea id="message" name="message" rows="5"></textarea>
+                                <label htmlFor="Message">Message</label>
+                                <textarea id="Message" name="Message" rows="5"></textarea>
                             </div>
 
-                            <button type="submit" className="submit-btn">
-                                <FaPaperPlane className="submit-icon" /> Send
+                            <button type="Submit" className="submit-btn">
+                                <FaPaperPlane className="Submit-icon" /> Send
                             </button>
                         </form>
                     )}

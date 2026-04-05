@@ -119,7 +119,7 @@ const ExhibitionProgram = () => {
 
                 {/* <!-- Upcoming Events Section --> */}
                 <section className="upcoming-events">
-                    <h2>Upcoming Trade Shows</h2>
+                    <h2>Recent Trade Shows</h2>
                     <div className="upcoming-event-card">
                         <h3>MEDICAL ASIA 2023</h3>
                         <p className="event-date">November 15-17, 2023 | Karachi Expo Center</p>
@@ -134,9 +134,8 @@ const ExhibitionProgram = () => {
                                 <strong>Location:</strong> Hall 3, Stand B-24
                             </p>
                             <p>
-                                <i className="fas fa-box-open"></i>
-                                <strong>Featured Products:</strong> All BP/BPC and USP compliant
-                                surgical dressings
+                               <i className="fas fa-box-open"></i>
+<strong className="spaced-label">Featured Products:</strong> All BP/BPC and USP compliant surgical dressings
                             </p>
                         </div>
                     </div>
