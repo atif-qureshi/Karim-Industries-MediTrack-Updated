@@ -1,0 +1,24 @@
+{
+  "id": 8,
+  "name": "Medi Triangular",
+  "title": "Triangular Bandage",
+  "description": "Made of 100% cotton for versatile medical use including slings and securing dressings.",
+  "features": [
+    "Complete with two Safety pins",
+    "Support to arms and shoulders (sling)",
+    "To secure splints and dressing",
+    "To control bleeding (tourniquet)"
+  ],
+  "sizes": "Available in all sizes as per customer demand",
+  "usage": [
+    "Used as a sling to support arms and shoulders",
+    "Secures splints and dressings",
+    "Applies pressure over a large area",
+    "Immobilizes ankles and feet",
+    "Controls bleeding as a tourniquet",
+    "Controls bleeding when direct pressure is unsuitable (e.g., embedded or protruding objects)"
+  ],
+  "precautions": [
+    "If in contact with broken skin, the bandage should be sterilized before use"
+  ]
+}

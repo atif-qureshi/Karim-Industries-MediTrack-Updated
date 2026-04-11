@@ -1,0 +1,21 @@
+{
+  "id": 16,
+  "name": "Medi Paraffin",
+  "title": "Paraffin Gauze",
+  "description": "Gauze dressings impregnated with paraffin ointment for wound moisture management.",
+  "features": [
+    "Prevents wound edges from drying",
+    "Recommended for infected wounds",
+    "Treats bedsores, ulcers, and burn wounds",
+    "Standard Size: 10cm x 10cm"
+  ],
+  "sizes": "Available in all sizes as per customer demand",
+  "usage": [
+    "Serves as a primary wound contact layer for burns, ulcers, skin grafts (donor and receptor sites), and traumatic injuries",
+    "Paraffin content reduces adherence to granulating wound surfaces",
+    "Apply directly to the wound surface and cover with an absorbent pad secured with tape or bandage",
+    "Not recommended for heavily exuding wounds due to risk of tissue maceration",
+    "Dressing change frequency depends on the wound's condition",
+    "Sterilized by irradiation; store in a cool place"
+  ]
+}

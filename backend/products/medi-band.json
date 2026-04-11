@@ -1,0 +1,25 @@
+{
+  "id": 7,
+  "name": "Medi Band",
+  "title": "Open Wove Bandage",
+  "description": "Basic bandage with loose weave for ventilation, ideal for securing dressings without pressure.",
+  "features": [
+    "Non-elastic design for wound dressings",
+    "Ventilation for burns/non-bleeding wounds",
+    "100% cotton",
+    "Standard Size: Width: 5cm, 6.5cm, 7.5cm, 10cm, 15cm x Length: 3m, 4m, 5m, & 6m"
+  ],
+  "sizes": "Available in all sizes as per customer demand",
+  "usage": [
+    "Protects and holds dressings in place",
+    "Provides support and, when needed, immobilization",
+    "Covers wounds and applies pressure to control bleeding",
+    "Supports medical devices such as splints",
+    "Can be used on its own to provide body support",
+    "Ideal for burns and non-bleeding wounds"
+  ],
+  "precautions": [
+    "Not suitable for compound fractures where bone is exposed",
+    "Not recommended for broken bones protruding from wounds"
+  ]
+}

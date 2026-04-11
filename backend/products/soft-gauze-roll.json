@@ -1,0 +1,23 @@
+{
+  "id": 11,
+  "name": "Soft Gauze Roll",
+  "title": "Surgical Gauze Roll",
+  "description": "Highly absorbent disposable Surgical Gauze for wound management.",
+  "features": [
+    "Made from 100% cotton Threads",
+    "Sterile Before Use",
+    "Standard Size: Width: 1m x Length: 2.5m, 5m, 10m, 20m, 30m, 40m, 50m"
+  ],
+  "sizes": "Available in all sizes as per customer demand",
+  "usage": [
+    "Stops bleeding and absorbs wound drainage",
+    "Cushions injured areas and provides protection against contamination",
+    "Secures medicated dressings in place",
+    "Holds splints in position",
+    "Immobilizes injured body parts to prevent further injury",
+    "Facilitates healing by providing stability"
+  ],
+  "precautions": [
+    "Ensure product is sterile before use"
+  ]
+}

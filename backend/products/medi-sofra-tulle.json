@@ -1,0 +1,26 @@
+{
+  "id": 14,
+  "name": "Medi Sofra Tulle",
+  "title": "Framycetin Sulphate Gauze",
+  "description": "Antibacterial tulle dressing impregnated with Framycetin Sulphate for infected wounds.",
+  "features": [
+    "Topical Antibiotic Patch",
+    "Prevents wound edges from drying",
+    "Recommended for infected wounds and chronic wounds",
+    "Standard Size: 10cm x 10cm"
+  ],
+  "sizes": "Available in all sizes as per customer demand",
+  "usage": [
+    "Clean the wound using standard techniques",
+    "Select the appropriate size of dressing and peel open the pouch",
+    "Using sterile gloves and forceps, remove the protector paper",
+    "Gently apply a single layer of impregnated gauze to the wound",
+    "Apply a secondary absorbent dressing if required and secure the area",
+    "If the dressing sticks, soak it gently with normal saline (0.9%) before removal"
+  ],
+  "precautions": [
+    "Do not use in the eye, auditory canal (especially with perforated eardrum), or near meninges, brain, or spinal cord",
+    "Not for intravenous or oral administration, and not for use in body cavities",
+    "Discontinue immediately if signs of hypersensitivity reaction appear and contact a physician"
+  ]
+}

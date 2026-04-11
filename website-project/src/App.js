@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './Components/Header/Header.jsx';
+import Header from './Components/Header/HeaderBackend.jsx';
 import Home from './Pages/Home/Home.jsx';
 import AboutUs from './Pages/AboutUs/About.jsx';
 import Footer from './Components/Footer/Footer.jsx';
@@ -10,8 +10,9 @@ import LogisticManagement from './Pages/LogisticManagement/LogisticManagement.js
 import MarketCompliance from './Pages/MarketCompliance/MarketCompliance.jsx';
 import ExhibitionProgram from './Pages/ExhibitionsProgram/ExhibitionProgram.jsx';
 import DistributerCollabration from './Pages/DistributerCollabration/DistributerCollabration.jsx';
-import Products from './Pages/Products/Products.jsx';
-import ProductDetail from './Pages/Products/ProductDetails.jsx';
+import Products from './Pages/Products/ProductsBackend.jsx';
+import ProductDetail from './Pages/Products/ProductDetailsBackend.jsx';
+import Admin from './Pages/Admin/Admin.jsx';
 import ContactUs from './Pages/ContactUs/ContactUs.jsx';
 import Services from './Pages/Services/Services.jsx';
 import PageTransition from './Components/ScreenLoader/PageTransition.jsx';
@@ -34,6 +35,7 @@ function App() {
           <Route path='/DistributerCollaboration' element={<DistributerCollabration />} />
           <Route path='/Products' element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path='/admin' element={<Admin />} />
           <Route path='/ContactUs' element={<ContactUs />} />
           <Route path='/Services' element={<Services />} />
 

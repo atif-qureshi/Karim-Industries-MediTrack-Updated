@@ -1,0 +1,20 @@
+{
+  "id": 24,
+  "name": "Medicare Gown",
+  "title": "Surgical Gown",
+  "description": "Protective gowns for medical professionals with fluid-resistant properties.",
+  "features": [
+    "SMS/SMMS non-woven fabric",
+    "Breathable yet fluid-resistant",
+    "Available in Medium, Large, XL, XXL",
+    "Options: Surgical Gown, Reinforced Gown, Isolation Gown"
+  ],
+  "sizes": "Available in all sizes as per customer demand",
+  "usage": [
+    "Used by medical professionals during surgical procedures and patient care activities",
+    "Provides protection against fluid penetration and microbial contamination",
+    "SMS/SMMS non-woven fabric offers breathability while maintaining fluid resistance",
+    "Available in different types including standard Surgical Gowns, Reinforced Gowns for high-fluid procedures, and Isolation Gowns for infection control",
+    "Various sizes ensure proper fit and protection for all healthcare workers"
+  ]
+}

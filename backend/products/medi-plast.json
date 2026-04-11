@@ -1,0 +1,30 @@
+{
+  "id": 6,
+  "name": "Medi Plast",
+  "title": "Plaster of Paris Bandage",
+  "description": "Made of 100% pure hydrophilic cotton Leno gauze coated with natural POP for fast and durable immobilization.",
+  "storage": [
+    "Must be stored at room temperature with less humidity (Moisture Sensitive)"
+  ],
+  "features": [
+    "X-Ray permeable",
+    "Does not absorb X-Rays",
+    "Setting time as per method",
+    "Standard Size: Width 7.5cm, 10cm, 15cm x Length 2.7m"
+  ],
+  "sizes": "Available in all sizes as per customer demand",
+  "usage": [
+    "Immobilization and splinting of fractures",
+    "Construction of rest splints and body supports",
+    "Used in orthopedic surgery for immobilization, support, and correctional splinting",
+    "Management of buckle injuries and minor wrist injuries",
+    "Temporary support for most elbow, hand, and foot injuries",
+    "Treatment of tibial fractures with significant swelling",
+    "Useful in crush injuries and open fractures"
+  ],
+  "precautions": [
+    "Do not insert objects under the plaster",
+    "Do not cut or attempt to remove the plaster yourself",
+    "Avoid wearing rings on fingers if the injured arm is in plaster"
+  ]
+}
