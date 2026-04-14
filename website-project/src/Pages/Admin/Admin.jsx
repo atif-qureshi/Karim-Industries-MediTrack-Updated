@@ -10,33 +10,71 @@ const Admin = () => {
 
   const renderDashboard = () => (
     <div className="admin-dashboard">
-      <h1>Karim Industries - Admin Dashboard</h1>
-      <p>Manage your medical products and users</p>
+      <div className="dashboard-header">
+        <div>
+          <span className="eyebrow">Admin Portal</span>
+          <h1>Karim Industries Dashboard</h1>
+          <p className="dashboard-description">
+            A central admin experience with the same blue and purple palette used across the website.
+          </p>
+        </div>
+        <div className="dashboard-actions">
+          <button className="btn secondary" onClick={() => { resetForm(); setActiveTab('product-form'); }}>
+            Add Product
+          </button>
+          <button className="btn outline" onClick={() => window.open('http://localhost:5000/api/health', '_blank')}>
+            API Health Check
+          </button>
+        </div>
+      </div>
+
+      <div className="dashboard-summary-grid">
+        <div className="summary-card">
+          <p className="summary-label">Total Products</p>
+          <strong>{stats.products || 0}</strong>
+        </div>
+        <div className="summary-card">
+          <p className="summary-label">Total Users</p>
+          <strong>{stats.users || 0}</strong>
+        </div>
+        <div className="summary-card">
+          <p className="summary-label">Database Size</p>
+          <strong>{stats.dbSize || 'N/A'}</strong>
+        </div>
+        <div className="summary-card highlight">
+          <p className="summary-label">Live Status</p>
+          <strong>Ready</strong>
+        </div>
+      </div>
 
       <div className="dashboard-grid">
-        <div className="card">
+        <div className="card accent-left">
           <h3>Products Management</h3>
-          <p>Manage your product catalog</p>
-          <button onClick={() => setActiveTab('products')} className="btn">View Products</button>
-          <button onClick={() => { resetForm(); setActiveTab('product-form'); }} className="btn">Add Product</button>
+          <p>Browse and update the product catalog from a single dashboard.</p>
+          <div className="card-actions">
+            <button onClick={() => setActiveTab('products')} className="btn">View Products</button>
+            <button onClick={() => { resetForm(); setActiveTab('product-form'); }} className="btn secondary">
+              Add Product
+            </button>
+          </div>
         </div>
 
-        <div className="card">
+        <div className="card accent-left">
           <h3>Users Management</h3>
-          <p>Manage user accounts</p>
+          <p>Review user accounts and their roles easily.</p>
           <button onClick={() => setActiveTab('users')} className="btn">View Users</button>
         </div>
 
-        <div className="card">
+        <div className="card accent-left">
           <h3>Database Stats</h3>
-          <p>Database information</p>
+          <p>Track current product and user metrics.</p>
           <button onClick={() => setActiveTab('stats')} className="btn">View Stats</button>
         </div>
 
-        <div className="card">
+        <div className="card accent-left">
           <h3>API Health</h3>
-          <p>Check system status</p>
-          <button onClick={() => window.open('http://localhost:5000/api/health', '_blank')} className="btn">
+          <p>Open the backend health endpoint in a new tab.</p>
+          <button onClick={() => window.open('http://localhost:5000/api/health', '_blank')} className="btn outline">
             Check Health
           </button>
         </div>
@@ -60,9 +98,13 @@ const Admin = () => {
   useEffect(() => {
     if (activeTab === 'products') {
       fetchProducts();
-    } else if (activeTab === 'users') {
+    }
+
+    if (activeTab === 'users') {
       fetchUsers();
-    } else if (activeTab === 'stats') {
+    }
+
+    if (activeTab === 'stats' || activeTab === 'dashboard') {
       fetchStats();
     }
   }, [activeTab]);
@@ -216,38 +258,6 @@ const Admin = () => {
       console.error(error);
     }
   };
-  <div className="admin-dashboard">
-    <h1>Karim Industries - Admin Dashboard</h1>
-    <p>Manage your medical products and users</p>
-
-    <div className="dashboard-grid">
-      <div className="card">
-        <h3>Products Management</h3>
-        <p>Manage your product catalog</p>
-        <button onClick={() => setActiveTab('products')} className="btn">View Products</button>
-        <button onClick={() => { resetForm(); setActiveTab('product-form'); }} className="btn">Add Product</button>
-      </div>
-
-      <div className="card">
-        <h3>Users Management</h3>
-        <p>Manage user accounts</p>
-        <button onClick={() => setActiveTab('users')} className="btn">View Users</button>
-      </div>
-
-      <div className="card">
-        <h3>Database Stats</h3>
-        <p>Database information</p>
-        <button onClick={() => setActiveTab('stats')} className="btn">View Stats</button>
-      </div>
-
-      <div className="card">
-        <h3>API Health</h3>
-        <p>Check system status</p>
-        <button onClick={() => window.open('http://localhost:5000/api/health', '_blank')} className="btn">Check Health</button>
-      </div>
-    </div>
-  </div>
-
 
   const renderProducts = () => (
     <div className="admin-products">
