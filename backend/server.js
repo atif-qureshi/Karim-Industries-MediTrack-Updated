@@ -361,9 +361,11 @@ app.post('/api/products/reload', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+}
 
 process.on('SIGINT', async () => {
   try {
@@ -375,3 +377,5 @@ process.on('SIGINT', async () => {
   }
   process.exit(0);
 });
+
+module.exports = { app, loadProductsFromFiles };
