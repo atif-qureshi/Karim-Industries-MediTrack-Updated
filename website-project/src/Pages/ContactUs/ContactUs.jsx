@@ -14,21 +14,37 @@ const ContactPage = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     // ✅ FormSubmit ke through email bhejna
-    const handleFormSubmit = (e) => {
-        e.preventDefault(); // page reload na ho
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
 
         const form = e.target;
+        const data = {
+            Name: form.Name.value,
+            Email: form.Email.value,
+            Phone: form.Phone.value,
+            Company: form.Company.value,
+            Country: form.Country.value,
+            Message: form.Message.value,
+        };
 
-        fetch(form.action, {
-            method: form.method,
-            body: new FormData(form),
-        })
-            .then(() => {
-                setIsSubmitted(true); // success message show
-                form.reset(); // form clear
-                setTimeout(() => setIsSubmitted(false), 4000); // 4 sec baad hide
-            })
-            .catch((err) => console.error("Form submit error:", err));
+        try {
+            const response = await fetch('http://localhost:5000/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to send message');
+            }
+
+            setIsSubmitted(true);
+            form.reset();
+            setTimeout(() => setIsSubmitted(false), 4000);
+        } catch (err) {
+            console.error('Form submit error:', err);
+            alert('Unable to send message at this time. Please try again later.');
+        }
     };
 
     return (
@@ -76,17 +92,10 @@ const ContactPage = () => {
                         </div>
                     ) : (
                         <form
-                            action="https://formsubmit.co/Karim.industries786@gmail.com"
+                            action="http://localhost:5000/api/contact"
                             method="POST"
                             onSubmit={handleFormSubmit}
                         >
-                            {/* FormSubmit options */}
-                            <input type="hidden" name="_captcha" value="false" />
-                            <input
-                                type="hidden"
-                                name="_next"
-                                value={window.location.href + "?submitted=true"}
-                            />
 
                             <div className="form-group">
                                 <label htmlFor="Name">Name*</label>

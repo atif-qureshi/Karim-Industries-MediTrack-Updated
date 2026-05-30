@@ -6,6 +6,9 @@ const bcrypt = require('bcryptjs');
 const { MongoClient } = require('mongodb');
 const fs = require('fs');
 const path = require('path');
+const { loadProductsFromFiles } = require('./mcp-utils');
+const mcpRoutes = require('./mcp-server');
+const mailer = require('./mailer');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -13,32 +16,17 @@ const uri = process.env.MONGO_URI || 'mongodb://localhost:27017';
 const dbName = process.env.DB_NAME || 'karim_industries';
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+app.use('/api/mcp', mcpRoutes);
 
+const transporter = mailer.createTransporter();
+const smtpConfigured = mailer.isSmtpConfigured();
+const mailRecipient = mailer.getMailRecipient();
+
+let mongoClient;
 let productsCollection;
 let usersCollection;
-
-// Function to load products from JSON files
-function loadProductsFromFiles() {
-  const productsDir = path.join(__dirname, 'products');
-  const products = [];
-
-  try {
-    const files = fs.readdirSync(productsDir);
-    files.forEach(file => {
-      if (file.endsWith('.json')) {
-        const filePath = path.join(productsDir, file);
-        const productData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-        products.push(productData);
-      }
-    });
-    console.log(`Loaded ${products.length} products from JSON files.`);
-    return products;
-  } catch (error) {
-    console.error('Error loading products from files:', error);
-    return [];
-  }
-}
 
 const sampleUsers = [
   {
@@ -83,15 +71,27 @@ async function seedDatabase() {
 
 async function connectDB() {
   try {
-    const client = new MongoClient(uri);
-    await client.connect();
-    const db = client.db(dbName);
+    mongoClient = new MongoClient(uri);
+    await mongoClient.connect();
+    const db = mongoClient.db(dbName);
     productsCollection = db.collection('products');
     usersCollection = db.collection('users');
     await seedDatabase();
     console.log(`Connected to MongoDB and using database: ${db.databaseName}`);
+
+    if (smtpConfigured) {
+      await transporter.verify();
+      console.log('SMTP transporter verified successfully.');
+    } else {
+      console.warn('SMTP configuration missing. Contact form email will not send until SMTP_USER and SMTP_PASS are configured.');
+    }
+
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
   } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
+    console.error('Error connecting to MongoDB or verifying SMTP:', error);
+    process.exit(1);
   }
 }
 
@@ -101,19 +101,55 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', database: dbName });
 });
 
-app.get('/api/products/data/:filename', (req, res) => {
-  const filename = req.params.filename;
-  const filePath = path.join(__dirname, 'products', filename + '.json');
-
-  if (!fs.existsSync(filePath)) {
-    return res.status(404).json({ message: 'Product data file not found.' });
-  }
-
+app.post('/api/contact', async (req, res) => {
   try {
-    const data = fs.readFileSync(filePath, 'utf8');
-    res.json(JSON.parse(data));
+    const { Name, Email, Phone, Company, Country, Message } = req.body;
+
+    if (!Name || !Email || !Phone || !Company || !Country) {
+      return res.status(400).json({ message: 'Name, email, phone, company and country are required.' });
+    }
+
+    const formattedMessage = Message ? Message : 'No message provided';
+    const htmlBody = `
+      <h2>New Contact Form Submission</h2>
+      <table style="width:100%; border-collapse: collapse;">
+        <tr><td style="padding: 8px; font-weight: 700;">Name:</td><td style="padding: 8px;">${Name}</td></tr>
+        <tr><td style="padding: 8px; font-weight: 700;">Email:</td><td style="padding: 8px;">${Email}</td></tr>
+        <tr><td style="padding: 8px; font-weight: 700;">Phone:</td><td style="padding: 8px;">${Phone}</td></tr>
+        <tr><td style="padding: 8px; font-weight: 700;">Company:</td><td style="padding: 8px;">${Company}</td></tr>
+        <tr><td style="padding: 8px; font-weight: 700;">Country:</td><td style="padding: 8px;">${Country}</td></tr>
+        <tr><td style="padding: 8px; font-weight: 700; vertical-align: top;">Message:</td><td style="padding: 8px;">${formattedMessage}</td></tr>
+      </table>
+    `;
+
+    if (!smtpConfigured) {
+      // Respond immediately even if SMTP isn't configured — don't block the client
+      res.json({ message: 'Contact message received. Email notifications are not configured.' });
+      return;
+    }
+
+    const mailOptions = {
+      from: process.env.SMTP_FROM || `Karim Industries <${process.env.SMTP_USER || 'no-reply@karimindustries.com.pk'}>`,
+      to: mailRecipient,
+      subject: `New Contact Form Message from ${Name}`,
+      text: `Name: ${Name}\nEmail: ${Email}\nPhone: ${Phone}\nCompany: ${Company}\nCountry: ${Country}\nMessage: ${formattedMessage}`,
+      html: htmlBody,
+    };
+
+    // Send email asynchronously so the API responds fast to the client
+    res.json({ message: 'Contact message received. We will reply shortly.' });
+
+    (async () => {
+      try {
+        await mailer.sendContactEmail({ ...mailOptions, transporter });
+        console.log(`Contact email sent to ${mailRecipient} for ${Email}`);
+      } catch (err) {
+        console.error('Error sending contact email (async):', err);
+      }
+    })();
   } catch (error) {
-    res.status(500).json({ message: 'Error reading product data.' });
+    console.error('Error sending contact email:', error);
+    res.status(500).json({ message: 'Failed to send contact message.' });
   }
 });
 
@@ -131,6 +167,14 @@ app.get('/api/products/data/:filename', (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error reading product data.' });
   }
+});
+
+app.use((req, res, next) => {
+  const needsDb = req.path.startsWith('/api/products') || req.path.startsWith('/api/users') || req.path.startsWith('/api/auth') || req.path.startsWith('/api/stats');
+  if (needsDb && (!productsCollection || !usersCollection)) {
+    return res.status(503).json({ message: 'Database not connected yet. Please try again shortly.' });
+  }
+  next();
 });
 
 app.get('/api/products', async (req, res) => {
@@ -361,17 +405,12 @@ app.post('/api/products/reload', async (req, res) => {
   }
 });
 
-if (process.env.NODE_ENV !== 'test') {
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-  });
-}
-
 process.on('SIGINT', async () => {
   try {
-    const client = new MongoClient(uri);
-    await client.close();
-    console.log('MongoDB connection closed');
+    if (mongoClient) {
+      await mongoClient.close();
+      console.log('MongoDB connection closed');
+    }
   } catch (err) {
     console.error(err);
   }

@@ -428,9 +428,15 @@ const Header = () => {
 
     // On suggestion click
     const handleSuggestionClick = (product) => {
-        setSearchTerm(product.name);
+        // navigate directly to the product page when a suggestion is selected
+        setSearchTerm('');
         setShowSuggestions(false);
         setSearchError('');
+        if (product.path) {
+            navigate(product.path);
+        } else if (product.id) {
+            navigate(`/products/${product.id}`);
+        }
     };
 
     const handleHamburger = () => setMobileMenu(prev => !prev);

@@ -261,18 +261,26 @@ const Admin = () => {
 
   const renderProducts = () => (
     <div className="admin-products">
-      <h1>Products Management</h1>
-      <button onClick={() => setActiveTab('dashboard')} className="btn back-btn">← Back to Dashboard</button>
-
-      <div className="actions">
-        <button onClick={() => { resetForm(); setActiveTab('product-form'); }} className="btn">Add New Product</button>
-        <button onClick={reloadProducts} className="btn reload-btn">Reload from Files</button>
+      <div className="section-header">
+        <div>
+          <span className="eyebrow">Products Management</span>
+          <h1>Product Catalog</h1>
+          <p className="dashboard-description">
+            Review catalog items, edit product details, and keep your inventory up to date.
+          </p>
+        </div>
+        <div className="section-actions">
+          <button onClick={() => { resetForm(); setActiveTab('product-form'); }} className="btn secondary">Add New Product</button>
+          <button onClick={reloadProducts} className="btn reload-btn">Reload from Files</button>
+          <button onClick={() => setActiveTab('dashboard')} className="btn outline">Back to Dashboard</button>
+        </div>
       </div>
 
       {loading ? (
         <p>Loading products...</p>
       ) : (
-        <table>
+        <div className="table-wrap">
+          <table>
           <thead>
             <tr>
               <th>ID</th>
@@ -294,7 +302,8 @@ const Admin = () => {
               </tr>
             ))}
           </tbody>
-        </table>
+          </table>
+        </div>
       )}
     </div>
   );
