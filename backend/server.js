@@ -79,6 +79,7 @@ let mongoClient;
 let productsCollection;
 let usersCollection;
 let contactMessagesCollection;
+let server;
 
 const sampleUsers = [
   {
@@ -139,9 +140,13 @@ async function connectDB() {
       console.warn('SMTP configuration missing. Contact form email will not send until SMTP_USER and SMTP_PASS are configured.');
     }
 
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-    });
+    if (process.env.NODE_ENV === 'test') {
+      console.log(`Test environment detected; server will not start listening on port ${port}`);
+    } else {
+      server = app.listen(port, () => {
+        console.log(`Server running on port ${port}`);
+      });
+    }
   } catch (error) {
     console.error('Error connecting to MongoDB or verifying SMTP:', error);
     process.exit(1);
@@ -736,4 +741,4 @@ process.on('SIGINT', async () => {
   process.exit(0);
 });
 
-module.exports = { app, loadProductsFromFiles };
+module.exports = { app, loadProductsFromFiles, server };
