@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
 
 const Footer = () => {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
   return (
     <footer>
       {/* Quick Links Column */}
@@ -158,6 +160,40 @@ const Footer = () => {
               />
             </svg>
           </a> */}
+        </div>
+        {/* Newsletter subscription (below social icons) */}
+        <div className="newsletter">
+          <p>Subscribe to our newsletter for product updates</p>
+          <form
+            className="subscribe-form"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (!email) return setMessage('Please enter your email');
+              try {
+                const res = await fetch('http://localhost:5000/api/subscribe', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ email }),
+                });
+                const data = await res.json();
+                setMessage(data.message || 'Subscribed');
+                if (res.ok) setEmail('');
+              } catch (err) {
+                setMessage('Subscription failed');
+              }
+            }}
+          >
+            <input
+              className="email-input"
+              type="email"
+              placeholder="Your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <button className="subscribe-btn" type="submit">Subscribe</button>
+            {message && <p className="subscribe-message">{message}</p>}
+          </form>
         </div>
       </div>
 

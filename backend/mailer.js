@@ -36,9 +36,15 @@ async function sendContactEmail({ transporter, ...mailOptions }) {
   return t.sendMail(mailOptions);
 }
 
+async function sendEmail({ transporter, ...mailOptions }) {
+  const t = transporter || createTransporter();
+  return t.sendMail(mailOptions);
+}
+
 module.exports = {
   isSmtpConfigured,
   createTransporter,
   getMailRecipient,
   sendContactEmail,
+  sendEmail,
 };

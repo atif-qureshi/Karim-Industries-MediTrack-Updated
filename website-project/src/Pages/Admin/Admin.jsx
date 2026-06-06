@@ -5,6 +5,8 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
+  const [subscribers, setSubscribers] = useState([]);
+  const [contacts, setContacts] = useState([]);
   const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -22,9 +24,9 @@ const Admin = () => {
           <button className="btn secondary" onClick={() => { resetForm(); setActiveTab('product-form'); }}>
             Add Product
           </button>
-          <button className="btn outline" onClick={() => window.open('http://localhost:5000/api/health', '_blank')}>
-            API Health Check
-          </button>
+          {adminToken && (
+            <button onClick={handleAdminLogout} className="btn outline">Logout</button>
+          )}
         </div>
       </div>
 
@@ -37,14 +39,7 @@ const Admin = () => {
           <p className="summary-label">Total Users</p>
           <strong>{stats.users || 0}</strong>
         </div>
-        <div className="summary-card">
-          <p className="summary-label">Database Size</p>
-          <strong>{stats.dbSize || 'N/A'}</strong>
-        </div>
-        <div className="summary-card highlight">
-          <p className="summary-label">Live Status</p>
-          <strong>Ready</strong>
-        </div>
+        {/* Removed Database Size and Live Status cards per request */}
       </div>
 
       <div className="dashboard-grid">
@@ -60,23 +55,29 @@ const Admin = () => {
         </div>
 
         <div className="card accent-left">
-          <h3>Users Management</h3>
-          <p>Review user accounts and their roles easily.</p>
-          <button onClick={() => setActiveTab('users')} className="btn">View Users</button>
-        </div>
-
-        <div className="card accent-left">
           <h3>Database Stats</h3>
           <p>Track current product and user metrics.</p>
           <button onClick={() => setActiveTab('stats')} className="btn">View Stats</button>
         </div>
 
         <div className="card accent-left">
-          <h3>API Health</h3>
-          <p>Open the backend health endpoint in a new tab.</p>
-          <button onClick={() => window.open('http://localhost:5000/api/health', '_blank')} className="btn outline">
-            Check Health
-          </button>
+          <h3>Users Management</h3>
+          <p>Review user accounts and their roles easily.</p>
+          <button onClick={() => setActiveTab('users')} className="btn">View Users</button>
+        </div>
+
+        <div className="card accent-left">
+          <h3>Subscribers</h3>
+          <p>View newsletter subscribers collected from the website footer.</p>
+          <div className="card-actions">
+            <button onClick={() => setActiveTab('subscribers')} className="btn">View Subscribers</button>
+          </div>
+        </div>
+
+        <div className="card accent-left">
+          <h3>Contact Messages</h3>
+          <p>Review messages submitted through the Contact Us page and reply directly.</p>
+          <button onClick={() => setActiveTab('contacts')} className="btn">View Messages</button>
         </div>
       </div>
     </div>
@@ -94,6 +95,12 @@ const Admin = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [message, setMessage] = useState('');
+  const [adminUser, setAdminUser] = useState('admin_atif');
+  const [adminPassword, setAdminPassword] = useState('');
+  const [adminToken, setAdminToken] = useState(() => window.localStorage.getItem('adminToken') || '');
+  const [adminError, setAdminError] = useState('');
+  const [selectedContact, setSelectedContact] = useState(null);
+  const [replyText, setReplyText] = useState('');
 
   useEffect(() => {
     if (activeTab === 'products') {
@@ -107,6 +114,13 @@ const Admin = () => {
     if (activeTab === 'stats' || activeTab === 'dashboard') {
       fetchStats();
     }
+    if (activeTab === 'subscribers') {
+      fetchSubscribers();
+    }
+    if (activeTab === 'contacts') {
+      fetchContacts();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   const fetchProducts = async () => {
@@ -130,6 +144,143 @@ const Admin = () => {
     } catch (error) {
       console.error('Error fetching users:', error);
     }
+  };
+
+  const fetchContacts = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('http://localhost:5000/api/contactmessages', {
+        headers: { Authorization: `Bearer ${adminToken}` },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch contact messages');
+      }
+      const data = await response.json();
+      setContacts(data);
+    } catch (error) {
+      console.error('Error fetching contact messages:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchSubscribers = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/subscribers');
+      const data = await response.json();
+      setSubscribers(data);
+    } catch (error) {
+      console.error('Error fetching subscribers:', error);
+    }
+  };
+
+  const deleteSubscriber = async (email) => {
+    // Attempt direct deletion without prompting. If a secret is available
+    // (build-time or stored), include it. Backend will allow unprotected
+    // deletes in development or when configured.
+    const buildSecret = process.env.REACT_APP_ADMIN_SECRET;
+    const stored = window.localStorage.getItem('adminSecret');
+    const secret = buildSecret || stored || null;
+
+    try {
+      const headers = { 'Content-Type': 'application/json' };
+      // Prefer bearer token if logged in
+      const token = window.localStorage.getItem('adminToken') || null;
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      else if (secret) headers['x-admin-secret'] = secret;
+
+      const res = await fetch('http://localhost:5000/api/subscribers', {
+        method: 'DELETE',
+        headers,
+        body: JSON.stringify({ email }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        return alert(err.message || 'Failed to delete subscriber');
+      }
+
+      setSubscribers((prev) => prev.filter((s) => s.email !== email));
+      alert('Subscriber deleted');
+    } catch (error) {
+      console.error('Error deleting subscriber:', error);
+      alert('Error deleting subscriber');
+    }
+  };
+
+  const sendContactReply = async () => {
+    if (!selectedContact || !replyText.trim()) {
+      return alert('Please enter a reply message.');
+    }
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/contactmessages/${selectedContact._id}/reply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${adminToken}`,
+        },
+        body: JSON.stringify({ reply: replyText.trim() }),
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.message || 'Failed to send reply.');
+      }
+
+      alert('Reply sent successfully.');
+      setReplyText('');
+      setSelectedContact(null);
+      fetchContacts();
+    } catch (error) {
+      console.error('Error sending reply:', error);
+      alert(error.message || 'Unable to send reply.');
+    }
+  };
+
+  const handleSelectContact = (contact) => {
+    setSelectedContact(contact);
+    setReplyText(contact.reply || '');
+  };
+
+  const handleClearContactSelection = () => {
+    setSelectedContact(null);
+    setReplyText('');
+  };
+
+  const handleAdminLogin = async (ev) => {
+    ev && ev.preventDefault();
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: adminUser, password: adminPassword })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        const msg = err && err.message ? err.message : 'Login failed';
+        setAdminError(msg);
+        return;
+      }
+      const data = await res.json();
+      if (data && data.token) {
+        window.localStorage.setItem('adminToken', data.token);
+        setAdminToken(data.token);
+        setAdminPassword('');
+        setAdminError('');
+        // show a small confirmation
+        setTimeout(() => { window.location.href = '/admin'; }, 150);
+      }
+    } catch (err) {
+      console.error('Admin login error:', err);
+      setAdminError('Login error');
+    }
+  };
+
+  const handleAdminLogout = () => {
+    window.localStorage.removeItem('adminToken');
+    setAdminToken('');
+    alert('Logged out');
   };
 
   const fetchStats = async () => {
@@ -338,6 +489,120 @@ const Admin = () => {
     </div>
   );
 
+  const renderSubscribers = () => (
+    <div className="admin-subscribers">
+      <h1>Newsletter Subscribers</h1>
+      <button onClick={() => setActiveTab('dashboard')} className="btn back-btn">← Back to Dashboard</button>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Subscribed At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {subscribers.map((s, idx) => (
+            <tr key={idx}>
+              <td>{s.email}</td>
+              <td>{s.subscribedAt || 'N/A'}</td>
+              <td>
+                <button onClick={() => deleteSubscriber(s.email)} className="btn delete-btn">Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  const renderContacts = () => (
+    <div className="admin-contacts">
+      <div className="section-header">
+        <div>
+          <span className="eyebrow">Contact Messages</span>
+          <h1>Contact Form Submissions</h1>
+          <p className="dashboard-description">
+            Manage incoming contact inquiries and reply directly to users from the admin panel.
+          </p>
+        </div>
+        <div className="section-actions">
+          <button onClick={() => { handleClearContactSelection(); setActiveTab('dashboard'); }} className="btn outline">Back to Dashboard</button>
+          <button onClick={fetchContacts} className="btn secondary">Refresh</button>
+        </div>
+      </div>
+
+      {loading ? (
+        <p>Loading messages...</p>
+      ) : contacts.length === 0 ? (
+        <p>No contact messages have been received yet.</p>
+      ) : (
+        <div className="contacts-grid">
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Company</th>
+                  <th>Country</th>
+                  <th>Phone</th>
+                  <th>Status</th>
+                  <th>Submitted</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {contacts.map((contact) => (
+                  <tr key={contact._id}>
+                    <td>{contact.Name}</td>
+                    <td>{contact.Email}</td>
+                    <td>{contact.Company}</td>
+                    <td>{contact.Country}</td>
+                    <td>{contact.Phone}</td>
+                    <td>{contact.status || 'new'}</td>
+                    <td>{new Date(contact.createdAt).toLocaleString()}</td>
+                    <td>
+                      <button onClick={() => handleSelectContact(contact)} className="btn">Reply</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="card contact-reply-card">
+            {selectedContact ? (
+              <>
+                <h3>Reply to {selectedContact.Name}</h3>
+                <p><strong>Email:</strong> {selectedContact.Email}</p>
+                <p><strong>Message:</strong></p>
+                <div className="contact-message-box">{selectedContact.Message}</div>
+                <textarea
+                  className="reply-textarea"
+                  rows="8"
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  placeholder="Write your reply here"
+                />
+                <div className="form-actions-row">
+                  <button onClick={sendContactReply} className="btn">Send Reply</button>
+                  <button onClick={handleClearContactSelection} className="btn outline">Cancel</button>
+                </div>
+              </>
+            ) : (
+              <div className="contact-placeholder">
+                <h3>Select a message to reply</h3>
+                <p>Click any inquiry in the table to view the full message and send a reply email directly from the admin panel.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
   const renderStats = () => (
     <div className="admin-stats">
       <h1>Database Statistics</h1>
@@ -352,22 +617,22 @@ const Admin = () => {
           <h3>Total Users</h3>
           <div className="stat-number">{stats.users || 0}</div>
         </div>
-        <div className="stat-card">
-          <h3>Database Size</h3>
-          <div className="stat-number">{stats.dbSize || 'N/A'}</div>
-        </div>
+        {/* Database Size removed per request */}
       </div>
     </div>
   );
 
-  const renderProductForm = () => (
+  const renderProductForm = () => {
+    return (
     <div className="admin-add-product">
       <h1>{isEditing ? `Edit Product ID ${productForm.id}` : 'Add New Product'}</h1>
       <button onClick={() => setActiveTab('products')} className="btn back-btn">← Back to Products</button>
       {message && <p className="form-message">{message}</p>}
 
+      <div className="card product-card">
       <form className="product-form" onSubmit={handleSubmitProduct}>
-        <div className="form-group">
+        <div className="form-grid">
+          <div className="form-group">
           <label htmlFor="name">Product Name:</label>
           <input
             type="text"
@@ -391,7 +656,7 @@ const Admin = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-group full-width">
           <label htmlFor="description">Description:</label>
           <textarea
             id="description"
@@ -455,24 +720,52 @@ const Admin = () => {
           <input type="file" id="imageUpload" accept="image/*" onChange={handleImageUpload} />
         </div>
 
-        {productForm.imageUrl && (
-          <div className="form-group image-preview-group">
-            <label>Image Preview:</label>
-            <img src={productForm.imageUrl} alt="Preview" className="image-preview" />
-          </div>
-        )}
+          {productForm.imageUrl && (
+            <div className="form-group image-preview-group full-width">
+              <label>Image Preview:</label>
+              <img src={productForm.imageUrl} alt="Preview" className="image-preview" />
+            </div>
+          )}
 
-        <button type="submit" className="btn">{isEditing ? 'Update Product' : 'Add Product'}</button>
+        </div>
+
+        <div className="form-actions-row">
+          <button type="submit" className="btn">{isEditing ? 'Update Product' : 'Add Product'}</button>
+          <button type="button" onClick={() => { resetForm(); setActiveTab('products'); }} className="btn outline">Cancel</button>
+        </div>
       </form>
+      </div>
     </div>
-  );
+    );
+  };
+
+  if (!adminToken) {
+    return (
+      <div className="admin-login-page">
+        <div className="admin-login-card">
+          <h1>Admin Login</h1>
+          <p className="lead">Sign in to access the admin panel and manage products and subscribers.</p>
+          {adminError && <div className="admin-login-error">{adminError}</div>}
+          <form onSubmit={handleAdminLogin} className="admin-login-form-large">
+            <input autoFocus type="text" placeholder="Admin username" value={adminUser} onChange={(e) => setAdminUser(e.target.value)} />
+            <input type="password" placeholder="Password" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} />
+            <div className="admin-login-actions">
+              <button type="submit" className="btn">Login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-container">
       {activeTab === 'dashboard' && renderDashboard()}
       {activeTab === 'products' && renderProducts()}
       {activeTab === 'users' && renderUsers()}
+      {activeTab === 'subscribers' && renderSubscribers()}
       {activeTab === 'stats' && renderStats()}
+      {activeTab === 'contacts' && renderContacts()}
       {activeTab === 'product-form' && renderProductForm()}
     </div>
   );

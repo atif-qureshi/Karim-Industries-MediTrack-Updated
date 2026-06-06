@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './Components/Header/HeaderBackend.jsx';
 import Home from './Pages/Home/Home.jsx';
 import AboutUs from './Pages/AboutUs/About.jsx';
@@ -19,10 +19,13 @@ import PageTransition from './Components/ScreenLoader/PageTransition.jsx';
 import WhatsAppButton from './Components/WhatsAppButton/WhatsAppButton.jsx';
 import NotFound from './Components/NotFound/NotFound.jsx';
 
-function App() {
+function AppContent() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname === '/admin';
+
   return (
-    <Router>
-      <Header />
+    <>
+      {!isAdminRoute && <Header />}
       <PageTransition>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -38,12 +41,19 @@ function App() {
           <Route path='/admin' element={<Admin />} />
           <Route path='/ContactUs' element={<ContactUs />} />
           <Route path='/Services' element={<Services />} />
-
           <Route path='*' element={<NotFound />} />
         </Routes>
-        <WhatsAppButton />
+        {!isAdminRoute && <WhatsAppButton />}
       </PageTransition>
-      <Footer />
+      {!isAdminRoute && <Footer />}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }

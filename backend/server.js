@@ -24,9 +24,61 @@ const transporter = mailer.createTransporter();
 const smtpConfigured = mailer.isSmtpConfigured();
 const mailRecipient = mailer.getMailRecipient();
 
+// Subscribers persistence (simple JSON file)
+const subscribersFile = path.join(__dirname, 'subscribers.json');
+
+function loadSubscribers() {
+  try {
+    if (!fs.existsSync(subscribersFile)) return [];
+    const raw = fs.readFileSync(subscribersFile, 'utf8');
+    return JSON.parse(raw || '[]');
+  } catch (err) {
+    console.error('Failed to load subscribers:', err);
+    return [];
+  }
+}
+
+function saveSubscribers(list) {
+  try {
+    fs.writeFileSync(subscribersFile, JSON.stringify(list, null, 2), 'utf8');
+  } catch (err) {
+    console.error('Failed to save subscribers:', err);
+  }
+}
+
+async function notifySubscribers({ subject, html }) {
+  try {
+    const subs = loadSubscribers();
+    if (!subs.length) return;
+    const bccList = subs.map((s) => s.email).join(',');
+    if (!smtpConfigured) {
+      console.log('SMTP not configured - skipping notifying subscribers', subject);
+      return;
+    }
+
+    const mailOptions = {
+      from: process.env.SMTP_FROM || `Karim Industries <${process.env.SMTP_USER || 'no-reply@karimindustries.com.pk'}>`,
+      to: mailRecipient,
+      bcc: bccList,
+      subject,
+      html,
+    };
+
+    // send async, don't block response
+    transporter.sendMail(mailOptions).then((info) => {
+      console.log('Notification sent to subscribers:', info && info.accepted && info.accepted.length);
+    }).catch((err) => {
+      console.error('Error sending subscriber notification:', err);
+    });
+  } catch (err) {
+    console.error('notifySubscribers error:', err);
+  }
+}
+
 let mongoClient;
 let productsCollection;
 let usersCollection;
+let contactMessagesCollection;
 
 const sampleUsers = [
   {
@@ -76,6 +128,7 @@ async function connectDB() {
     const db = mongoClient.db(dbName);
     productsCollection = db.collection('products');
     usersCollection = db.collection('users');
+    contactMessagesCollection = db.collection('contactMessages');
     await seedDatabase();
     console.log(`Connected to MongoDB and using database: ${db.databaseName}`);
 
@@ -122,8 +175,21 @@ app.post('/api/contact', async (req, res) => {
       </table>
     `;
 
+    const savedMessage = await contactMessagesCollection.insertOne({
+      Name,
+      Email,
+      Phone,
+      Company,
+      Country,
+      Message: formattedMessage,
+      status: 'new',
+      createdAt: new Date(),
+      reply: null,
+      repliedAt: null,
+      repliedBy: null,
+    });
+
     if (!smtpConfigured) {
-      // Respond immediately even if SMTP isn't configured — don't block the client
       res.json({ message: 'Contact message received. Email notifications are not configured.' });
       return;
     }
@@ -150,6 +216,222 @@ app.post('/api/contact', async (req, res) => {
   } catch (error) {
     console.error('Error sending contact email:', error);
     res.status(500).json({ message: 'Failed to send contact message.' });
+  }
+});
+
+app.get('/api/contactmessages', requireAdmin, async (req, res) => {
+  try {
+    const messages = await contactMessagesCollection.find().sort({ createdAt: -1 }).toArray();
+    res.json(messages);
+  } catch (err) {
+    console.error('Error fetching contact messages:', err);
+    res.status(500).json({ message: 'Unable to get contact messages.' });
+  }
+});
+
+app.post('/api/contactmessages/:id/reply', requireAdmin, async (req, res) => {
+  try {
+    const messageId = req.params.id;
+    const { reply } = req.body;
+    if (!reply || typeof reply !== 'string') {
+      return res.status(400).json({ message: 'Reply text is required.' });
+    }
+
+    const objectId = require('mongodb').ObjectId;
+    if (!objectId.isValid(messageId)) {
+      return res.status(400).json({ message: 'Invalid message ID.' });
+    }
+
+    const messageDoc = await contactMessagesCollection.findOne({ _id: new objectId(messageId) });
+    if (!messageDoc) {
+      return res.status(404).json({ message: 'Contact message not found.' });
+    }
+
+    const update = {
+      $set: {
+        reply,
+        repliedAt: new Date(),
+        repliedBy: req.adminUser ? req.adminUser.name : 'admin',
+        status: 'replied',
+      },
+    };
+
+    await contactMessagesCollection.updateOne({ _id: new objectId(messageId) }, update);
+
+    if (smtpConfigured) {
+      const mailOptions = {
+        from: process.env.SMTP_FROM || `Karim Industries <${process.env.SMTP_USER || 'no-reply@karimindustries.com.pk'}>`,
+        to: messageDoc.Email,
+        subject: `Reply from Karim Industries regarding your message`,
+        text: `Hello ${messageDoc.Name},\n\n${reply}\n\nRegards,\nKarim Industries`,
+        html: `<p>Hello ${messageDoc.Name},</p><p>${reply.replace(/\n/g, '<br/>')}</p><p>Regards,<br/>Karim Industries</p>`,
+      };
+
+      try {
+        await mailer.sendEmail({ ...mailOptions, transporter });
+      } catch (sendErr) {
+        console.error('Error sending reply email:', sendErr);
+        return res.status(500).json({ message: 'Reply saved but failed to send email.' });
+      }
+    }
+
+    res.json({ message: 'Reply sent and saved.' });
+  } catch (err) {
+    console.error('Error replying to contact message:', err);
+    res.status(500).json({ message: 'Unable to send reply.' });
+  }
+});
+
+// Subscribe endpoint for newsletter
+app.post('/api/subscribe', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email || typeof email !== 'string') return res.status(400).json({ message: 'Valid email required.' });
+
+    const normalized = email.trim().toLowerCase();
+    // basic email validation
+    const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+    if (!emailRegex.test(normalized)) return res.status(400).json({ message: 'Invalid email address.' });
+
+    const list = loadSubscribers();
+    if (list.some((s) => s.email === normalized)) {
+      return res.json({ message: 'Already subscribed.' });
+    }
+
+    const entry = { email: normalized, subscribedAt: new Date().toISOString() };
+    list.push(entry);
+    saveSubscribers(list);
+    res.status(201).json({ message: 'Subscribed successfully.' });
+
+    if (smtpConfigured) {
+      (async () => {
+        try {
+          await mailer.sendEmail({
+            transporter,
+            from: process.env.SMTP_FROM || `Karim Industries <${process.env.SMTP_USER || 'no-reply@karimindustries.com.pk'}>`,
+            to: normalized,
+            subject: 'Newsletter Subscription Confirmed',
+            text: `Thank you for subscribing to the Karim Industries newsletter. You will now receive product updates and news.`,
+            html: `
+              <div style="font-family: Arial, sans-serif; color: #333;">
+                <h2 style="color: #2a2a72;">Subscription Confirmed</h2>
+                <p>Thank you for subscribing to the Karim Industries newsletter.</p>
+                <p>We will send you product updates, company news, and useful service information.</p>
+                <p style="margin-top: 20px;">If you have any questions, reply to this email or visit our website.</p>
+                <p style="margin-top: 30px; font-size: 0.9em; color: #666;">Karim Industries</p>
+              </div>
+            `,
+          });
+          console.log(`Subscription confirmation email sent to ${normalized}`);
+        } catch (emailError) {
+          console.error('Failed to send subscription confirmation email:', emailError);
+        }
+      })();
+    }
+  } catch (err) {
+    console.error('Subscribe error:', err);
+    res.status(500).json({ message: 'Failed to subscribe.' });
+  }
+});
+
+// Admin: list subscribers
+app.get('/api/subscribers', async (req, res) => {
+  try {
+    const list = loadSubscribers();
+    res.json(list);
+  } catch (err) {
+    console.error('Error fetching subscribers:', err);
+    res.status(500).json({ message: 'Unable to get subscribers.' });
+  }
+});
+
+// Delete a subscriber (protected by ADMIN_SECRET)
+// Admin auth middleware - requires admin token or ADMIN_SECRET
+function getEnvAdminToken() {
+  const uiUser = process.env.ADMIN_UI_USER || '';
+  if (!uiUser) return null;
+  return 'env-' + Buffer.from(uiUser).toString('hex');
+}
+
+async function requireAdmin(req, res, next) {
+  try {
+    const adminSecret = process.env.ADMIN_SECRET || '';
+    // allow header secret for scripted access (optional)
+    const providedSecret = (req.headers['x-admin-secret'] || req.body.adminSecret || '').toString();
+    if (adminSecret && providedSecret === adminSecret) return next();
+
+    const auth = (req.headers.authorization || '').toString();
+    if (!auth.startsWith('Bearer ')) return res.status(401).json({ message: 'Unauthorized' });
+    const token = auth.slice(7);
+
+    // support env-based admin token
+    const envToken = getEnvAdminToken();
+    if (envToken && token === envToken) {
+      req.adminUser = { id: 0, name: process.env.ADMIN_UI_USER || 'env-admin', role: 'admin' };
+      return next();
+    }
+
+    if (!token.startsWith('token-')) return res.status(401).json({ message: 'Unauthorized' });
+    const id = parseInt(token.split('-')[1], 10);
+    if (Number.isNaN(id)) return res.status(401).json({ message: 'Unauthorized' });
+    const user = await usersCollection.findOne({ id });
+    if (!user || user.role !== 'admin') return res.status(403).json({ message: 'Forbidden' });
+    req.adminUser = user;
+    next();
+  } catch (err) {
+    console.error('requireAdmin error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+app.delete('/api/subscribers', requireAdmin, async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email || typeof email !== 'string') return res.status(400).json({ message: 'Email required.' });
+
+    const normalized = email.trim().toLowerCase();
+    const list = loadSubscribers();
+    const filtered = list.filter((s) => s.email !== normalized);
+    if (filtered.length === list.length) {
+      return res.status(404).json({ message: 'Subscriber not found.' });
+    }
+
+    saveSubscribers(filtered);
+    res.json({ message: 'Subscriber deleted.' });
+  } catch (err) {
+    console.error('Error deleting subscriber:', err);
+    res.status(500).json({ message: 'Failed to delete subscriber.' });
+  }
+});
+
+// Admin: trigger notification to all subscribers
+app.post('/api/notify', async (req, res) => {
+  try {
+    const adminSecret = process.env.ADMIN_SECRET || '';
+    const provided = (req.headers['x-admin-secret'] || req.body.adminSecret || '').toString();
+    if (!adminSecret || provided !== adminSecret) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    const { subject, html, text } = req.body;
+    if (!subject || (!html && !text)) {
+      return res.status(400).json({ message: 'Subject and html/text required.' });
+    }
+
+    // Trigger async notify - do not block the request
+    (async () => {
+      try {
+        await notifySubscribers({ subject, html: html || text, text });
+        console.log('Admin notification triggered:', subject);
+      } catch (err) {
+        console.error('Admin notify error:', err);
+      }
+    })();
+
+    res.json({ message: 'Notification triggered.' });
+  } catch (err) {
+    console.error('Error in /api/notify:', err);
+    res.status(500).json({ message: 'Failed to trigger notification.' });
   }
 });
 
@@ -199,6 +481,17 @@ app.post('/api/products', async (req, res) => {
     const newProduct = { id: nextId, ...product };
     await productsCollection.insertOne(newProduct);
     res.status(201).json(newProduct);
+    // Notify subscribers about new product (do not block response)
+    (async () => {
+      try {
+        await notifySubscribers({
+          subject: `New product added: ${newProduct.name}`,
+          html: `<p>A new product has been added: <strong>${newProduct.name}</strong></p><p><a href="/products/${newProduct.id}">View product</a></p>`
+        });
+      } catch (err) {
+        console.error('Failed to notify subscribers after product creation:', err);
+      }
+    })();
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Unable to create product.' });
@@ -238,8 +531,18 @@ app.put('/api/products/:id', async (req, res) => {
     if (!result.value) {
       return res.status(404).json({ message: 'Product not found.' });
     }
-
     res.json(result.value);
+    // Notify subscribers about product update
+    (async () => {
+      try {
+        await notifySubscribers({
+          subject: `Product updated: ${result.value.name || ('ID ' + result.value.id)}`,
+          html: `<p>Product updated: <strong>${result.value.name || ('ID ' + result.value.id)}</strong></p><p><a href="/products/${result.value.id}">View product</a></p>`
+        });
+      } catch (err) {
+        console.error('Failed to notify subscribers after product update:', err);
+      }
+    })();
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Unable to update product.' });
@@ -342,6 +645,22 @@ app.post('/api/auth/login', async (req, res) => {
   }
 
   try {
+    // Support env-based admin credentials (username stored in ADMIN_UI_USER)
+    const uiUser = process.env.ADMIN_UI_USER || '';
+    const uiPass = process.env.ADMIN_UI_PASS || '';
+    if (uiUser && uiPass && email === uiUser && password === uiPass) {
+      const token = getEnvAdminToken();
+      return res.json({
+        token,
+        user: {
+          id: 0,
+          name: uiUser,
+          email: '',
+          role: 'admin'
+        }
+      });
+    }
+
     const user = await usersCollection.findOne({ email: email.toLowerCase() });
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials.' });
