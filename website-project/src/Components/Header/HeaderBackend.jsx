@@ -4,6 +4,8 @@ import './Header.css';
 import logo from './Images/logo.jpg';
 import Hamburger from './Hamburger.js';
 
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
+
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState([]);
@@ -18,7 +20,7 @@ const Header = () => {
   const searchInputRef = useRef(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API_BASE}/api/products`)
       .then((response) => response.json())
       .then((data) => setProducts(data))
       .catch(() => setProducts([]));
@@ -56,7 +58,7 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
     setSearchError('');
     const trimmed = searchTerm.trim();
@@ -76,16 +78,34 @@ const Header = () => {
       setShowSuggestions(false);
       setMobileMenu(false);
       navigate(`/products/${exactMatch.id}`);
-    } else {
-      setPopupMessage(`"${searchTerm}" not found. Try a valid product name.`);
-      setShowPopup(true);
+      return;
     }
+
+    try {
+      const response = await fetch(`${API_BASE}/api/products/search?q=${encodeURIComponent(trimmed)}`);
+      const data = await response.json();
+      const results = data.results || [];
+      if (results.length > 0) {
+        setSearchTerm('');
+        setShowSuggestions(false);
+        setMobileMenu(false);
+        navigate(`/products/${results[0].id}`);
+        return;
+      }
+    } catch (err) {
+      console.error('Semantic search failed:', err);
+    }
+
+    setPopupMessage(`"${searchTerm}" not found. Try a valid product name.`);
+    setShowPopup(true);
   };
 
   const handleSuggestionClick = (product) => {
-    setSearchTerm(product.name);
+    setSearchTerm('');
     setShowSuggestions(false);
     setSearchError('');
+    setMobileMenu(false);
+    navigate(`/products/${product.id}`);
   };
 
   const handleHamburger = () => setMobileMenu((prev) => !prev);

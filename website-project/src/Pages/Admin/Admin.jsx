@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Admin.css';
+import AIDashboard from './AIDashboard.jsx';
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -76,8 +78,19 @@ const Admin = () => {
 
         <div className="card accent-left">
           <h3>Contact Messages</h3>
-          <p>Review messages submitted through the Contact Us page and reply directly.</p>
-          <button onClick={() => setActiveTab('contacts')} className="btn">View Messages</button>
+          <p>View and reply to all incoming contact form inquiries from customers.</p>
+          <div className="card-actions">
+            <button onClick={() => setActiveTab('contacts')} className="btn">View Messages</button>
+            {contacts.filter(c => c.status === 'new').length > 0 && (
+              <span className="badge-unread">{contacts.filter(c => c.status === 'new').length} new</span>
+            )}
+          </div>
+        </div>
+
+        <div className="card accent-left">
+          <h3>AI Management</h3>
+          <p>Manage the RAG knowledge base and monitor semantic embedding health.</p>
+          <button onClick={() => setActiveTab('ai')} className="btn">Open AI Panel</button>
         </div>
       </div>
     </div>
@@ -117,7 +130,7 @@ const Admin = () => {
     if (activeTab === 'subscribers') {
       fetchSubscribers();
     }
-    if (activeTab === 'contacts') {
+    if (activeTab === 'contacts' || activeTab === 'dashboard') {
       fetchContacts();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,7 +139,7 @@ const Admin = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/products');
+      const response = await fetch(`${API_BASE}/api/products`);
       const data = await response.json();
       setProducts(data);
     } catch (error) {
@@ -138,7 +151,7 @@ const Admin = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/users');
+      const response = await fetch(`${API_BASE}/api/users`);
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -149,7 +162,7 @@ const Admin = () => {
   const fetchContacts = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/contactmessages', {
+      const response = await fetch(`${API_BASE}/api/contactmessages`, {
         headers: { Authorization: `Bearer ${adminToken}` },
       });
       if (!response.ok) {
@@ -166,7 +179,7 @@ const Admin = () => {
 
   const fetchSubscribers = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/subscribers');
+      const response = await fetch(`${API_BASE}/api/subscribers`);
       const data = await response.json();
       setSubscribers(data);
     } catch (error) {
@@ -189,7 +202,7 @@ const Admin = () => {
       if (token) headers['Authorization'] = `Bearer ${token}`;
       else if (secret) headers['x-admin-secret'] = secret;
 
-      const res = await fetch('http://localhost:5000/api/subscribers', {
+      const res = await fetch(`${API_BASE}/api/subscribers`, {
         method: 'DELETE',
         headers,
         body: JSON.stringify({ email }),
@@ -214,7 +227,7 @@ const Admin = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/contactmessages/${selectedContact._id}/reply`, {
+      const response = await fetch(`${API_BASE}/api/contactmessages/${selectedContact._id}/reply`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -251,7 +264,7 @@ const Admin = () => {
   const handleAdminLogin = async (ev) => {
     ev && ev.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
+      const res = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: adminUser, password: adminPassword })
@@ -285,7 +298,7 @@ const Admin = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/stats');
+      const response = await fetch(`${API_BASE}/api/stats`);
       const data = await response.json();
       setStats(data);
     } catch (error) {
@@ -295,7 +308,7 @@ const Admin = () => {
 
   const reloadProducts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/products/reload', {
+      const response = await fetch(`${API_BASE}/api/products/reload`, {
         method: 'POST'
       });
       const data = await response.json();
@@ -311,7 +324,7 @@ const Admin = () => {
   const deleteProduct = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        const response = await fetch(`http://localhost:5000/api/products/${id}`, {
+        const response = await fetch(`${API_BASE}/api/products/${id}`, {
           method: 'DELETE'
         });
         if (response.ok) {
@@ -388,7 +401,7 @@ const Admin = () => {
 
     try {
       const response = await fetch(
-        isEditing ? `http://localhost:5000/api/products/${productForm.id}` : 'http://localhost:5000/api/products',
+        isEditing ? `${API_BASE}/api/products/${productForm.id}` : `${API_BASE}/api/products`,
         {
           method: isEditing ? 'PUT' : 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -766,6 +779,7 @@ const Admin = () => {
       {activeTab === 'subscribers' && renderSubscribers()}
       {activeTab === 'stats' && renderStats()}
       {activeTab === 'contacts' && renderContacts()}
+      {activeTab === 'ai' && <AIDashboard token={adminToken} />}
       {activeTab === 'product-form' && renderProductForm()}
     </div>
   );

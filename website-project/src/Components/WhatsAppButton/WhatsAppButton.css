@@ -1,28 +1,42 @@
 .whatsapp-float {
   position: fixed;
-  bottom: 2vh; /* viewport height */
-  right: 2vw;  /* viewport width */
-  width: 60px;
-  height: 60px;
-  background-color: #25D366; /* WhatsApp green */
-  border-radius: 50%; /* fully round */
+  bottom: 96px; /* sit above the AI chatbot pill (pill ~52px + 24px bottom + 20px gap) */
+  right: 24px;
+  width: 52px;
+  height: 52px;
+  background-color: #25D366;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   text-decoration: none;
   color: white;
-  font-size: 2rem; /* icon size */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
-  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  z-index: 9998; /* just below chatbot (9999) */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .whatsapp-float:hover {
-  background-color: #22994b; /* darker green on hover */
-  transform: scale(1.1);
+  background-color: #22994b;
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.32);
 }
 
 .whatsapp-icon {
-  font-size: 2rem; /* make icon bigger */
+  font-size: 1.75rem;
   color: white;
+}
+
+/* Mobile */
+@media (max-width: 759px) {
+  .whatsapp-float {
+    right: 16px;
+    bottom: 90px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .whatsapp-icon {
+    font-size: 1.5rem;
+  }
 }

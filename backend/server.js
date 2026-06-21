@@ -9,16 +9,23 @@ const path = require('path');
 const { loadProductsFromFiles } = require('./mcp-utils');
 const mcpRoutes = require('./mcp-server');
 const mailer = require('./mailer');
+const { createGeminiClient } = require('./services/geminiClient');
+const { ensureEmbeddingIndexes, upsertProductEmbedding, deleteProductEmbedding, rebuildAllEmbeddings, searchVectorEmbeddings } = require('./services/embeddingService');
+const { signToken } = require('./services/jwtService');
+const { apiRateLimiter, ragRateLimiter } = require('./middleware/rateLimiter');
+const { requireAdmin } = require('./middleware/auth');
+const ragRoutes = require('./routes/ragRoutes');
 
 const app = express();
 const port = process.env.PORT || 5000;
-const uri = process.env.MONGO_URI || 'mongodb://localhost:27017';
+const uri = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://localhost:27017';
 const dbName = process.env.DB_NAME || 'karim_industries';
 
 app.use(cors());
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 app.use('/api/mcp', mcpRoutes);
+app.use('/api/rag', ragRateLimiter, ragRoutes);
 
 const transporter = mailer.createTransporter();
 const smtpConfigured = mailer.isSmtpConfigured();
@@ -130,7 +137,26 @@ async function connectDB() {
     productsCollection = db.collection('products');
     usersCollection = db.collection('users');
     contactMessagesCollection = db.collection('contactMessages');
+    const embeddingsCollection = db.collection('productEmbeddings');
+
     await seedDatabase();
+    const vectorSearchEnabled = await ensureEmbeddingIndexes(embeddingsCollection);
+
+    app.locals.productsCollection = productsCollection;
+    app.locals.usersCollection = usersCollection;
+    app.locals.contactMessagesCollection = contactMessagesCollection;
+    app.locals.embeddingsCollection = embeddingsCollection;
+    app.locals.geminiClient = createGeminiClient();
+    app.locals.vectorSearchEnabled = vectorSearchEnabled;
+    // Build an in-memory cache of products to speed up product list responses
+    try {
+      app.locals.productsCache = await productsCollection.find({}).sort({ id: 1 }).toArray();
+      console.log(`Loaded ${app.locals.productsCache.length} products into cache.`);
+    } catch (cacheErr) {
+      console.warn('Failed to build products cache:', cacheErr);
+      app.locals.productsCache = null;
+    }
+
     console.log(`Connected to MongoDB and using database: ${db.databaseName}`);
 
     if (smtpConfigured) {
@@ -145,6 +171,15 @@ async function connectDB() {
     } else {
       server = app.listen(port, () => {
         console.log(`Server running on port ${port}`);
+      });
+      // Gracefully handle server errors such as address in use
+      server.on('error', (err) => {
+        if (err && err.code === 'EADDRINUSE') {
+          console.error(`Port ${port} is already in use. Please stop the other process or set PORT to a different value.`);
+        } else {
+          console.error('Server error:', err);
+        }
+        // Do not crash the process here; allow external supervision to restart if needed.
       });
     }
   } catch (error) {
@@ -351,43 +386,7 @@ app.get('/api/subscribers', async (req, res) => {
 });
 
 // Delete a subscriber (protected by ADMIN_SECRET)
-// Admin auth middleware - requires admin token or ADMIN_SECRET
-function getEnvAdminToken() {
-  const uiUser = process.env.ADMIN_UI_USER || '';
-  if (!uiUser) return null;
-  return 'env-' + Buffer.from(uiUser).toString('hex');
-}
-
-async function requireAdmin(req, res, next) {
-  try {
-    const adminSecret = process.env.ADMIN_SECRET || '';
-    // allow header secret for scripted access (optional)
-    const providedSecret = (req.headers['x-admin-secret'] || req.body.adminSecret || '').toString();
-    if (adminSecret && providedSecret === adminSecret) return next();
-
-    const auth = (req.headers.authorization || '').toString();
-    if (!auth.startsWith('Bearer ')) return res.status(401).json({ message: 'Unauthorized' });
-    const token = auth.slice(7);
-
-    // support env-based admin token
-    const envToken = getEnvAdminToken();
-    if (envToken && token === envToken) {
-      req.adminUser = { id: 0, name: process.env.ADMIN_UI_USER || 'env-admin', role: 'admin' };
-      return next();
-    }
-
-    if (!token.startsWith('token-')) return res.status(401).json({ message: 'Unauthorized' });
-    const id = parseInt(token.split('-')[1], 10);
-    if (Number.isNaN(id)) return res.status(401).json({ message: 'Unauthorized' });
-    const user = await usersCollection.findOne({ id });
-    if (!user || user.role !== 'admin') return res.status(403).json({ message: 'Forbidden' });
-    req.adminUser = user;
-    next();
-  } catch (err) {
-    console.error('requireAdmin error:', err);
-    res.status(500).json({ message: 'Server error' });
-  }
-}
+// Admin auth is handled by imported middleware in middleware/auth.js
 
 app.delete('/api/subscribers', requireAdmin, async (req, res) => {
   try {
@@ -457,15 +456,75 @@ app.get('/api/products/data/:filename', (req, res) => {
 });
 
 app.use((req, res, next) => {
-  const needsDb = req.path.startsWith('/api/products') || req.path.startsWith('/api/users') || req.path.startsWith('/api/auth') || req.path.startsWith('/api/stats');
-  if (needsDb && (!productsCollection || !usersCollection)) {
+  const needsDb = req.path.startsWith('/api/products') || req.path.startsWith('/api/users') || req.path.startsWith('/api/auth') || req.path.startsWith('/api/stats') || req.path.startsWith('/api/rag');
+  if (needsDb && (!app.locals.productsCollection || !app.locals.usersCollection)) {
     return res.status(503).json({ message: 'Database not connected yet. Please try again shortly.' });
   }
   next();
 });
 
+app.get('/api/products/search', async (req, res) => {
+  try {
+    const query = (req.query.q || req.query.query || '').toString().trim();
+    if (!query) {
+      return res.status(400).json({ message: 'Search query is required.' });
+    }
+
+    const embeddingsCollection = app.locals.embeddingsCollection;
+    const productsCollection = app.locals.productsCollection;
+
+    let vectorMatches = [];
+    if (app.locals.geminiClient && app.locals.geminiClient.embeddings && typeof app.locals.geminiClient.embeddings.create === 'function') {
+      const queryEmbedding = await app.locals.geminiClient.embeddings.create({ model: 'text-embedding-3-small', input: query }).then((resp) => resp.data[0].embedding);
+      vectorMatches = await searchVectorEmbeddings({
+        queryEmbedding,
+        embeddingsCollection,
+        k: 10,
+        vectorSearchEnabled: app.locals.vectorSearchEnabled
+      });
+    }
+
+    const productIds = vectorMatches.map((item) => item.productId);
+    const products = await productsCollection.find({ id: { $in: productIds } }).toArray();
+    const orderedProducts = productIds.map((id) => products.find((p) => p.id === id)).filter(Boolean);
+
+    if (orderedProducts.length > 0) {
+      return res.json({ results: orderedProducts, semantic: true });
+    }
+
+    const keywordResults = await productsCollection.find({
+      $or: [
+        { name: { $regex: query, $options: 'i' } },
+        { title: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } },
+        { tags: { $elemMatch: { $regex: query, $options: 'i' } } }
+      ]
+    }).toArray();
+
+    res.json({ results: keywordResults, semantic: false });
+  } catch (error) {
+    console.error('Product search error:', error);
+    res.status(500).json({ message: 'Unable to search products.' });
+  }
+});
+
 app.get('/api/products', async (req, res) => {
   try {
+    // Support simple pagination via ?limit and ?page to avoid sending huge lists to clients
+    const limit = parseInt(req.query.limit, 10) || null;
+    const page = parseInt(req.query.page, 10) || 1;
+
+    const cache = req.app.locals.productsCache;
+    if (cache && Array.isArray(cache)) {
+      if (limit) {
+        const start = (page - 1) * limit;
+        const slice = cache.slice(start, start + limit);
+        return res.json({ total: cache.length, page, limit, results: slice });
+      }
+      return res.json(cache);
+    }
+
+    // Fallback to DB if cache not available
     const products = await productsCollection.find({}).sort({ id: 1 }).toArray();
     res.json(products);
   } catch (error) {
@@ -481,12 +540,21 @@ app.post('/api/products', async (req, res) => {
   }
 
   try {
-    const lastProduct = await productsCollection.find({}).sort({ id: -1 }).limit(1).next();
+    const lastProduct = await app.locals.productsCollection.find({}).sort({ id: -1 }).limit(1).next();
     const nextId = lastProduct ? lastProduct.id + 1 : 1;
     const newProduct = { id: nextId, ...product };
-    await productsCollection.insertOne(newProduct);
+    await app.locals.productsCollection.insertOne(newProduct);
+    // Update in-memory cache if present
+    if (app.locals.productsCache && Array.isArray(app.locals.productsCache)) {
+      app.locals.productsCache.push(newProduct);
+      app.locals.productsCache.sort((a, b) => a.id - b.id);
+    }
+    await upsertProductEmbedding({
+      product: newProduct,
+      embeddingsCollection: app.locals.embeddingsCollection,
+      client: app.locals.geminiClient
+    });
     res.status(201).json(newProduct);
-    // Notify subscribers about new product (do not block response)
     (async () => {
       try {
         await notifySubscribers({
@@ -529,15 +597,21 @@ app.put('/api/products/:id', async (req, res) => {
 
   try {
     const update = { $set: req.body };
-    const result = await productsCollection.findOneAndUpdate({ id: productId }, update, {
+    const result = await app.locals.productsCollection.findOneAndUpdate({ id: productId }, update, {
       returnDocument: 'after'
     });
 
     if (!result.value) {
       return res.status(404).json({ message: 'Product not found.' });
     }
+
+    await upsertProductEmbedding({
+      product: result.value,
+      embeddingsCollection: app.locals.embeddingsCollection,
+      client: app.locals.geminiClient
+    });
+
     res.json(result.value);
-    // Notify subscribers about product update
     (async () => {
       try {
         await notifySubscribers({
@@ -561,10 +635,11 @@ app.delete('/api/products/:id', async (req, res) => {
   }
 
   try {
-    const result = await productsCollection.deleteOne({ id: productId });
+    const result = await app.locals.productsCollection.deleteOne({ id: productId });
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: 'Product not found.' });
     }
+    await deleteProductEmbedding(productId, app.locals.embeddingsCollection);
     res.json({ message: 'Product deleted.' });
   } catch (error) {
     console.error(error);
@@ -607,12 +682,12 @@ app.post('/api/auth/register', async (req, res) => {
   }
 
   try {
-    const existingUser = await usersCollection.findOne({ email: email.toLowerCase() });
+    const existingUser = await app.locals.usersCollection.findOne({ email: email.toLowerCase() });
     if (existingUser) {
       return res.status(409).json({ message: 'Email already registered.' });
     }
 
-    const lastUser = await usersCollection.find({}).sort({ id: -1 }).limit(1).next();
+    const lastUser = await app.locals.usersCollection.find({}).sort({ id: -1 }).limit(1).next();
     const nextId = lastUser ? lastUser.id + 1 : 1;
     const passwordHash = await bcrypt.hash(password, 10);
     const newUser = {
@@ -624,10 +699,11 @@ app.post('/api/auth/register', async (req, res) => {
       phone: '',
       address: ''
     };
-    await usersCollection.insertOne(newUser);
+    await app.locals.usersCollection.insertOne(newUser);
+    const token = signToken(newUser);
 
     res.status(201).json({
-      token: `token-${newUser.id}`,
+      token,
       user: {
         id: newUser.id,
         name: newUser.name,
@@ -650,11 +726,10 @@ app.post('/api/auth/login', async (req, res) => {
   }
 
   try {
-    // Support env-based admin credentials (username stored in ADMIN_UI_USER)
     const uiUser = process.env.ADMIN_UI_USER || '';
     const uiPass = process.env.ADMIN_UI_PASS || '';
     if (uiUser && uiPass && email === uiUser && password === uiPass) {
-      const token = getEnvAdminToken();
+      const token = signToken({ id: 0, name: uiUser, email: '', role: 'admin' });
       return res.json({
         token,
         user: {
@@ -666,7 +741,7 @@ app.post('/api/auth/login', async (req, res) => {
       });
     }
 
-    const user = await usersCollection.findOne({ email: email.toLowerCase() });
+    const user = await app.locals.usersCollection.findOne({ email: email.toLowerCase() });
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials.' });
     }
@@ -676,8 +751,9 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials.' });
     }
 
+    const token = signToken(user);
     res.json({
-      token: `token-${user.id}`,
+      token,
       user: {
         id: user.id,
         name: user.name,
@@ -713,11 +789,23 @@ app.post('/api/products/reload', async (req, res) => {
   try {
     const freshProducts = loadProductsFromFiles();
 
-    // Clear existing products
-    await productsCollection.deleteMany({});
+    await app.locals.productsCollection.deleteMany({});
+    await app.locals.productsCollection.insertMany(freshProducts);
 
-    // Insert fresh products
-    await productsCollection.insertMany(freshProducts);
+    // Refresh in-memory cache
+    try {
+      app.locals.productsCache = await app.locals.productsCollection.find({}).sort({ id: 1 }).toArray();
+      console.log(`Refreshed products cache with ${app.locals.productsCache.length} items.`);
+    } catch (cacheErr) {
+      console.warn('Failed to refresh products cache after reload:', cacheErr);
+      app.locals.productsCache = null;
+    }
+
+    await rebuildAllEmbeddings({
+      productsCollection: app.locals.productsCollection,
+      embeddingsCollection: app.locals.embeddingsCollection,
+      client: app.locals.geminiClient
+    });
 
     res.json({
       message: `Successfully reloaded ${freshProducts.length} products from JSON files.`,

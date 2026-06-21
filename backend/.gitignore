@@ -1,0 +1,22 @@
+# Environment — never commit secrets
+.env
+.env.*
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temp/diagnostic scripts
+diagmail.js
+smtptest.js
+smtp-check.js
+test-ethereal.js
+diagmail-result.txt
+smtptest.log
+
+# OS
+.DS_Store
+Thumbs.db

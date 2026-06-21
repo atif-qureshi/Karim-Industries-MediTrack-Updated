@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './Components/Header/HeaderBackend.jsx';
+import AIChatbot from './Components/AIChatbot/AIChatbot.jsx';
 import Home from './Pages/Home/Home.jsx';
 import AboutUs from './Pages/AboutUs/About.jsx';
 import Footer from './Components/Footer/Footer.jsx';
@@ -44,6 +45,7 @@ function AppContent() {
           <Route path='*' element={<NotFound />} />
         </Routes>
         {!isAdminRoute && <WhatsAppButton />}
+        {!isAdminRoute && <AIChatbot />}
       </PageTransition>
       {!isAdminRoute && <Footer />}
     </>

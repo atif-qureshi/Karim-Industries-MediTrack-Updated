@@ -26,6 +26,8 @@ import AlcoSwab from './images/Alcohol Swab.JPG';
 import Drape from './images/Medicare Drape Kit.png';
 import Gown from './images/Medicare-Gown.png';
 
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
+
 const imageMap = {
   1: MediCott,
   2: MediBalls,
@@ -59,7 +61,7 @@ const Products = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API_BASE}/api/products`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);

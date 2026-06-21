@@ -506,6 +506,186 @@ These enhancements are not in the current scope but can add value once the core 
 | Version | Date | Author | Description |
 |---------|------|--------|-------------|
 | 1.0 | March 10, 2026 | AI Assistant | Initial release |
+| 1.1 | June 21, 2026 | AI Assistant | Added RAG/AI Chatbot feature, Gemini API integration, embedding service, unit tests for RAG |
+
+---
+
+## 11. Updates Log (v1.1 — June 21, 2026)
+
+### 11.1 New Features Implemented
+
+#### 11.1.1 AI-Powered RAG Chatbot
+A Retrieval-Augmented Generation (RAG) chatbot has been fully implemented and integrated into the website.
+
+**What it does:**
+- Accepts natural-language questions from website visitors about medical products
+- Converts the question into a vector embedding using the Gemini API
+- Searches MongoDB for the most semantically similar product documents
+- Passes the matched product context to Gemini's generative model to produce a grounded answer
+- Returns only answers derived from the actual product catalog — no hallucination
+
+**Frontend Component:** `src/Components/AIChatbot/AIChatbot.jsx`
+
+**Backend Services added:**
+
+| File | Purpose |
+|------|---------|
+| `backend/services/geminiClient.js` | Wraps the Gemini REST API for embeddings and chat completions |
+| `backend/services/embeddingService.js` | Creates, stores, and searches vector embeddings in MongoDB |
+| `backend/services/ragService.js` | Orchestrates embedding lookup + Gemini chat to answer queries |
+| `backend/routes/ragRoutes.js` | Exposes `/api/rag/query`, `/api/rag/rebuild`, `/api/rag/status` |
+
+**API Endpoints Added:**
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/rag/query` | Submit a natural-language question to the chatbot | None |
+| POST | `/api/rag/rebuild` | Rebuild all product embeddings in MongoDB | Admin JWT |
+| GET | `/api/rag/status` | Check embedding health (count, last updated, vector index) | Admin JWT |
+
+#### 11.1.2 Newsletter Subscription System
+- `POST /api/subscribe` — subscribers saved to `subscribers.json`
+- `GET /api/subscribers` — admin view of all subscribers
+- `DELETE /api/subscribers` — remove a subscriber (admin only)
+- `POST /api/notify` — send bulk HTML email to all subscribers (admin secret required)
+- Confirmation email sent to subscriber on sign-up
+
+#### 11.1.3 Contact Form — Database Storage
+- All contact form submissions are now persisted to the `contactMessages` MongoDB collection
+- Admin can view all messages via `GET /api/contactmessages` (JWT protected)
+- Admin can reply to individual messages via `POST /api/contactmessages/:id/reply`
+  - Reply is saved in the database and an email is sent to the original sender
+  - Message status updated to `replied`
+
+#### 11.1.4 JWT-Based Admin Authentication
+- Admin login replaced hardcoded session with JWT tokens
+- `POST /api/auth/login` supports both admin UI credentials and DB users
+- `POST /api/auth/register` for new user registration
+- All sensitive admin routes protected with `requireAdmin` middleware
+- JWT secret configurable via `JWT_SECRET` environment variable
+- Tokens expire after 8 hours
+
+#### 11.1.5 Rate Limiting
+- `apiRateLimiter` applied to general API routes
+- `ragRateLimiter` applied specifically to `/api/rag/*` to protect Gemini API quota
+
+#### 11.1.6 Product Embedding Auto-Sync
+- When a product is **created** via `POST /api/products`, its embedding is automatically generated and stored
+- When a product is **updated** via `PUT /api/products/:id`, its embedding is automatically refreshed
+- When a product is **deleted** via `DELETE /api/products/:id`, its embedding is removed from MongoDB
+- `POST /api/products/reload` reloads all products from JSON files and rebuilds all embeddings
+
+---
+
+### 11.2 Technical Changes
+
+#### 11.2.1 Gemini API Integration (Fixed & Verified)
+
+The Gemini REST API integration was debugged and corrected. The following issues were resolved:
+
+| Issue | Old (broken) | Fixed |
+|-------|-------------|-------|
+| Authentication method | `Authorization: Bearer <key>` | `?key=<apiKey>` query param |
+| API base URL | `v1` | `v1beta` |
+| Embedding model | `gemini-embedding-001` (wrong path) / `text-embedding-004` (not available) | `gemini-embedding-001` via correct endpoint |
+| Embedding endpoint | `/models/{model}/embeddings` | `/models/{model}:embedContent` |
+| Request body format | `{ input: [...] }` | `{ model: "models/...", content: { parts: [{ text: "..." }] } }` |
+| Response parsing | `data.data[0].embedding` | `data.embedding.values` |
+| Chat endpoint | `:generate` | `:generateContent` |
+| Chat body format | Flat prompt string | `{ contents: [{ role, parts: [{ text }] }], generationConfig: {...} }` |
+| Vector dimensions | 1536 (OpenAI default) | **3072** (actual output of `gemini-embedding-001`) |
+
+**Model mappings (current):**
+
+| Internal name | Gemini model |
+|--------------|-------------|
+| `text-embedding-3-small` | `gemini-embedding-001` |
+| `text-embedding-3-large` | `gemini-embedding-2` |
+| `gpt-4o-mini` | `gemini-2.5-flash` |
+| `gpt-4o` | `gemini-2.5-pro` |
+
+#### 11.2.2 MongoDB Collections Added
+
+| Collection | Purpose |
+|-----------|---------|
+| `productEmbeddings` | Stores 3072-dim vector embeddings per product |
+| `contactMessages` | Stores all contact form submissions with reply history |
+
+#### 11.2.3 Environment Variables Added
+
+| Variable | Purpose |
+|---------|---------|
+| `GEMINI_API_KEY` | Google Gemini API key |
+| `USE_GEMINI` | Set to `true` to enable RAG features |
+| `GEMINI_API_BASE` | Override Gemini base URL (optional) |
+| `JWT_SECRET` | Secret for signing JWT tokens |
+| `ADMIN_UI_USER` | Admin username for UI login |
+| `ADMIN_UI_PASS` | Admin password for UI login |
+| `ADMIN_SECRET` | Secret header for bulk notify endpoint |
+
+---
+
+### 11.3 Testing Updates
+
+#### 11.3.1 New Test File: `backend/tests/rag.test.js`
+
+A comprehensive unit test suite has been added for all RAG components.
+
+**Test coverage:**
+
+| Test Suite | Cases | What is tested |
+|-----------|-------|---------------|
+| `geminiClient` | 2 | Client creation with/without API key |
+| `embeddingService.createEmbedding` | 4 | Success, null client, empty text, whitespace |
+| `embeddingService.searchVectorEmbeddings` | 4 | Matches, empty collection, empty embedding, k limit |
+| `embeddingService.rebuildAllEmbeddings` | 2 | Success with count, null client warning |
+| `embeddingService.getEmbeddingHealth` | 2 | Populated collection, empty collection |
+| `ragService.answerQuery` | 5 | Valid answer, no matches fallback, empty question, whitespace question, embedding error |
+| `POST /api/rag/query` | 7 | Valid query, missing question, empty string, whitespace, no gemini client, no matches, embedding error |
+| `POST /api/rag/rebuild` | 3 | Success, no gemini client, rebuild error |
+| `GET /api/rag/status` | 3 | Populated, disabled, health check error |
+| `RAG prompt building` | 2 | Context passed to chat, empty chat response fallback |
+
+**Total: 34 test cases**
+
+#### 11.3.2 Updated Test Files
+
+| File | Changes |
+|-----|---------|
+| `tests/api.test.js` | Existing — covers health, products, auth, stats endpoints |
+| `tests/products.test.js` | Existing — full product CRUD coverage |
+| `tests/contact.test.js` | Existing — contact form submission, admin view, reply |
+| `tests/utils.test.js` | Existing — loadProductsFromFiles utility |
+| `tests/rag.test.js` | **New** — RAG/chatbot full unit test coverage |
+
+---
+
+### 11.4 Updated API Endpoints Reference
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/health` | Server health check | None |
+| POST | `/api/auth/login` | Admin/user login → JWT | None |
+| POST | `/api/auth/register` | New user registration | None |
+| GET | `/api/products` | List all products (pagination supported) | None |
+| POST | `/api/products` | Create product + auto-embed | Admin JWT |
+| GET | `/api/products/:id` | Get product by ID | None |
+| PUT | `/api/products/:id` | Update product + refresh embedding | Admin JWT |
+| DELETE | `/api/products/:id` | Delete product + remove embedding | Admin JWT |
+| GET | `/api/products/search` | Semantic vector search (falls back to keyword) | None |
+| POST | `/api/products/reload` | Reload all products from JSON + rebuild embeddings | Admin JWT |
+| GET | `/api/products/data/:filename` | Serve raw product JSON file | None |
+| POST | `/api/contact` | Submit contact form (saved to DB + email) | None |
+| GET | `/api/contactmessages` | List all contact submissions | Admin JWT |
+| POST | `/api/contactmessages/:id/reply` | Reply to a contact message | Admin JWT |
+| POST | `/api/subscribe` | Subscribe to newsletter | None |
+| GET | `/api/subscribers` | List all subscribers | None |
+| DELETE | `/api/subscribers` | Remove a subscriber | Admin JWT |
+| POST | `/api/notify` | Send bulk email to all subscribers | Admin Secret |
+| POST | `/api/rag/query` | AI chatbot query | None |
+| POST | `/api/rag/rebuild` | Rebuild product embeddings | Admin JWT |
+| GET | `/api/rag/status` | Embedding health check | Admin JWT |
+| GET | `/api/stats` | DB stats (product/user count) | None |
 
 ### 2.1 Existing Features
 - **Frontend (React):**

@@ -9,6 +9,7 @@ import {
     FaPaperPlane,
 } from 'react-icons/fa';
 import { FiCheckCircle } from 'react-icons/fi';
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
 
 const ContactPage = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -28,7 +29,7 @@ const ContactPage = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:5000/api/contact', {
+            const response = await fetch(`${API_BASE}/api/contact`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
@@ -92,7 +93,7 @@ const ContactPage = () => {
                         </div>
                     ) : (
                         <form
-                            action="http://localhost:5000/api/contact"
+                            action={`${API_BASE}/api/contact`}
                             method="POST"
                             onSubmit={handleFormSubmit}
                         >

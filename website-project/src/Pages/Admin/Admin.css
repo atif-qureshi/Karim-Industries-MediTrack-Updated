@@ -275,6 +275,77 @@
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 16px;
+  align-items: center;
+}
+
+.badge-unread {
+  display: inline-block;
+  background: #e53e3e;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 50px;
+  letter-spacing: 0.03em;
+}
+
+/* Contact messages section */
+.contacts-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.contact-reply-card {
+  position: sticky;
+  top: 80px;
+  height: fit-content;
+}
+
+.contact-message-box {
+  background: #f4f7ff;
+  border: 1px solid rgba(52, 75, 152, 0.12);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  color: #2d3748;
+  margin-bottom: 14px;
+  white-space: pre-wrap;
+  line-height: 1.55;
+}
+
+.reply-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(52, 75, 152, 0.2);
+  font-size: 0.9rem;
+  color: #1a202c;
+  resize: vertical;
+  margin-bottom: 14px;
+  font-family: inherit;
+}
+
+.contact-placeholder {
+  text-align: center;
+  padding: 32px 16px;
+  color: #718096;
+}
+
+.contact-placeholder h3 {
+  color: #4a5568;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 900px) {
+  .contacts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-reply-card {
+    position: static;
+  }
 }
 
 /* Dashboard header/layout tweaks */

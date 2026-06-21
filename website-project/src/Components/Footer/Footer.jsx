@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
@@ -170,7 +171,7 @@ const Footer = () => {
               e.preventDefault();
               if (!email) return setMessage('Please enter your email');
               try {
-                const res = await fetch('http://localhost:5000/api/subscribe', {
+                const res = await fetch(`${API_BASE}/api/subscribe`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ email }),
@@ -200,7 +201,7 @@ const Footer = () => {
       {/* Footer Bottom */}
       <div className="footer-bottom">
         <p>
-          &copy; 2025 Karim Industries. All rights reserved |
+          &copy; 2026 Karim Industries. All rights reserved |
           Designed and Developed by <strong>Muhammad Atif Qureshi</strong>
         </p>
       </div>

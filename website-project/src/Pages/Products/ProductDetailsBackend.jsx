@@ -26,6 +26,8 @@ import SilvaTulle from './images/Silva Tulle.jpg';
 import SoftGuaze from './images/Soft Guaze.JPG';
 import SurgiGrip from './images/Paper Tape (Surgi Grip).JPG';
 
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
+
 const imageMap = {
   'Alco Swab': AlcoholSwab,
   'Fustin Tulle': FusitinTulle,
@@ -61,7 +63,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`${API_BASE}/api/products/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Product not found');
