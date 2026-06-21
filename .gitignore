@@ -25,5 +25,9 @@ yarn-error.log*
 # Ignore env files used for local secrets
 .env
 backend/.env
+website-project/.env
 node_modules/
 cache/
+
+# Presentation (local only)
+Presentation.html
