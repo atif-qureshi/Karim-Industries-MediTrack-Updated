@@ -539,7 +539,6 @@ app.get('/api/products/search', async (req, res) => {
 
 app.get('/api/products', async (req, res) => {
   try {
-    // Support simple pagination via ?limit and ?page to avoid sending huge lists to clients
     const limit = parseInt(req.query.limit, 10) || null;
     const page = parseInt(req.query.page, 10) || 1;
 
@@ -553,8 +552,10 @@ app.get('/api/products', async (req, res) => {
       return res.json(cache);
     }
 
-    // Fallback to DB if cache not available
-    const products = await productsCollection.find({}).sort({ id: 1 }).toArray();
+    // Fallback to DB — use app.locals collection (works on Vercel too)
+    const col = req.app.locals.productsCollection || productsCollection;
+    if (!col) return res.status(503).json({ message: 'Database not ready.' });
+    const products = await col.find({}).sort({ id: 1 }).toArray();
     res.json(products);
   } catch (error) {
     console.error(error);
@@ -800,12 +801,14 @@ app.post('/api/auth/login', async (req, res) => {
 
 app.get('/api/stats', async (req, res) => {
   try {
-    const productsCount = await productsCollection.countDocuments();
-    const usersCount = await usersCollection.countDocuments();
+    const pCol = req.app.locals.productsCollection || productsCollection;
+    const uCol = req.app.locals.usersCollection || usersCollection;
+    const productsCount = await pCol.countDocuments();
+    const usersCount = await uCol.countDocuments();
     res.json({
       products: productsCount,
       users: usersCount,
-      dbSize: 'N/A' // Could be implemented with db.stats() if needed
+      dbSize: 'N/A'
     });
   } catch (error) {
     console.error(error);
