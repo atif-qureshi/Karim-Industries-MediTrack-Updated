@@ -188,17 +188,32 @@ async function connectDB() {
 
 // On Vercel: connect lazily on first request
 let dbConnected = false;
+let dbConnecting = false;
+let dbConnectPromise = null;
+
+async function ensureDbConnected() {
+  if (dbConnected) return;
+  if (dbConnecting) return dbConnectPromise;
+  dbConnecting = true;
+  dbConnectPromise = connectDB().then(() => {
+    dbConnected = true;
+    dbConnecting = false;
+  }).catch((e) => {
+    dbConnecting = false;
+    throw e;
+  });
+  return dbConnectPromise;
+}
+
 if (process.env.VERCEL === '1') {
   app.use(async (req, res, next) => {
-    if (!dbConnected) {
-      try {
-        await connectDB();
-        dbConnected = true;
-      } catch (e) {
-        return res.status(503).json({ message: 'Database connecting, please retry.' });
-      }
+    try {
+      await ensureDbConnected();
+      next();
+    } catch (e) {
+      console.error('DB connect error:', e.message);
+      return res.status(503).json({ message: 'Database connection failed. Please retry.' });
     }
-    next();
   });
 } else {
   connectDB();
@@ -471,7 +486,7 @@ app.get('/api/products/data/:filename', (req, res) => {
 
 app.use((req, res, next) => {
   const needsDb = req.path.startsWith('/api/products') || req.path.startsWith('/api/users') || req.path.startsWith('/api/auth') || req.path.startsWith('/api/stats') || req.path.startsWith('/api/rag');
-  if (needsDb && (!app.locals.productsCollection || !app.locals.usersCollection)) {
+  if (needsDb && process.env.VERCEL !== '1' && (!app.locals.productsCollection || !app.locals.usersCollection)) {
     return res.status(503).json({ message: 'Database not connected yet. Please try again shortly.' });
   }
   next();
