@@ -21,9 +21,49 @@ const port = process.env.PORT || 5000;
 const uri = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://localhost:27017';
 const dbName = process.env.DB_NAME || 'karim_industries';
 
+// ── Vercel-compatible MongoDB connection cache ──────────────────────────────
+// Vercel serverless reuses module instances between warm invocations.
+// Storing the client on `global` prevents creating a new connection per request.
+let cachedClient = global._mongoClient || null;
+let cachedDb     = global._mongoDb     || null;
+
+async function getDb() {
+  if (cachedClient && cachedDb) return { client: cachedClient, db: cachedDb };
+  const client = new MongoClient(uri);
+  await client.connect();
+  const db = client.db(dbName);
+  cachedClient = client;
+  cachedDb     = db;
+  global._mongoClient = client;
+  global._mongoDb     = db;
+  return { client, db };
+}
+// ───────────────────────────────────────────────────────────────────────────
+
 app.use(cors());
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+
+// ── Per-request DB injection (Vercel serverless compatible) ─────────────────
+app.use(async (req, res, next) => {
+  try {
+    const { db } = await getDb();
+    req.app.locals.productsCollection      = db.collection('products');
+    req.app.locals.usersCollection         = db.collection('users');
+    req.app.locals.contactMessagesCollection = db.collection('contactMessages');
+    req.app.locals.embeddingsCollection    = db.collection('productEmbeddings');
+    if (!req.app.locals.geminiClient) {
+      req.app.locals.geminiClient = createGeminiClient();
+      req.app.locals.vectorSearchEnabled = false;
+    }
+    next();
+  } catch (e) {
+    console.error('DB middleware error:', e.message);
+    res.status(503).json({ message: 'Database unavailable. Please retry.' });
+  }
+});
+// ────────────────────────────────────────────────────────────────────────────
+
 app.use('/api/mcp', mcpRoutes);
 app.use('/api/rag', ragRateLimiter, ragRoutes);
 
@@ -186,41 +226,8 @@ async function connectDB() {
   }
 }
 
-// On Vercel: connect on module load (not per-request)
-// On local/other: connect normally
-let dbConnected = false;
-let dbConnecting = false;
-let dbConnectPromise = null;
-
-function ensureDbConnected() {
-  if (dbConnected) return Promise.resolve();
-  if (dbConnecting) return dbConnectPromise;
-  dbConnecting = true;
-  dbConnectPromise = connectDB().then(() => {
-    dbConnected = true;
-    dbConnecting = false;
-  }).catch((e) => {
-    dbConnecting = false;
-    throw e;
-  });
-  return dbConnectPromise;
-}
-
-if (process.env.VERCEL === '1') {
-  // Start connecting immediately at module load time
-  ensureDbConnected().catch((e) => console.error('Initial DB connect failed:', e.message));
-
-  // Also ensure connected on every request (handles cold starts)
-  app.use(async (req, res, next) => {
-    try {
-      await ensureDbConnected();
-      next();
-    } catch (e) {
-      console.error('DB connect error:', e.message);
-      return res.status(503).json({ message: 'Database connection failed. Please retry.' });
-    }
-  });
-} else {
+// Start DB on non-Vercel environments (local dev, traditional servers)
+if (process.env.VERCEL !== '1') {
   connectDB();
 }
 
