@@ -10,7 +10,10 @@
           "middleware/**",
           "routes/**",
           "services/**",
-          "utils/**"
+          "utils/**",
+          "mailer.js",
+          "mcp-utils.js",
+          "mcp-server.js"
         ]
       }
     }

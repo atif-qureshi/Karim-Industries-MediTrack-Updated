@@ -168,27 +168,41 @@ async function connectDB() {
 
     if (process.env.NODE_ENV === 'test') {
       console.log(`Test environment detected; server will not start listening on port ${port}`);
-    } else {
+    } else if (process.env.VERCEL !== '1') {
       server = app.listen(port, () => {
         console.log(`Server running on port ${port}`);
       });
-      // Gracefully handle server errors such as address in use
       server.on('error', (err) => {
         if (err && err.code === 'EADDRINUSE') {
-          console.error(`Port ${port} is already in use. Please stop the other process or set PORT to a different value.`);
+          console.error(`Port ${port} is already in use.`);
         } else {
           console.error('Server error:', err);
         }
-        // Do not crash the process here; allow external supervision to restart if needed.
       });
     }
   } catch (error) {
     console.error('Error connecting to MongoDB or verifying SMTP:', error);
-    process.exit(1);
+    if (process.env.VERCEL !== '1') process.exit(1);
   }
 }
 
-connectDB();
+// On Vercel: connect lazily on first request
+let dbConnected = false;
+if (process.env.VERCEL === '1') {
+  app.use(async (req, res, next) => {
+    if (!dbConnected) {
+      try {
+        await connectDB();
+        dbConnected = true;
+      } catch (e) {
+        return res.status(503).json({ message: 'Database connecting, please retry.' });
+      }
+    }
+    next();
+  });
+} else {
+  connectDB();
+}
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', database: dbName });
