@@ -830,3 +830,4 @@ process.on('SIGINT', async () => {
 });
 
 module.exports = { app, loadProductsFromFiles, server };
+module.exports.default = app;
