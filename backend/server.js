@@ -31,9 +31,9 @@ async function getDb() {
   if (cachedClient && cachedDb) return { client: cachedClient, db: cachedDb };
   const client = new MongoClient(uri, {
     tls: true,
-    tlsAllowInvalidCertificates: false,
-    serverSelectionTimeoutMS: 10000,
-    connectTimeoutMS: 10000,
+    tlsAllowInvalidCertificates: true,
+    serverSelectionTimeoutMS: 15000,
+    connectTimeoutMS: 15000,
   });
   await client.connect();
   const db = client.db(dbName);
@@ -178,9 +178,9 @@ async function connectDB() {
   try {
     mongoClient = new MongoClient(uri, {
       tls: true,
-      tlsAllowInvalidCertificates: false,
-      serverSelectionTimeoutMS: 10000,
-      connectTimeoutMS: 10000,
+      tlsAllowInvalidCertificates: true,
+      serverSelectionTimeoutMS: 15000,
+      connectTimeoutMS: 15000,
     });
     await mongoClient.connect();
     const db = mongoClient.db(dbName);
