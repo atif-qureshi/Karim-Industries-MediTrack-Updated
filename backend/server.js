@@ -186,13 +186,14 @@ async function connectDB() {
   }
 }
 
-// On Vercel: connect lazily on first request
+// On Vercel: connect on module load (not per-request)
+// On local/other: connect normally
 let dbConnected = false;
 let dbConnecting = false;
 let dbConnectPromise = null;
 
-async function ensureDbConnected() {
-  if (dbConnected) return;
+function ensureDbConnected() {
+  if (dbConnected) return Promise.resolve();
   if (dbConnecting) return dbConnectPromise;
   dbConnecting = true;
   dbConnectPromise = connectDB().then(() => {
@@ -206,6 +207,10 @@ async function ensureDbConnected() {
 }
 
 if (process.env.VERCEL === '1') {
+  // Start connecting immediately at module load time
+  ensureDbConnected().catch((e) => console.error('Initial DB connect failed:', e.message));
+
+  // Also ensure connected on every request (handles cold starts)
   app.use(async (req, res, next) => {
     try {
       await ensureDbConnected();
@@ -553,8 +558,8 @@ app.get('/api/products', async (req, res) => {
     }
 
     // Fallback to DB — use app.locals collection (works on Vercel too)
-    const col = req.app.locals.productsCollection || productsCollection;
-    if (!col) return res.status(503).json({ message: 'Database not ready.' });
+    const col = req.app.locals.productsCollection;
+    if (!col) return res.status(503).json({ message: 'Database not ready, please retry in a moment.' });
     const products = await col.find({}).sort({ id: 1 }).toArray();
     res.json(products);
   } catch (error) {
