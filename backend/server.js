@@ -21,54 +21,9 @@ const port = process.env.PORT || 5000;
 const uri = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://localhost:27017';
 const dbName = process.env.DB_NAME || 'karim_industries';
 
-// ── Vercel-compatible MongoDB connection cache ──────────────────────────────
-// Vercel serverless reuses module instances between warm invocations.
-// Storing the client on `global` prevents creating a new connection per request.
-let cachedClient = global._mongoClient || null;
-let cachedDb     = global._mongoDb     || null;
-
-async function getDb() {
-  if (cachedClient && cachedDb) return { client: cachedClient, db: cachedDb };
-  const client = new MongoClient(uri, {
-    tls: true,
-    tlsAllowInvalidCertificates: true,
-    serverSelectionTimeoutMS: 15000,
-    connectTimeoutMS: 15000,
-  });
-  await client.connect();
-  const db = client.db(dbName);
-  cachedClient = client;
-  cachedDb     = db;
-  global._mongoClient = client;
-  global._mongoDb     = db;
-  return { client, db };
-}
-// ───────────────────────────────────────────────────────────────────────────
-
 app.use(cors());
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
-
-// ── Per-request DB injection (Vercel serverless compatible) ─────────────────
-app.use(async (req, res, next) => {
-  try {
-    const { db } = await getDb();
-    req.app.locals.productsCollection      = db.collection('products');
-    req.app.locals.usersCollection         = db.collection('users');
-    req.app.locals.contactMessagesCollection = db.collection('contactMessages');
-    req.app.locals.embeddingsCollection    = db.collection('productEmbeddings');
-    if (!req.app.locals.geminiClient) {
-      req.app.locals.geminiClient = createGeminiClient();
-      req.app.locals.vectorSearchEnabled = false;
-    }
-    next();
-  } catch (e) {
-    console.error('DB middleware error:', e.message);
-    res.status(503).json({ message: 'Database unavailable. Please retry.' });
-  }
-});
-// ────────────────────────────────────────────────────────────────────────────
-
 app.use('/api/mcp', mcpRoutes);
 app.use('/api/rag', ragRateLimiter, ragRoutes);
 
@@ -176,12 +131,7 @@ async function seedDatabase() {
 
 async function connectDB() {
   try {
-    mongoClient = new MongoClient(uri, {
-      tls: true,
-      tlsAllowInvalidCertificates: true,
-      serverSelectionTimeoutMS: 15000,
-      connectTimeoutMS: 15000,
-    });
+    mongoClient = new MongoClient(uri);
     await mongoClient.connect();
     const db = mongoClient.db(dbName);
     productsCollection = db.collection('products');
@@ -218,13 +168,13 @@ async function connectDB() {
 
     if (process.env.NODE_ENV === 'test') {
       console.log(`Test environment detected; server will not start listening on port ${port}`);
-    } else if (process.env.VERCEL !== '1') {
+    } else {
       server = app.listen(port, () => {
         console.log(`Server running on port ${port}`);
       });
       server.on('error', (err) => {
         if (err && err.code === 'EADDRINUSE') {
-          console.error(`Port ${port} is already in use.`);
+          console.error(`Port ${port} is already in use. Please stop the other process or set PORT to a different value.`);
         } else {
           console.error('Server error:', err);
         }
@@ -232,14 +182,12 @@ async function connectDB() {
     }
   } catch (error) {
     console.error('Error connecting to MongoDB or verifying SMTP:', error);
-    if (process.env.VERCEL !== '1') process.exit(1);
+    process.exit(1);
   }
 }
 
-// Start DB on non-Vercel environments (local dev, traditional servers)
-if (process.env.VERCEL !== '1') {
-  connectDB();
-}
+// Start DB
+connectDB();
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', database: dbName });
@@ -508,7 +456,7 @@ app.get('/api/products/data/:filename', (req, res) => {
 
 app.use((req, res, next) => {
   const needsDb = req.path.startsWith('/api/products') || req.path.startsWith('/api/users') || req.path.startsWith('/api/auth') || req.path.startsWith('/api/stats') || req.path.startsWith('/api/rag');
-  if (needsDb && process.env.VERCEL !== '1' && (!app.locals.productsCollection || !app.locals.usersCollection)) {
+  if (needsDb && (!app.locals.productsCollection || !app.locals.usersCollection)) {
     return res.status(503).json({ message: 'Database not connected yet. Please try again shortly.' });
   }
   next();
@@ -574,10 +522,8 @@ app.get('/api/products', async (req, res) => {
       return res.json(cache);
     }
 
-    // Fallback to DB — use app.locals collection (works on Vercel too)
-    const col = req.app.locals.productsCollection;
-    if (!col) return res.status(503).json({ message: 'Database not ready, please retry in a moment.' });
-    const products = await col.find({}).sort({ id: 1 }).toArray();
+    // Fallback to DB if cache not available
+    const products = await productsCollection.find({}).sort({ id: 1 }).toArray();
     res.json(products);
   } catch (error) {
     console.error(error);
@@ -823,10 +769,8 @@ app.post('/api/auth/login', async (req, res) => {
 
 app.get('/api/stats', async (req, res) => {
   try {
-    const pCol = req.app.locals.productsCollection || productsCollection;
-    const uCol = req.app.locals.usersCollection || usersCollection;
-    const productsCount = await pCol.countDocuments();
-    const usersCount = await uCol.countDocuments();
+    const productsCount = await productsCollection.countDocuments();
+    const usersCount = await usersCollection.countDocuments();
     res.json({
       products: productsCount,
       users: usersCount,
